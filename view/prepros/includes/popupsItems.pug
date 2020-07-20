@@ -1,0 +1,20 @@
+#AddItems.col-12.col-sm
+	h5 Agregar Intención 
+	.row.justify-content-center.m-0
+		.col.p-0
+			select#docproductor.custom-select
+				option(value selected) Productores
+			select#undproduccion.custom-select()
+				option(value selected) Unidad de Producción
+			input#estadound(type="hidden")
+			input#municipiound(type="hidden")
+			input#parroquiaund(type="hidden")
+			select#rubros.custom-select()
+				option(value selected) Rubros
+			input#haintencion.number(type="text", placeholder="Hectareas")
+			select#tecnico.custom-select()
+				option(value selected) Tecnico de Campo
+			br
+			br
+			a#addList(href="javascript:void(0)").button-primary: span + Agregar
+			

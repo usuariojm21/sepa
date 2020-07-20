@@ -1,0 +1,6 @@
+ul
+	li: a#mnuprincipal.flaticon-salpicadero(href="./dashboard") Principal
+	//li: a.flaticon-escritura(href="#") Ciclo de cosecha
+	li: a#intencionsiembra.flaticon-escritura(href="#") Intención de Siembra
+	|<?php if ($show > 0) echo '<li><a class="flaticon-tractor" href="javascript:void(0)">Financiamiento</a></li>'; ?>
+	li: a#logout.flaticon-logout(href="../controller/logout.session.php" + formato_archivos) Cerrar Sesión

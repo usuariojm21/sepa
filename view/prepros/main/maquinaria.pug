@@ -1,0 +1,68 @@
+-var modulo = 'Maquinaria';
+-var estilosCss = 'css/maquinaria.css';
+-var formato_archivos = '';
+
+|<?php include("../controller/mainscript.php");?>
+
+doctype
+html.h-100(lang="es")
+	head
+		include ../includes/head_common.pug
+		title Sepa
+		link(rel="stylesheet" href=estilosCss)
+
+	body.h-100
+		#fondoDark
+		.container-fluid.h-100
+			
+			include ../includes/header.pug
+			.main-content.row.h-100
+				.barra_lateral.col-12.col-md-auto
+					nav
+						.leyenda
+							a(href="./dashboard") Principal
+							span  / 
+							a(href="./archivos") Archivos
+							span  / #{modulo}
+						include ../includes/mnu_archivos.pug
+				main.contenido.col
+					.row.m-0
+						section.col-12.col-lg
+							#cont-maq.card
+								h3.flaticon-cosechadora Maquinaria
+								br
+								ul#tabMaq.nav.nav-tabs(roles="tablist")
+									li.nav-item
+										a#tabListMaq.nav-link.active(href="#list", data-toggle="tab") Resumen
+									li.nav-item
+										a#tabData1.nav-link(href="#new", data-toggle="tab") Datos Principales
+									//li.nav-item
+										a#tabData2.nav-link(href="#newad", data-toggle="tab") Datos Adicionales
+
+								#contenidoTabMaq.tab-content
+									#list.tab-pane.fade.show.active(role="tabpanel")
+										h4 Maquinaria registrada
+										br
+										include ../includes/formbuscar.pug
+										.table-responsive
+											table.table.table-striped.table-hover.table-bordered
+												thead
+													tr
+														th ...
+														th ...
+														th ...
+												tbody
+													tr
+														td ...
+														td ...
+														td.text-collapsed ...
+													tr
+														td ...
+														td ...
+														td.text-collapsed ...
+
+						aside.col-12.col-lg-auto
+							.card
+								p Información Adicional
+								
+	include ../includes/scripts.pug

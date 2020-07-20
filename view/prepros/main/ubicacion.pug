@@ -1,0 +1,123 @@
+-var modulo = 'Ubicación';
+-var estilosCss = 'css/ubicacion.css';
+-var formato_archivos = '';
+
+|<?php include("../controller/mainscript.php");?>
+
+doctype
+html.h-100(lang="es")
+	head
+		include ../includes/head_common.pug
+		title Sepa
+		link(rel="stylesheet" href=estilosCss)
+
+	body.h-100
+		#fondoDark
+		.container-fluid.h-100
+			
+			include ../includes/header.pug
+			.main-content.row.h-100
+				.barra_lateral.col-12.col-md-auto
+					nav
+						.leyenda
+							a(href="./dashboard") Principal
+							span  / 
+							a(href="./archivos") Archivos
+							span  / #{modulo}
+						include ../includes/mnu_archivos.pug
+				main.contenido.col
+					.row.m-0
+						section.col-12.col-lg
+							#cont-ub.card
+								h3.flaticon-cosechadora Ubicación
+								br
+								ul#tabUb.nav.nav-tabs(roles="tablist")
+									li.nav-item
+										a#tabList.nav-link.active(href="#list", data-toggle="tab") Resumen
+									li.nav-item
+										a#tabData1.nav-link(href="#new", data-toggle="tab") Estados
+									li.nav-item
+										a#tabData2.nav-link(href="#new2", data-toggle="tab") Municipio
+									li.nav-item
+										a#tabData3.nav-link(href="#new3", data-toggle="tab") Parroquia
+									li.nav-item
+										a#tabData4.nav-link(href="#new4", data-toggle="tab") Sector
+
+								#contenidoTabUb.tab-content
+									#list.tab-pane.fade.show.active(role="tabpanel")
+										h4 Ubicaciones registradas
+										br
+										include ../includes/formbuscar.pug
+										.table-responsive
+											table.table.table-striped.table-hover.table-bordered
+												thead
+													tr
+														th Estado
+														th Municipio
+														th Parroquia
+														th Sector 
+												tbody
+													tr
+														td: a.item-estado(href="#") Portuguesa
+														td: a.item-municipio(href="#") Guanare
+														td.text-collapsed: a.item-parroquia(href="#") San Juan de Guanaguanare
+														td.text-collapsed: a.item-sector(href="#") Mesa de Cavaca
+													tr
+														td: a.item-estado(href="#") Lara
+														td: a.item-municipio(href="#") Iribarren
+														td.text-collapsed: a.item-parroquia(href="#") Santa Rosa
+														td.text-collapsed: a.item-sector(href="#") ...
+									#new.tab-pane.fade(role="tabpanel")
+										h4 Datos del Estado
+										form#fEstado.form-module.form-inline(action="#")
+											input#coEstado(type="text", name="codestado" readonly)
+											input#dsestado(type="text", name="dsestado" placeholder="Descripción")
+											.w-100
+											input#btnRegEstado.button-primary.btn-reg(type="button" value="Guardar")
+									#new2.tab-pane.fade(role="tabpanel")
+										h4 Datos del Municipio
+										form#fMunicipio.form-module.form-inline(action="#")
+											select#estado.custom-select
+												option(value="" selected) Seleccione un Estado
+											.w-100
+											input#coMunicipio(type="text", name="comunicipio" placeholder="" readonly)
+											input#dsMunicipio(type="text", name="dsmunicipio" placeholder="Descripción")
+											.w-100
+											input#btnRegMunicipio.button-primary.btn-reg(type="button" value="Guardar")
+									#new3.tab-pane.fade(role="tabpanel")
+										h4 Datos de la Parroquia
+										form#fParroquia.form-module.form-inline(action="#")
+											select#sEstado.custom-select
+												option(value="" selected) Seleccione un Estado
+											select#sMunicipio.custom-select
+												option(value="" selected) Seleccione un Municipio
+											.w-100
+											input#coParroquia(type="text", name="coparroquia" placeholder="" readonly)
+											input#dsParroquia(type="text", name="dsparroquia" placeholder="Descripción")
+											.w-100
+											input#btnRegParroquia.button-primary.btn-reg(type="button" value="Guardar")
+									#new4.tab-pane.fade(role="tabpanel")
+										h4 Datos del Sector
+										form#fSector.form-module.form-inline(action="#")
+											select#sEstado.custom-select
+												option(value="" selected) Seleccione un Estado
+											select#sMunicipio.custom-select
+												option(value="" selected) Seleccione un Municipio
+											select#sParroquia.custom-select
+												option(value="" selected) Seleccione una Parroquia
+											.w-100
+											input#coSector(type="text", name="cosector" placeholder="" readonly)
+											input#dsSector(type="text", name="dssector" placeholder="Descripción")
+											.w-100
+											input#btnRegSector.button-primary.btn-reg(type="button" value="Guardar")
+						aside.col-12.col-lg-auto
+							.card
+								p Información Adicional							
+	include ../includes/scripts.pug
+	script(src="js/rubros.js")
+	script.
+		var pmain = new Principal;
+		pmain.main_process();
+
+		var ubicacion = new ubicacion();
+		ubicacion.item_selected();

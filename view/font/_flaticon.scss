@@ -1,0 +1,124 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 30/06/2020 20:27
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff2") format("woff2"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-notificacion:before { content: "\f100"; }
+.flaticon-boton-de-menu:before { content: "\f101"; }
+.flaticon-busqueda:before { content: "\f102"; }
+.flaticon-logout:before { content: "\f103"; }
+.flaticon-usuario-hombre:before { content: "\f104"; }
+.flaticon-escritura:before { content: "\f105"; }
+.flaticon-tractor:before { content: "\f106"; }
+.flaticon-portafolios-con-lapiz:before { content: "\f107"; }
+.flaticon-numero-de-seguimiento:before { content: "\f108"; }
+.flaticon-mantenimiento:before { content: "\f109"; }
+.flaticon-boton-de-ayuda-bocadillo-con-signo-de-interrogacion:before { content: "\f10a"; }
+.flaticon-recycle-water:before { content: "\f10b"; }
+.flaticon-agricultor:before { content: "\f10c"; }
+.flaticon-siembra:before { content: "\f10d"; }
+.flaticon-cosechadora:before { content: "\f10e"; }
+.flaticon-granero:before { content: "\f10f"; }
+.flaticon-pagar:before { content: "\f110"; }
+.flaticon-inventario:before { content: "\f111"; }
+.flaticon-obrero:before { content: "\f112"; }
+.flaticon-mapa:before { content: "\f113"; }
+.flaticon-coordenadas:before { content: "\f114"; }
+.flaticon-tractor-agricola:before { content: "\f115"; }
+.flaticon-cerrar:before { content: "\f116"; }
+.flaticon-salpicadero:before { content: "\f117"; }
+.flaticon-dinero:before { content: "\f118"; }
+.flaticon-cargar:before { content: "\f119"; }
+.flaticon-recargar:before { content: "\f11a"; }
+.flaticon-lapiz-boton-de-editar:before { content: "\f11b"; }
+.flaticon-terreno:before { content: "\f11c"; }
+.flaticon-mas:before { content: "\f11d"; }
+.flaticon-anadir:before { content: "\f11e"; }
+.flaticon-caja:before { content: "\f11f"; }
+.flaticon-derecho:before { content: "\f120"; }
+.flaticon-izquierda:before { content: "\f121"; }
+.flaticon-flecha-hacia-abajo:before { content: "\f122"; }
+.flaticon-borrar:before { content: "\f123"; }
+.flaticon-sobre:before { content: "\f124"; }
+.flaticon-configuraciones:before { content: "\f125"; }
+.flaticon-menu-symbol-of-three-parallel-lines:before { content: "\f126"; }
+.flaticon-eliminar:before { content: "\f127"; }
+.flaticon-eliminar-1:before { content: "\f128"; }
+.flaticon-lupa:before { content: "\f129"; }
+    
+    $font-Flaticon-notificacion: "\f100";
+    $font-Flaticon-boton-de-menu: "\f101";
+    $font-Flaticon-busqueda: "\f102";
+    $font-Flaticon-logout: "\f103";
+    $font-Flaticon-usuario-hombre: "\f104";
+    $font-Flaticon-escritura: "\f105";
+    $font-Flaticon-tractor: "\f106";
+    $font-Flaticon-portafolios-con-lapiz: "\f107";
+    $font-Flaticon-numero-de-seguimiento: "\f108";
+    $font-Flaticon-mantenimiento: "\f109";
+    $font-Flaticon-boton-de-ayuda-bocadillo-con-signo-de-interrogacion: "\f10a";
+    $font-Flaticon-recycle-water: "\f10b";
+    $font-Flaticon-agricultor: "\f10c";
+    $font-Flaticon-siembra: "\f10d";
+    $font-Flaticon-cosechadora: "\f10e";
+    $font-Flaticon-granero: "\f10f";
+    $font-Flaticon-pagar: "\f110";
+    $font-Flaticon-inventario: "\f111";
+    $font-Flaticon-obrero: "\f112";
+    $font-Flaticon-mapa: "\f113";
+    $font-Flaticon-coordenadas: "\f114";
+    $font-Flaticon-tractor-agricola: "\f115";
+    $font-Flaticon-cerrar: "\f116";
+    $font-Flaticon-salpicadero: "\f117";
+    $font-Flaticon-dinero: "\f118";
+    $font-Flaticon-cargar: "\f119";
+    $font-Flaticon-recargar: "\f11a";
+    $font-Flaticon-lapiz-boton-de-editar: "\f11b";
+    $font-Flaticon-terreno: "\f11c";
+    $font-Flaticon-mas: "\f11d";
+    $font-Flaticon-anadir: "\f11e";
+    $font-Flaticon-caja: "\f11f";
+    $font-Flaticon-derecho: "\f120";
+    $font-Flaticon-izquierda: "\f121";
+    $font-Flaticon-flecha-hacia-abajo: "\f122";
+    $font-Flaticon-borrar: "\f123";
+    $font-Flaticon-sobre: "\f124";
+    $font-Flaticon-configuraciones: "\f125";
+    $font-Flaticon-menu-symbol-of-three-parallel-lines: "\f126";
+    $font-Flaticon-eliminar: "\f127";
+    $font-Flaticon-eliminar-1: "\f128";
+    $font-Flaticon-lupa: "\f129";

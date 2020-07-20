@@ -1,0 +1,51 @@
+script(src='js/vue.js')
+script(src="js/jquery.min.js")
+script(src="js/bootstrap.min.js")
+script(src="js/axios.js")
+script(src="js/imask.js")
+script(src="js/sweetalert.min.js")
+//script(src="js/Chart.bundle.min.js")
+//script(src="js/utils.js")
+script(src="js/main.js?v=100")
+script(src="js/class.principal.js?v=100")
+
+script.
+
+
+	$(document).ready(function(){
+		window.addEventListener("click",function(){
+			$(".menu-dropdown").hide();
+		})
+
+		//MOSTRAR Y OCULTAR EL MENU LATERAL EN EL MODO RESPONSIVE
+		var btnmenu = document.getElementById("btn-menu");
+		btnmenu.addEventListener("click",function(){
+			$(".barra_lateral").toggleClass('mostrarmenu');
+			$("#fondoDark").fadeToggle("slow");
+		});
+
+		$("#fondoDark").on("click",function(){
+			btnmenu.click();
+		});
+
+		window.addEventListener("resize",function(){
+			if(window.innerWidth>=768){
+				$(".barra_lateral").removeClass('mostrarmenu');
+				$("#fondoDark").fadeOut(0);
+			}
+		});
+
+		//MOSTRAR Y OCULTAR LOS MENUS DROPDOWNS
+		$(".menu-toggle").on("click",function(event){
+			event.stopPropagation();
+			var menu_dropdown = $(this).parent(".dropdown-container").children(".menu-dropdown");
+			$(".menu-dropdown").hide();
+			menu_dropdown.fadeToggle("fast");
+		});
+
+		$(".ciclo-cosecha").on("click",".menu-items",function(e){
+			let cicloc = $(this).data("ciclo");
+			localStorage.setItem('ciclo',cicloc);
+			location.reload();
+		});
+	});

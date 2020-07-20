@@ -1,0 +1,24 @@
+@import url("./main.css");
+@import "../includes/varandfunctions.styl"
+
+body
+	background #f8f8f8
+
+
+#ubicacion
+	menu_selected()		
+		
+@media(min-width 414px)
+	//estilo de form
+	.form-module
+		display flex
+		flex-flow row wrap
+		align-items center
+		
+		input,.custom-select
+			flex auto
+			width auto
+		#coEstado,#coMunicipio,#coParroquia,#coSector
+			max-width 150px
+		.btn-reg
+			flex none

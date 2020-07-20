@@ -1,0 +1,286 @@
+-var modulo = 'Productores';
+-var estilosCss = 'css/productores.css';
+-var formato_archivos = '';
+
+|<?php
+|	include("../controller/mainscript.php");
+|	require_once("../controller/class.productores.php");
+|	require_once("../controller/class.intencion.php");
+| $nUNDproduccion = count($undproduccion["data"]);
+|
+|	if($_SESSION["nivel"]=='PRODUCTOR'){
+|		if($nUNDproduccion<1){
+|			header("location:./primerospasos");
+|		}else{
+|			$intencion = new IntencionSiembra(array(
+|					"ciclo"=>"%",
+|					"fecha1"=>"1900-01-01",
+|					"fecha2"=>"2050-12-31",
+|					"rubro"=>"%",
+|					"estado"=>"%",
+|					"municipio"=>"%",
+|					"parroquia"=>"%",
+|					"sector"=>"%",
+|					"productor"=>"%",
+|					"entidad"=>"%"
+|			));
+|			$verifyintencion = $intencion->buscar();
+|			if($verifyintencion["estado"]===true){
+|				$data = $verifyintencion["data"];
+|				if(count($data)<1){
+|					header("location:./primerospasos");
+|				}
+|			}
+|		}
+|	}
+|
+|?>
+
+doctype
+html.h-100(lang="es")
+	head
+		include ../includes/head_common.pug
+		title Sepa
+		link(rel="stylesheet" href=estilosCss)
+		script.
+			let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+			//var listEstados = JSON.parse(`<?php //echo $obtener_estados; ?>`);
+			var ssdata = JSON.parse(`<?php echo $session_data; ?>`);
+			//console.log(ssdata.filtro);
+
+	body.h-100
+		#fondoDark
+		.container-fluid.h-100
+			
+			include ../includes/header.pug
+			.main-content.row.h-100
+				.barra_lateral.col-12.col-md-auto
+					nav
+						.leyenda
+							a(href="./dashboard" + formato_archivos) Principal
+							span  / 
+							a(href="./archivos" + formato_archivos) Archivos
+							span  / #{modulo}
+						include ../includes/mnu_archivos.pug
+				main.contenido.col
+					.row.m-0
+						section#migasdepan.col-12
+							.leyenda
+								a(href="./dashboard" + formato_archivos) Principal
+								span  > 
+								a(href="./archivos" + formato_archivos) Archivos
+								span 
+									| > 
+									b #{modulo}
+						section.col-12.col-lg
+							#cont-productores.card
+								h3.flaticon-agricultor Productor/Empresa
+								br
+								ul#tabProductores.nav.nav-tabs.d-none(roles="tablist")
+									li.nav-item
+										a#tabList.nav-link.active(href="#list", data-toggle="tab") Resumen
+									li.nav-item
+										a#tabNew.nav-link(href="#new", data-toggle="tab") Datos Principales
+								
+								#contenidoTabproductores.tab-content
+									#list.tab-pane.fade.show.active(role="tabpanel")
+										h4 Productores registrados
+										.table-responsive
+											table#tabla.tabla-productores.table.table-striped.table-hover
+												thead
+													tr
+														th #
+														th C.I./Rif
+														th Razón Social
+														th Dirección fiscal
+														th Telefonos
+														th.d-none
+														th.d-none
+														th.d-none
+														th.d-none
+												tbody
+													|<?php 
+													|	$productores = new Productores(array("busqueda"=>"%"));
+													|	$data = $productores->buscar();
+													|	$estado = $data["estado"];
+													|	$desc = $data["descripcion"];
+													|	$reg = $data["data"];
+													|	foreach ($reg as $key => $value) {
+													|		echo "<tr>
+													|			<td><a href='javascript:void(0)' class='flaticon-lapiz-boton-de-editar edit'></a></td>
+													|			<td>".$value["cRif"]."</td>
+													|			<td class='text-collapsed'>".$value["razonsocial"]."</td>
+													|			<td class='text-collapsed'>".$value["direccion"]."</td>
+													|			<td>".$value["telefonos"]."</td>
+													|			<td class='d-none'>".$value["representante"]."</td>
+													|			<td class='d-none'>".$value["correo"]."</td>
+													|			<td class='d-none'>".$value["pagina"]."</td>
+													|			<td class='d-none'>".$value["estatus"]."</td>
+													|		</tr>";                            
+													|	}
+													|?>
+											h4.noData
+									#new.tab-pane.fade(role="tabpanel")
+										h4 Datos del productor
+										form#fproductor.form-module(action="#" method="post" autocomplete="off")
+											.row.m-0
+												.col-12.col-sm-3.p-1
+													label.custom-label CI/Rif * 
+													input#crif(type="text", class='v-rif' name="ndoc" maxlength="10" placeholder='Ej. J321459658')
+												.col-12.col-sm-5.p-1
+													label.custom-label Razón Social * 
+													input#rsocial(type="text", name="rsocial"  maxlength="100")
+												.col-12.col-sm-4.p-1
+													label.custom-label Telefono * 
+													input#tlf(type="text", name="tlf"  maxlength="100")
+												.col-12.col-sm-6.p-1
+													label.custom-label Correo electrónico * 
+													input#correo(type="email", name="correo"  maxlength="" placeholder='juan@gmail.com')
+												.col-12.col-sm-6.p-1
+													label.custom-label dirección de Pagina web
+													input#pagina.no-valid(type="text", name="pagina"  maxlength="255" placeholder='www.ejemplo.org')
+												.w-100
+												.col-12.p-1
+													label.custom-label Dirección * 
+													input#dfiscal.large-control.no-valid(type="text", name="dfiscal" maxlength="255")
+												.col-12.p-1
+													p.large-control Representante Legal
+												.col-12.col-sm.p-1
+													label.custom-label Nombre y Apellido * 
+													input#rlegal.large-control(type="text" name="rlegal" maxlength="50")
+												.col-12.p-1
+													.custom-control.custom-switch
+														input#switchProd.custom-control-input(type="checkbox", name="")
+														label.custom-control-label(for="switchProd") Activo/Inactivo
+												.w-100
+												.col-auto.p-0.mt-2.ml-auto
+													input#btnBack.b-style-color1(type="button" value="Volver" onclick="js('#tabList').click(),js('#buttonNew').removeAttribute('style')")
+												.col-auto.px-1.mt-2
+													input#btnClean.b-style-cancel(type="button" value="Cancelar")
+												.col-auto.p-0.mt-2
+													input#btnReg.b-style-color3.load(type="submit" value="Guardar")
+				.button-primary-new
+					a#buttonNew.flaticon-anadir(href="javascript:void(0)")
+				#boxNew.row.m-0.position-fixed.h-100
+						#boxButtons.align-self-end
+							.item-button
+								label Intención de siembra
+								a.flaticon-escritura(href="./intencion")
+							.item-button
+								label Unidad de Producción
+								a.flaticon-siembra(href="./unidad_produccion")
+							.item-button.primary
+								label Nuevo productor
+								a.flaticon-agricultor(href='javascript:void(0)' onclick="main.hideBoxNew(), js('#tabNew').click()")
+
+	include ../includes/scripts.pug
+	script(src="js/datatables/datatables.min.js")
+	script(src="js/datatables/cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js")
+	script(src="js/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js")
+	script(src="js/datatables/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js")
+	script(src="js/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js")
+	script(src="js/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js")
+	script(src="js/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js")
+	script(src="js/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js")
+	script(src="js/class.productores.js")
+	script.
+
+		var main = new Main();
+		var dashboard = new Dashboard();
+		dashboard.getCicle(jsonCiclos);
+		main.boxNew();
+
+		//let busqueda = js("#search_main");
+
+		let forms = js('#fproductor');
+		let cRif = js("#crif");
+		let razonsocial = js("#rsocial");
+		let tlf = js("#tlf");
+		let email = js("#correo");
+		let url = js("#pagina");
+		/*let estado = js("#estado");
+		let municipio = js("#municipio");
+		let parroquia = js("#parroquia");
+		let sector = js("#sector");*/
+		let direccion = js("#dfiscal");
+		let representante = js("#rlegal");
+		let estatus = js("#switchProd");
+		let bGuardar = js("#btnReg");
+		let bLimpiar = js("#btnClean");
+
+		let arrayProductores = [];
+		let valueStatus = 0
+		let updateProductor = 0;
+		var blockElement = [cRif]; //elementos a ser bloqueados
+
+		//validar campos con expresiones regulares. Cuando el usuario teclee
+		IMask(cRif,{mask:EXPrifMask});
+		IMask(tlf,{mask:'0000-0000000'});
+
+		//isntanciar clase Productores en la variable productores
+		let productores = new Productores(
+			cRif,
+			razonsocial,
+			tlf,
+			email,
+			url,
+			direccion,
+			representante,
+			estatus
+		);
+
+		window.addEventListener("load",function(){
+			//productores.buscar();
+			//pmain.obtenerEstados(listEstados);
+		});
+
+		$('.tabla-productores').DataTable({
+				dom: 'Bfrtip',
+				buttons: [
+						'excel', 'pdf', 'print'
+				]
+		});	 
+
+			
+		/*let frmBuscar = document.querySelector("#form-buscar");
+		frmBuscar.addEventListener("submit",function(){
+			event.preventDefault();
+			productores.buscar();
+		});*/
+
+		//obtener datos del registro seleccionado y pasarlos al formulario editar
+
+		$(document).on("click",".edit",function(e){
+			let tr = $(this).parents("tr");
+
+			let data = {
+				rif:tr.children("td").eq(1).text(),
+				razonsocial:tr.children("td").eq(2).text(),
+				direccion:tr.children("td").eq(3).text(),
+				telefono:tr.children("td").eq(4).text(),
+				representante:tr.children("td").eq(5).text(),
+				correo:tr.children("td").eq(6).text(),
+				pagina:tr.children("td").eq(7).text(),
+				estatus:tr.children("td").eq(8).text()
+			}
+			productores.editar(data);
+		});
+
+		//validar y guardar nuevo registro
+		forms.addEventListener('submit',function(e){
+			e.preventDefault();
+
+			productores.guardar();
+
+		});
+
+		bLimpiar.addEventListener("click",function(e){
+			productores.limpiar();
+		})
+
+		/*estado.addEventListener("change",function(){
+			pmain.obtenerMunicipios(this.value);
+		});
+		municipio.addEventListener("change",function(){
+			pmain.obtenerParroquias(this.value);
+		});*/

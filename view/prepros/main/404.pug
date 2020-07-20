@@ -1,0 +1,22 @@
+-var modulo = '';
+-var estilosCss = 'css/dashboard.css';
+-var formato_archivos = '';
+
+include ../includes/scripts_php_principales.pug
+
+doctype
+html.h-100(lang="es")
+	head
+		include ../includes/head_common.pug
+		title Sepa
+		link(rel="stylesheet" href=estilosCss)
+	body.h-100
+		#error404.container-fluid.h-100
+			.main-content.row.h-100
+				main.contenido.col
+					.row.m-0.h-100.justify-content-center.align-items-center
+						section#error404.col-12.align-self-center
+							h1 404
+							h5 No se encuentra la pagina :(
+							a#volver(href="./dashboard") Ir al inicio
+

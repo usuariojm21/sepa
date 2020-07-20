@@ -1,0 +1,107 @@
+-var modulo = '...';
+-var estilosCss = 'css/...css';
+-var formato_archivos = '';
+
+|<?php include("../controller/mainscript.php");?>
+
+doctype
+html.h-100(lang="es")
+	head
+		include ../includes/head_common.pug
+		title Sepa
+		link(rel="stylesheet" href=estilosCss)
+
+	body.h-100
+		#fondoDark
+		.container-fluid.h-100
+			
+			include ../includes/header.pug
+			.main-content.row.h-100
+				.barra_lateral.col-12.col-md-auto
+					nav
+						.leyenda
+							a(href="./dashboard") Principal
+							span  / #{modulo}
+						//include ../includes/...pug
+				main.contenido.col
+					.row.m-0
+
+						section#migasdepan.col-12
+							.leyenda
+								a(href="./dashboard" + formato_archivos) Principal
+								span  > 
+								a(href="./archivos" + formato_archivos) Archivos
+								span 
+									| > 
+									b #{modulo}
+									
+						section.col-12.col-lg
+							.card
+
+						aside.col-12.col-lg-auto
+							.card
+								p Información Adicional
+								
+	include ../includes/scripts.pug
+	script.
+		function_main();
+
+//ESTILO PARA LOS FORMULARIOS
+form(action="#" method="post" autocomplete="off")
+	input(type="", name="" placeholder="")
+	input(type="", name="" placeholder="")
+	input(type="", name="" placeholder="")
+	input.error(type="", name="" placeholder="")
+	textarea(name="", cols="30", rows="10" placeholder="Comentario")
+	.form-check.p-0
+		.custom-control.custom-checkbox.custom-control-inline
+			input#customCheck1.custom-control-input(type="checkbox")
+			label.custom-control-label(for="customCheck1") Opción 1
+		.custom-control.custom-checkbox.custom-control-inline
+			input#customCheck2.custom-control-input(type="checkbox")
+			label.custom-control-label(for="customCheck2") Opción 2
+	hr
+	.form-check.p-0
+		.custom-control.custom-radio.custom-control-inline
+			input#customRadio1.custom-control-input(type="radio" name="sexo")
+			label.custom-control-label(for="customRadio1") Hombre
+		.custom-control.custom-radio.custom-control-inline
+			input#customRadio2.custom-control-input(type="radio" name="sexo")
+			label.custom-control-label(for="customRadio2") Mujer
+	hr
+	select.custom-select
+		option(selected) Seleccione una opción
+		option(value="1") Primero
+		option(value="2") Segundo
+		option(value="3") Tercero
+	hr
+	.custom-control.custom-switch
+		input#customSwitch1.custom-control-input(type="checkbox", name="")
+		label.custom-control-label(for="customSwitch1") Apagado/Encendido
+	.clear
+	input.button-primary.btn-reg(type="button" value="Registrar")
+//ESTILO PARA LAS TABLAS
+.table-responsive
+	table.table.table-striped.table-sm
+		thead
+			tr
+				th Nombre
+				th Apellido
+				th Telefono
+				th Correo
+				th Dirección
+				
+		tbody
+			tr
+				td Jose
+				td Mendez
+				td 04145514202
+				td.large josemendezbn@gmail.com
+				td.large Mesa de Cavaca, Barrio la goajira. Calle Miranda con Av. Los Jabillos
+			tr
+				td
+				td
+				td
+				td
+				td
+

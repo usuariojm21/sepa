@@ -1,0 +1,25 @@
+@import url("./main.css");
+@import "../includes/varandfunctions.styl"
+
+body
+	background #f8f8f8
+
+.pasos
+	background #fff
+	min-height 400px
+	transition .3s all
+#paso2,#paso3
+	opacity 0
+	right -110%
+.pasos-visible
+	opacity 1 !important
+	right 0 !important
+	
+#btnAdd
+	padding-bottom 7px
+	padding-top 7px
+	&:before
+		font-size 15px !important
+		font-weight 500
+		margin-left 0 !important
+		margin-right 10px

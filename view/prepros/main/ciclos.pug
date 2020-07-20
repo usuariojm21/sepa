@@ -1,0 +1,234 @@
+-var modulo = 'Ciclos';
+-var estilosCss = 'css/ciclos.css';
+-var formato_archivos = '';
+
+|<?php include("../controller/mainscript.php");
+|	require_once("../controller/class.ciclos.php");
+|?>
+|
+doctype
+html.h-100(lang="es")
+	head
+		include ../includes/head_common.pug
+		title Sepa
+		link(rel="stylesheet" href=estilosCss)
+		script.
+			let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+
+	body.h-100
+		#fondoDark
+		.container-fluid.h-100
+			
+			include ../includes/header.pug
+			.main-content.row.h-100
+				.barra_lateral.col-12.col-md-auto
+					nav
+						.leyenda
+							a(href="./dashboard" + formato_archivos) Principal
+							span  / 
+							a(href="./archivos" + formato_archivos) Archivos
+							span  / #{modulo}
+						include ../includes/mnu_archivos.pug
+				main.contenido.col
+					.row.m-0
+						section#migasdepan.col-12
+							.leyenda
+								a(href="./dashboard" + formato_archivos) Principal
+								span  > 
+								a(href="./archivos" + formato_archivos) Archivos
+								span 
+									| > 
+									b #{modulo}
+						section.col-12.col-lg
+							#cont-ciclos.card
+								h3.flaticon-recycle-water Ciclo de Cosecha
+								ul#tabciclos.nav.nav-tabs.d-none(roles="tablist")
+									li.nav-item
+										a#tabList.nav-link.active(href="#list", data-toggle="tab") Resumen
+									li.nav-item
+										a#tabNew.nav-link(href="#new", data-toggle="tab") Datos Principales
+								
+								#contenidoTabciclos.tab-content
+									#list.tab-pane.fade.show.active(role="tabpanel")
+										h4 Resumen de ciclos										
+										.table-responsive
+											table#tabla.tabla-ciclos.table.table-striped.table-hover
+												thead
+													tr
+														th #
+														th Codigo
+														th Descripción
+														th Desde
+														th Hasta
+														th.d-none
+												tbody
+													|<?php 
+													|	$ciclos = new Ciclos(array("busqueda"=>"%"));
+													|	$data = $ciclos->buscar();
+													|	$estado = $data["estado"];
+													|	$desc = $data["descripcion"];
+													|	$reg = $data["data"];
+													|	foreach ($reg as $key => $value) {
+													|		echo "<tr>
+													|			<td><a href='javascript:void(0)' class='deleteItem flaticon-borrar hidden-nivel deleteItem' data-toggle='modal' data-target='.modal'></a></td>
+													|			<td>".$value["ciclo"]."</td>
+													|			<td>".$value["desciclo"]."</td>
+													|			<td>".date("d/m/Y",strtotime($value["desdeciclo"]))."</td>
+													|			<td>".date("d/m/Y",strtotime($value["hastaciclo"]))."</td>
+													|			<td class='d-none'>".$value["estatus"]."</td>
+													|		</tr>";                            
+													|	}
+													|?>
+									#new.tab-pane.fade.show(role="tabpanel")
+										h4 Datos del ciclo
+										form#fCiclo.form-module(action="#" method="post" name="ciclos" autocomplete="off")
+											.row.m-0
+												.col-12.col-sm-4.p-1
+													label.custom-label(for="codCiclo") Ciclo de cosecha
+													select#codCiclo.custom-select()
+														option(value="") Ciclo de cosecha
+														option(value="INV-Invierno") Invierno
+														option(value="VER-Verano") Verano
+														option(value="CLG-Ciclo Largo") Ciclo Largo
+												.col-12.col-sm.p-1
+													label.custom-label(for="desCiclo") Descripción
+													input#desCiclo(type="text" name="desCiclo" placeholder="Descripción" maxlength="50" readonly)
+												.w-100
+												.col-12.col-sm.p-1
+													label.custom-label(for="cicloDesde") Desde
+													input#cicloDesde.fciclo(type="date" name="cicloDesde")
+												.col-12.col-sm.p-1
+													label.custom-label(for="cicloHasta") Hasta
+													input#cicloHasta.fciclo(type="date" name="cicloHasta")
+												.w-100
+												.col-12.col-sm.p-1
+													.custom-control.custom-switch
+														input#switchCiclo.custom-control-input(type="checkbox", name="")
+														label.custom-control-label(for="switchCiclo") Activo/Inactivo
+												.w-100
+												.col-auto.p-0.mt-2.ml-auto
+													input#btnBack.b-style-color1(type="button" value="Volver" onclick="js('#tabList').click(),js('#buttonNew').removeAttribute('style')")
+												//.col-auto.px-1.mt-2
+													input#btnClean.b-style-cancel(type="button" value="Cancelar")
+												.col-auto.p-0.pl-1.mt-2
+													input#btnRegCiclo.b-style-color3.load(type="submit" value="Guardar")
+				.button-primary-new
+					a#buttonNew.flaticon-anadir(href="javascript:void(0)")
+				#boxNew.row.m-0.position-fixed.h-100
+						#boxButtons.align-self-end
+							.item-button
+								label Intención de siembra
+								a.flaticon-escritura(href="./intencion")
+							.item-button
+								label Nuevo ciclo de cosecha
+								a.flaticon-recycle-water(href='javascript:void(0)' onclick="main.hideBoxNew(), js('#tabNew').click()")
+
+						//aside.col-12.col-lg-auto
+							.card
+								p Información Adicional
+	include ../includes/scripts.pug
+	script(src="js/datatables/datatables.min.js")
+	script(src="js/datatables/cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js")
+	script(src="js/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js")
+	script(src="js/datatables/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js")
+	script(src="js/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js")
+	script(src="js/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js")
+	script(src="js/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js")
+	script(src="js/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js")
+	script(src="js/class.ciclos.js")
+	script.
+
+		var main = new Main();
+		var dashboard = new Dashboard();
+		dashboard.getCicle(jsonCiclos);
+		main.boxNew();
+
+		let forms = document.getElementById('fCiclo');
+		let cCiclo = document.getElementById("codCiclo");
+		let desCiclo = document.getElementById("desCiclo");
+		let fDesdeCiclo = document.getElementById("cicloDesde");
+		let fHastaCiclo = document.getElementById("cicloHasta");
+		let estatus = document.getElementById("switchCiclo");
+		let bGuardar = document.getElementById("btnRegCiclo");
+
+		let fecha = new Date();
+		let yearToday = fecha.getFullYear();
+
+		let arrayCicloC = [];
+		let codigoCiclo = "";
+		let descripcionCiclo = "";
+		let valueStatus = 0;
+		let updateCiclo = 0;
+		var blockElement = [cCiclo,desCiclo,fHastaCiclo]; //elementos a ser bloqueados
+
+		let ciclos = new Ciclos(
+			cCiclo,
+			desCiclo,
+			fDesdeCiclo,
+			fHastaCiclo,
+			estatus
+		);
+
+		$('.tabla-ciclos').DataTable({
+				dom: 'Bfrtip',
+				buttons: [
+						'excel', 'pdf', 'print'
+				]
+		});
+
+		jsAll(".deleteItem").forEach(function(el){
+			el.addEventListener("click",function(){
+				tr = $(this).parents("tr");
+				let codigo = tr.children("td").eq(1).text();
+				
+				swal("Eliminar registro", '¿Estas seguro de querer eliminar este registro?', "warning",{
+					buttons:{
+						cancel: "Cancelar",
+						confirm: {
+							text: "Aceptar",
+							className:"warningSweetAlert",
+							closeModal:true
+						}
+					}
+				}).then((aceptar)=>{
+					if(aceptar){
+						ciclos.eliminar(codigo);
+					}
+				});
+			});
+		});
+
+		cCiclo.addEventListener("change",function(){
+
+			if (this.value!="") {
+				arrayCicloC = this.value.split("-");
+				codigoCiclo = arrayCicloC[0];
+				descripcionCiclo = arrayCicloC[1];
+				codigoCiclo += yearToday;
+				descripcionCiclo += " " + yearToday;
+			}else{
+				codigoCiclo ="";
+				descripcionCiclo = "";
+			}
+
+			//asignar descripcion del ciclo al campo desCiclo;
+			desCiclo.value = descripcionCiclo;
+
+		});
+
+		forms.addEventListener("submit",function(e){
+			e.preventDefault();
+			ciclos.guardar();
+		});
+		/*$("#fCiclo input, #fCiclo select").on("keypress",function(){
+			var keycode = event.keyCode ? event.keyCode : event.which;
+			if(keycode == '13'){
+				ciclos.validar();
+			}
+		});
+
+		bGuardar.addEventListener("click",function(){
+			ciclos.validar();
+
+		});*/
+				

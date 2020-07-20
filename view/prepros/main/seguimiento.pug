@@ -1,0 +1,32 @@
+-var estilosCss = 'css/seguimiento.css';
+-var formato_archivos = '';
+
+|<?php include("../controller/mainscript.php");?>
+
+doctype
+html.h-100(lang="es")
+	head
+		include ../includes/head_common.pug
+		title Sepa | Seguimiento
+		link(rel="stylesheet" href="css/archivos.css")
+
+	body.h-100
+		#fondoDark
+		.container-fluid.h-100
+			
+			include ../includes/header.pug
+			.main-content.row.h-100
+				.barra_lateral.col-12.col-sm.auto
+					//.d-none.d-sm-block
+					nav
+						.leyenda
+							a(href="./dashboard" + formato_archivos) Principal
+							span  / 
+							a(href="./seguimiento" + formato_archivos) Seguimiento
+						include ../includes/mnu_seguimiento.pug
+				main.col-12.col-sm
+					h3 Seguimiento
+				aside.col-12.col-sm-2
+	include ../includes/scripts.pug
+	script.
+		function_main();

@@ -1,0 +1,134 @@
+@import url("./main.css");
+@import "../includes/varandfunctions.styl"
+
+body
+	background #f8f8f8
+
+#mnuprincipal
+	menu_selected()
+	
+#card-undprod
+	.card
+		background linear-gradient(45deg, #ef0f95, #500a96)//#6a0ed6
+#card-entidad
+	.card
+		background linear-gradient(45deg, #ff0047,#581125)
+#card-productores
+	.card
+		background linear-gradient(45deg,#ff4800,#a90414)
+#card-haproductivas
+	.card
+		background linear-gradient(45deg, #2fc797, #007bff)//#31bd7e
+#card-haintencion
+	.card
+		background: linear-gradient(45deg,#0af17b,#009688);
+#card-hafinanciadas
+	.card
+		background: linear-gradient(45deg,#3F51B5,#F44336);
+#card-hasembradas
+	.card
+		background: linear-gradient(45deg,#9e7538,#ff9800);
+#card-hacosechadas
+	.card
+		background: linear-gradient(45deg,#2f5ec7,#007bff);
+#card-haperdidas
+	.card
+		background: linear-gradient(45deg,#852fc7,#2a6bff);
+
+.header-resumen
+	margin 0 -5px !important
+	
+	//CARD RESUMEN
+	.card-resumen
+		padding 5px !important
+		.card
+			overflow hidden
+			padding 10px
+			position relative
+			i:before
+				color #00000033
+				font-size 50px
+				margin 0 !important
+				position absolute
+				left -5%
+				//top -5%
+				z-index 1
+			h4
+				color #fff
+				font-size 20px
+				font-style normal
+				font-weight 900				
+				margin 0
+				position relative
+				text-align right
+				z-index 2
+			span
+				color #fff
+				font-size 12px
+				max-width 100%
+				min-width 100%
+				position relative
+				text-align right
+				z-index 2
+	//FIN CARD		
+
+/*#form-resumen
+	input,select,.custom-select,textarea,.form-control
+		font-size 16px
+		padding 5px
+		text-transform initial
+	input:disabled,select:disabled, textarea:disabled
+		background #ddd !important*/
+	/*input#buscar
+		background color3//#530a96
+		cursor pointer
+		padding 6px
+		&:hover
+			opacity .8*/
+
+#listadoIntencion
+	.table-responsive
+		h2
+			color #aaa
+			font-size 25px
+			font-weight 600
+			text-transform capitalize
+	/*table#table.table thead tr th
+		padding 6px*/
+			
+@media(min-width 576px)
+	#listadoIntencion
+		.table-responsive
+			h2
+				font-size 30px
+	.header-resumen
+		.card-resumen
+			&:nth-child[0]
+				padding-left 0 !important
+			.card
+				padding 15px
+				i:before
+					font-size 100px
+					left -5%
+					top -5%
+				h4
+					font-size 25px
+				span
+					font-size 14px
+	
+/*#listadoIntencion
+	text-align right
+	.row
+		margin 0 !important
+	.col,.col-9,.col-3,.col-12,.col-auto
+		padding 0 !important
+#headIntencion,#bodyDetalle
+	border 1px solid #000
+	span
+		display block
+#headIntencion
+	#ente
+		text-align left*/
+
+	
+		

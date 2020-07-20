@@ -1,0 +1,367 @@
+-var modulo = 'Unidad de Producción';
+-var estilosCss = 'css/pasos.css';
+-var formato_archivos = '';
+
+|<?php
+
+| error_reporting(E_ERROR | E_WARNING | E_PARSE);
+|	include("../controller/mainscript.php");
+|	require_once("../controller/methods.php");
+|	require_once("../model/class.querys.php");
+|	require_once("../controller/class.productores.php");
+|	require_once("../controller/class.undproduccion.php");
+|	require_once("../controller/class.direction.php");
+|	require_once("../controller/class.intencion.php");
+|	$undprod = $undproduccion["data"];
+|	$JSONundprod = json_encode($undprod);
+|	$intencion = new IntencionSiembra(array(
+|			"ciclo"=>"%",
+|			"fecha1"=>"1900-01-01",
+|			"fecha2"=>"2050-12-31",
+|			"rubro"=>"%",
+|			"estado"=>"%",
+|			"municipio"=>"%",
+|			"parroquia"=>"%",
+|			"sector"=>"%",
+|			"productor"=>"%",
+|			"entidad"=>"%"
+|		)
+|	);
+|	$verifyintencion = $intencion->buscar();
+|	if($verifyintencion["estado"]===true){
+|		$data = $verifyintencion["data"];
+|		
+|		if(count($data)>0){
+|			header('location:./dashboard');
+|		}
+|	}
+|
+|?>
+|
+
+doctype
+html.h-100(lang="es")
+	head
+		include ../includes/head_common.pug
+		title Sepa
+		link(rel="stylesheet" href=estilosCss)
+		script.
+			let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+			var ssdata = JSON.parse(`<?php echo $session_data; ?>`);
+	body.h-100
+		#fondoDark
+		.container-fluid.h-100
+			include ../includes/header.pug
+			.main-content.row.h-100
+				main.contenido.col
+					.row.m-0
+						section.col-12.col-lg
+							#cont-up.card
+								.row.m-0
+									.col-12.p-0
+										h1.mb-2 Primeros pasos
+									.row.m-0.position-relative(style='overflow:hidden;')
+										#paso1.pasos.col-12.p-0
+											h3
+												strong Paso 1
+												span Agrega una unidad de producción
+											form#f_up.forms.form-module(action="" method="post" autocomplete="off" enctype="multipart/form-data")
+												.row
+													.group-select.col-12.col-sm
+														label(for='undproduccion') UP existente
+														select#undproduccion.custom-select(name='codundproduccion')
+															option(value="POR ASIGNAR" selected) POR ASIGNAR
+															|<?php
+															|	foreach ($undprod as $key => $value) {
+															|		echo '<option value="'.$value['codundprod'].'">'.strtoupper($value["nomundprod"]).'</option>';
+															|	}?>																
+													.group-input.col-12.col-sm
+														label Codigo de la ficha predial
+														input#codFichaPredial.no-valid(type="text" name="codfichapredial")
+													.group-input.col-12.col-sm-6
+														label Adjuntar documento de ficha predial
+														.custom-file
+															input#fileFichaPredial.custom-file-input.no-valid(type="file")
+															label.custom-file-label(for="fileFichaPredial") Cargar Archivo
+														input#ndocproductor.no-valid(type="hidden" name='productor' data-twovalue='' value='') 
+													.group-input.col-12.col-sm-6
+														label(for="nombre") Nombre de la Unidad de producción *
+														input#nombre(type="text", name="nombre"  maxlength="100")
+													.group-input.col-12.col-sm-6
+														label(for="hatotal") Hectareas Totales *
+														input#hatotal(type="text", name="haTotal" maxlength="8")
+													.group-input.col-12.col-sm-6
+														label(for="haproductivas") Hectareas Productivas *
+														input#haproductivas(type="text", name="haProductivas" maxlength="8")
+													.group-select.col-12.col-sm
+														label(for="tenencia") Tenencia *
+														select#tenencia.custom-select(name="tenencia")
+															option(value='') Seleccione una opción
+															option(value='1') PROPIA
+															option(value='2') PRESTAMO DE USO
+														//input#tenencia.no-valid(type="hidden" name="tenencia" value="1")
+													.w-100
+													.group-select.col-12.col-sm-4
+														label(for="estado") Estado *
+														select#estado.custom-select(name="estado")
+															option(value) Seleccione una opción
+															|<?php 
+															|	$direccion = new Direccion();
+															|	$data = $direccion->getEstados();
+															|	$estado = $data["estado"];
+															|	$desc = $data["descripcion"];
+															|	$reg = $data["data"];
+															|	foreach ($reg as $key => $value) {
+															|		echo '<option value="'.$value['codigo'].'">'.$value["nombre"].'</option>';
+															|	}?>														
+													.group-select.col-12.col-sm-4
+														label(for="municipio") Municipio *
+														select#municipio.custom-select(name="municipio")
+															option(value) Seleccione una opción														
+													.group-select.col-12.col-sm-4
+														label(for="parroquia") Parroquia *
+														select#parroquia.custom-select(name="parroquia")
+															option(value) Seleccione una opción
+													.group-input.col-12.col-sm-4.autocomplete
+														label(for="sector") Sector *
+														input#sector(type="text" name="sector" data-twovalue='')
+													.group-input.col-12.col-sm-8
+														label(for="dfiscal") Dirección *
+														input#dfiscal.large-control(type="text", name="direccion" maxlength="255")
+													.form-subtitle.col-12
+														p.large-control Coordenadas Principales
+													.group-input.col-12.col-sm-6
+														label(for="latitud") Latitud *
+														input#latitud(type="text", name="latitud" maxlength="50")
+													.group-input.col-12.col-sm-6
+														label(for="longitud") Longitud *
+														input#longitud(type="text", name="longitud" maxlength="50")
+													.w-100
+													.group-input.col-12.col-sm-auto
+														input#btnRegUP.button-primary.btn-reg(type="submit" value="Siguiente")
+										#paso2.pasos.col-12.p-0.position-absolute
+											h3
+												strong Paso 2
+												span Agrega una intención de siembra
+											form#fintencion.forms.form-module(action="#" method="post" autocomplete="off")
+												.row
+													.group-select.col-12.col-sm
+														label(for="rubros") Rubros *
+														select#rubros.custom-select(name="rubros")
+															option(value selected) Seleccione una opción
+															|<?php 
+															|	$sql='SELECT * from rubros';
+															|	$param=[];
+															|	$resultQuery = Querys::QUERYBD($sql,$param);
+															|	$state = $resultQuery["state"];
+															|	if ($state){
+															| 	$stmt = $resultQuery["stmt"];
+															|		while ($f=$stmt->fetch()) {
+															|			echo '<option value="'.$f['codrubro'].'">'.$f['desrubro'].'</option>';
+															|		}
+															|	}
+															|?>															
+													.group-input.col-12.col-sm
+														label(for="haintencion") Hectareas de la intención *
+														input#haintencion(type="text", name="haintencion" placeholder="Hectareas")
+													.group-select.col-12.col-sm
+														label(for='ndoctecnico') Tecnico de campo
+														select#ndoctecnico.custom-select(name="doctecnico")
+															|<?php
+															|	$sql='SELECT * from tecnico';
+															|	$param=[];
+															|	$resultQuery = Querys::QUERYBD($sql,$param);
+															|	$state = $resultQuery["state"];
+															|	if ($state){
+															| 	$stmt = $resultQuery["stmt"];
+															|		while ($f=$stmt->fetch()) {
+															|			echo '<option value="'.$f['cedtecnico'].'">'.$f["nomtecnico"].'</option>';
+															|		}
+															|	}
+															|?>															
+													input#ciclo(type="hidden", name="ciclo")
+													//input#docproductor(type="hidden", name="cirif")
+													//input#undproduccion(type='hidden' name='codundproduccion')
+													input#entidad(type="hidden", name="entidad")
+													.w-100
+													.group-input.col-auto
+														input#btnBack.b-secundary(type="button", value="Anterior")
+													.group-input.col-auto
+														input#btnNext.button-primary(type="submit", value="Finalizar")
+
+	include ../includes/scripts.pug
+	script(src="js/class.undproduccion.js?v=1")
+	script(src="js/class.intencion.js?v=1")
+	script(src='js/class.primerospasos.js?v=1')
+	script.
+
+		var main = new Main();
+		var dashboard = new Dashboard();
+		dashboard.getCicle(jsonCiclos);
+
+		var session = JSON.parse(`<?php echo $session_data; ?>`);
+		var JSONundprod = JSON.parse(`<?php echo $JSONundprod; ?>`);
+
+		let forms = document.getElementsByClassName('forms');
+		let codigoficha = js("#codFichaPredial");
+		let fileFicha = js("#fileFichaPredial");
+		let ndocproductor = js("#ndocproductor");
+		ndocproductor.value = session.cirif;
+		ndocproductor.dataset.twovalue = session.cirif;
+		let razonsocial = '';
+		let codigoUNDproduccion='';
+		let nombre = js("#nombre");
+		let haTotal = js("#hatotal");
+		let haProductivas = js("#haproductivas");
+		let tenencia = js("#tenencia");
+		let estado = js("#estado");
+		let municipio = js("#municipio");
+		let parroquia = js("#parroquia");
+		let sector = js("#sector");
+		let direccion = js("#dfiscal");
+		let clatitud = js("#latitud");
+		let clongitud = js("#longitud");
+		let switchUP = document.createElement("input");
+		switchUP.setAttribute("type","checkbox");
+		switchUP.checked = true;
+		
+		let bGuardar = js("#btnRegUP");
+
+		let rubros = js("#rubros");
+		let tecnico = js("#ndoctecnico");
+		
+		let haintencion = js("#haintencion");
+		IMask(haintencion,{mask:EXPnumberDecimal});
+
+		let	ciclo = js("#ciclo");
+		ciclo.value = jsonCiclos.ciclo_actual;
+		
+		let	entidad = js("#entidad");
+		entidad.value =  session.entidad;
+		
+		let bGuardar2 = js("#bguardar");
+		
+		let updateundprod = 0;
+		let valueStatus = 0;
+		var blockElement = [];
+
+		for (var i = 0; i < forms.length; i ++) {
+			forms[i].addEventListener('submit',function(e){
+				e.preventDefault();
+			});
+		}
+
+		//instanciar clase Pasos de class.primerospasos.js
+		let pasos = new Pasos(ciclo.value,session.cirif,session.entidad);
+
+		let undproduccion = new UNDProduccion(
+			codigoficha,
+			fileFicha,
+			ndocproductor,
+			razonsocial,
+			codigoUNDproduccion,
+			nombre,
+			haTotal,
+			haProductivas,
+			estado,
+			municipio,
+			parroquia,
+			sector,
+			direccion,
+			clatitud,
+			clongitud,
+			switchUP,
+			tenencia
+				);
+
+		//seleccionar unidad de produccion exitente y obtener datos
+		js("#undproduccion").addEventListener("change",function(){
+			if(this.value==='') {
+				pasos.cleanFormUndProd();				
+				return;
+			}
+
+			let value = this.value;
+			JSONundprod.forEach(function(data){
+				if(value === data["codundprod"]){
+					undproduccion.codigoUNDproduccion = data["codundprod"];
+					codigoficha.value = data["codfichapredial"];
+					fileFicha.value = data["filefichapredial"];
+					nombre.value = data["nomundprod"];
+					haTotal.value = data["hatotal"];
+					haProductivas.value = data["haproductivas"];
+					tenencia.value = data["codtenencia"];
+					estado.value = data["estado"];
+					
+					main.getMunicipio(estado.value,municipio,data["municipio"],function(value){
+						main.getParroquia(value,parroquia,data["parroquia"],function(value2){
+							main.getSector(value2,sector,data["sector"]);
+						});
+					});
+
+					direccion.value = data["direccion"];
+					clatitud.value = data["coorprinlat"];
+					clongitud.value = data["coorprinlog"];
+
+					updateundprod = 1;
+				}
+			});
+		});
+
+		//llenar select de municipio y parroquia
+		estado.addEventListener("change",function(){
+			main.getMunicipio(this.value,municipio,'');
+			main.getParroquia(999999,parroquia,'');
+		});
+		municipio.addEventListener("change",function(){
+			main.getParroquia(this.value,parroquia,'');
+		});
+		parroquia.addEventListener("change",function(){
+			sector.value='';
+			sector.dataset.twovalue = '';
+			main.getSector(this.value,sector,'');
+		});
+
+		//limitar solo numeros
+		IMask(codigoficha,{mask:EXPnumber});
+		IMask(haTotal,{mask:EXPnumberDecimal});
+		IMask(haProductivas,{mask:EXPnumberDecimal});
+		IMask(clatitud,{mask:EXPnumberDecimal});
+		IMask(clongitud,{mask:EXPnumberDecimal});
+
+		//script para input file personalizado
+		$(".custom-file-input").on("change", function() {
+			var fileName = $(this).val().split("\\").pop();
+			if(fileName==""){
+				$(this).siblings(".custom-file-label").addClass("selected").html("Cargar Archivo");
+				return;
+			}
+			$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+		});
+
+		//guardar registro
+		let frmUNDproduccion = document.querySelector("#f_up");
+		frmUNDproduccion.addEventListener('submit',function(e){
+			e.preventDefault();
+			undproduccion.guardar(function(data){
+				//console.log(data);
+				undproduccion.codigoUNDproduccion = data.undproduccion;
+				//paso 2: nueva intencion
+				js(".main-content").scroll(0,0);
+				js("#paso1").classList.add("complete");
+				js("#paso2").classList.add("visible");
+			});
+		});
+
+		//volver a paso anterior
+		js("#btnBack").addEventListener("click",function(){
+			js(".main-content").scroll(0,0);
+			js("#paso1").classList.remove("complete");
+			js("#paso2").classList.remove("visible");
+		});
+
+		//guardar nueva intencion
+		js("#fintencion").addEventListener("submit",function(e){
+			e.preventDefault();
+			pasos.newIntencion();
+		});

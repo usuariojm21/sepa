@@ -1,0 +1,14 @@
+ul
+	li: a#mnuprincipal.flaticon-salpicadero(href="./dashboard") Principal
+	|<?php if ($show==2) echo '<li><a id="c-cosecha" class="flaticon-recycle-water" href="./ciclos">Ciclo de cosecha</a></li>'; ?>
+	li: a#productores.flaticon-agricultor(href="./productores") Productor/Empresa
+	li: a#u-produccion.flaticon-siembra(href="./unidad_produccion") Unidad de Producción
+	//li: a#maquinaria.flaticon-cosechadora(href="./maquinaria") Maquinaria
+	//li: a#almacenamiento.flaticon-inventario(href="./almacenamiento") Almacenamiento
+	|<?php if ($show > 0) echo '<li><a id=e-financiero" class="flaticon-pagar" href="./entes_financieros">Entes financiero</a></li>'; ?>
+	//|<?php if ($show > 0) echo '<li><a id=receptoria" class="flaticon-granero" href="./receptoria">Receptorías</a></li>'; ?>
+	li: a#t-campo.flaticon-obrero(href="./tecnico_campo") Técnicos de campo
+	|<?php if ($show > 0) echo '<li><a id=rubro" class="flaticon-tractor-agricola" href="./rubros">Rubros</a></li>'; ?>
+	//|<?php if ($show == 2) echo '<li><a id=ubicacion" class="flaticon-mapa" href="./ubicacion">Ubicación</a></li>'; ?>
+	li: a#paquetetec.flaticon-coordenadas(href="./paquete_tecnologico") Paquete Tecnológico
+	li: a#logout.flaticon-logout(href="../controller/logout.session") Cerrar Sesión

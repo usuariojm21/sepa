@@ -1,0 +1,300 @@
+-var modulo = 'Rubros';
+-var estilosCss = 'css/rubros.css';
+-var formato_archivos = '';
+
+|<?php 
+|	include("../controller/mainscript.php");
+|	require_once("../controller/class.intencion.php");
+| $nUNDproduccion = count($undproduccion["data"]);
+|
+|	if($_SESSION["nivel"]=='PRODUCTOR'){
+|		if($nUNDproduccion<1){
+|			header("location:./primerospasos");
+|		}else{
+|			$intencion = new IntencionSiembra(array(
+|					"ciclo"=>"%",
+|					"fecha1"=>"1900-01-01",
+|					"fecha2"=>"2050-12-31",
+|					"rubro"=>"%",
+|					"estado"=>"%",
+|					"municipio"=>"%",
+|					"parroquia"=>"%",
+|					"sector"=>"%",
+|					"productor"=>"%",
+|					"entidad"=>"%"
+|			));
+|			$verifyintencion = $intencion->buscar();
+|			if($verifyintencion["estado"]===true){
+|				$data = $verifyintencion["data"];
+|				if(count($data)<1){
+|					header("location:./primerospasos");
+|				}
+|			}
+|		}
+|	}
+|
+|?>
+
+doctype
+html.h-100(lang="es")
+	head
+		include ../includes/head_common.pug
+		title Sepa
+		link(rel="stylesheet" href=estilosCss)
+		script.
+			let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+			var ssdata = JSON.parse(`<?php echo $session_data; ?>`);
+
+	body.h-100
+		#fondoDark
+		.container-fluid.h-100
+			
+			include ../includes/header.pug
+			.main-content.row.h-100
+				.barra_lateral.col-12.col-md-auto
+					nav
+						.leyenda
+							a(href="./dashboard") Principal
+							span  / 
+							a(href="./archivos") Archivos
+							span  / #{modulo}
+						include ../includes/mnu_archivos.pug
+				main.contenido.col
+					.modal(tabindex="-1" role="dialog")
+						.modal-dialog(role='document')
+							.modal-content
+								.modal-header
+									h5.modal-title Eliminar Rubro
+									button.close(type="button" data-dismiss="modal" aria-label="Close")
+										span(aria-hidden="true") &times;
+								.modal-body
+									p Si eliminas el rubro no podras deshacer los cambios ¿Estas seguro de continuar?
+								.modal-footer
+									button#aceptar.btn.btn-danger Eliminar
+									button#cancel-modal.btn.btn-secondary(type
+									='button' data-dismiss='modal') Cancelar
+					.row.m-0
+						section#migasdepan.col-12
+							.leyenda
+								a(href="./dashboard" + formato_archivos) Principal
+								span  > 
+								a(href="./archivos" + formato_archivos) Archivos
+								span 
+									| > 
+									b #{modulo}
+						section.col-12.col-lg
+							#cont-rub.card
+								h3.flaticon-cosechadora Rubros
+								br
+								ul#tabRub.nav.nav-tabs(roles="tablist")
+									li.nav-item
+										a#tabListRub.nav-link.active(href="#list", data-toggle="tab") Resumen
+									li.nav-item
+										a#tabData1.nav-link(href="#new", data-toggle="tab") Grupos
+									li.nav-item
+										a#tabData2.nav-link(href="#new2", data-toggle="tab") Sub-Grupos
+									li.nav-item
+										a#tabData3.nav-link(href="#new3", data-toggle="tab") Rubros
+
+								#contenidoTabRub.tab-content
+									#list.tab-pane.fade.show.active(role="tabpanel")
+										br
+										h4 Rubros registrados
+										br
+										include ../includes/formbuscar.pug
+										.table-responsive
+											table.table.table-striped.table-hover.table-bordered
+												thead
+													tr
+														th #
+														th Grupo
+														th Sub-Grupo
+														th Rubro
+												tbody
+												h4.noData
+									#new.tab-pane.fade(role="tabpanel")
+										//h4 Datos del Grupo
+										br
+										form#fGrupo.forms.form-rubros.form-module(action="#" name="form-grupos" autocomplete="off")
+											.row
+												.col-12
+													label.custom-label Descripción
+													input#dsGrupo(type="text", name="dsgrupo" placeholder="Descripción")
+													input(type="hidden" name="method" value="1")
+												.col-auto.p-0.mt-2
+													input#btnRegGrupo.b-style-color3(type="submit" value="Guardar")
+									#new2.tab-pane.fade(role="tabpanel")
+										//h4 Datos del Sub-Grupo
+										br
+										form#fSubgrupo.forms.form-module(action="#" name="form-subgrupos" autocomplete="off")
+											.row
+												.col-12.col-sm-4
+													label.custom-label Grupo
+													select#grupo.grupo.custom-select(name="codgrupo")
+														option(value="" selected) Seleccione una opción
+												.col-12.col-sm-8
+													label.custom-label Descripción de Subgrupo
+													input#dsSubgrupo(type="text", name="dssubgrupo" placeholder="Descripción del Sub-Grupo")
+													input(type="hidden" name="method" value="2")
+												.col-auto.p-0.mt-2
+													input#btnRegSubgrupo.b-style-color3(type="submit" value="Guardar")
+												.col-auto.pl-1.mt-2
+													input#btnClean1.b-style-color1(type="button" value="Cancelar")
+									#new3.tab-pane.fade(role="tabpanel")
+										//h4 Datos del Rubro
+										br
+										form#fRubro.forms.form-rubros.form-module(action="#" name="form-rubros" autocomplete="off")
+											.row
+												.col-12.col-sm-6
+													label.custom-label Grupo
+													select#grupo.grupo.custom-select(name="codgrupo")
+														option(value="" selected) Seleccione una opción
+												.col-12.col-sm-6
+													label.custom-label Subgrupo
+													select#subgrupo.custom-select(name="codsubgrupo")
+														option(value="" selected) Seleccione una opción
+												.col-12
+													label.custom-label Descripción de Rubro
+													input#dsRubro(type="text", name="dsrubro" placeholder="Descripción")
+													input(type="hidden" name="method" value="3")
+												.col-auto.p-0.mt-2
+													input#btnRegRubro.b-style-color3(type="submit" value="Guardar")
+												.col-auto.pl-1.mt-2
+													input#btnClean2.b-style-color1(type="button" value="Cancelar")
+								
+	include ../includes/scripts.pug
+	script(src="js/class.rubros.js")
+	script.
+
+		var main = new Main();
+		var dashboard = new Dashboard();
+		dashboard.getCicle(jsonCiclos);
+
+		let formBusqueda = document.querySelector("#form-buscar");
+
+		let forms = document.getElementsByClassName("forms");
+		let formGrupo = document.getElementById("fGrupo");
+		let formSubGrupo = document.getElementById("fSubgrupo");
+		let formRubro = document.getElementById("fRubro");
+
+		let dsgrupo = forms['fGrupo']['dsGrupo'];
+		let bgGrupo = forms['fGrupo']['btnRegGrupo'];
+		
+		let combrogrupo1 = forms['fSubgrupo']['grupo'];
+		let dssubgrupo = forms['fSubgrupo']['dsSubgrupo'];
+		let bgSubGrupo = forms['fSubgrupo']['btnRegSubgrupo'];
+		
+		let combrogrupo2 = forms['fRubro']['grupo'];
+		let combosbgrupo = forms['fRubro']['subgrupo'];
+		let dsrubro = forms['fRubro']['dsRubro'];
+		let bgRubro = forms['fRubro']['btnRegRubro'];
+
+		let rubro = new Rubro(
+			forms,
+			dsgrupo,
+			combrogrupo1,
+			dssubgrupo,
+			combrogrupo2,
+			combosbgrupo,
+			dsrubro
+		);
+
+		/*let rubros = new Rubros(forms,dsgrupo,
+		combrogrupo1,
+		dssubgrupo,
+		combrogrupo2,
+		combosbgrupo,
+		dsrubro);
+
+		let grupos = new Grupos(forms,dsgrupo,
+		combrogrupo1,
+		dssubgrupo,
+		combrogrupo2,
+		combosbgrupo,
+		dsrubro);
+
+		let subgrupos = new SubGrupos(forms,dsgrupo,
+		combrogrupo1,
+		dssubgrupo,
+		combrogrupo2,
+		combosbgrupo,
+		dsrubro);
+
+		let rubro = new Rubro(forms,dsgrupo,
+		combrogrupo1,
+		dssubgrupo,
+		combrogrupo2,
+		combosbgrupo,
+		dsrubro);*/
+
+		window.addEventListener('load',function(){
+			rubro.datos();
+			rubro.buscar();
+			rubro.obtenerGrupos();
+		});
+
+		var tr='';
+		$(document).on("click","#deleteItem",function(e){
+			tr = $(this).parents("tr");
+		});
+
+		/*let bModalAceptar = document.querySelector("#aceptar");
+		bModalAceptar.addEventListener("click",function(){
+
+			let codigoRubro = tr.children("td").eq(5).text();
+			rubro.eliminarRubro(codigoRubro);
+		});*/
+
+		let frmBuscar = document.querySelector("#form-buscar");
+		frmBuscar.addEventListener("submit",function(e){
+			e.preventDefault();
+			rubro.buscar();
+		});
+
+		//eventos select grupos
+		combrogrupo2.addEventListener("change",function(){
+			rubro.obtenerSubGrupos(this.value);
+		});
+
+		//eventos guardar
+		forms["fGrupo"].addEventListener("submit",function(e){
+			e.preventDefault();
+			rubro.guardarDatosGrupos();
+		});
+		forms["fSubgrupo"].addEventListener("submit",function(e){
+			e.preventDefault();
+			rubro.guardarDatosSubGrupo();
+		});
+		forms["fRubro"].addEventListener("submit",function(e){
+			e.preventDefault();
+			rubro.guardarDatosRubro();
+		});
+
+		let bCleanSubgrupo = document.querySelector("#btnClean1");
+		bCleanSubgrupo.addEventListener("click",function(){
+			combrogrupo1.value = "";
+			dssubgrupo.value = "";
+			combrogrupo1.focus();
+		});
+
+		let bCleanRubro = document.querySelector("#btnClean2");
+		bCleanRubro.addEventListener("click",function(){
+			combrogrupo2.value = "";
+			combosbgrupo.value = "";
+			dsrubro.value = "";
+			combrogrupo2.focus();
+		});
+
+		/*this.items_tabla = function(){
+			$(".item-grupo").on("click",function(){
+				document.getElementById("tabData1").click();
+			});
+
+			$(".item-subgrupo").on("click",function(){
+				document.getElementById("tabData2").click();
+			});
+
+			$(".item-rubro").on("click",function(){
+				document.getElementById("tabData3").click();
+			});
+		}*/

@@ -1,0 +1,1011 @@
+@import "../includes/varandfunctions.styl"
+
+/**
+	box-sizing border-box
+	margin 0
+	padding 0*/
+	
+body,html
+	height 100%
+	font-family 'Rubik', arial
+
+#fondoDark
+	background rgba(0,0,0,.8)
+	display none
+	height calc(100% - 55px)
+	left 0
+	position fixed
+	top 55px
+	width 100%
+	z-index 1000
+
+h1,h2,h3,h4,h5,h6
+	font-family 'Roboto', arial
+	font-weight 400
+	margin 0
+	
+a,i,b,span,label,p,input,select,textarea,button
+	font-family 'Rubik', arial
+	outline none !important
+a
+	text-decoration none !important
+
+/*a
+	color color2
+	text-decoration none !important
+	&:hover
+		color color3*/
+		
+//Colapsar texto
+.text-collapsed
+	collapsed()
+	max-width 180px
+
+.large-control
+	width 100% !important
+
+//Alinear a la derecha
+.align-right, .number
+	text-align right !important
+//Alinear a la izquierda
+.align-left
+	text-align left !important
+	
+.number::placeholder
+	text-align left
+	
+.card
+	border 0
+	box-sizing border-box
+	box-shadow 0 0 3px rgba(0,0,0,.2)
+	margin 0
+	padding 15px
+	
+	h3
+		color color3
+		font-size 25px
+		font-weight 900
+		&:before
+			display none
+			font-size 25px
+			margin 0
+			margin-right 10px
+			position relative
+			top 3px
+	h4
+		color #585858
+		//font-style italic
+		font-size 18px
+		//font-weight 500
+		margin 0
+		margin-bottom 15px
+		margin-top 5px
+			
+	.nav-tabs
+		.nav-link
+			font-size 14px !important
+			font-weight 500 !important
+			padding 5px !important
+
+	/*.tab-pane
+		h4
+			font-size 16px
+			font-weight 400
+			margin 15px 0*/
+		/*& > p
+			color #aaa
+			font-size 13px*/
+
+//styles personalizados para swewtAlert
+.swal-modal
+	.swal-button
+		box-shadow initial
+	.successSweetAlert
+		background color3
+	.swal-button.successSweetAlert:not([disabled]):hover
+		background-color: #28a980;
+	.errorSweetAlert
+		background #f27474
+	.swal-button.errorSweetAlert:not([disabled]):hover
+		background-color: #e05d5d;
+	.warningSweetAlert
+		background #f8bb86
+	.swal-button.warningSweetAlert:not([disabled]):hover
+		background-color: #d6a071;
+	.infoSweetAlert
+		background #c9dae1
+	.swal-button.infoSweetAlert:not([disabled]):hover
+		background-color: #9bb0b9;
+	
+/*.alert-success
+	color #15573f !important
+	background-color #6be6b2cc !important
+	border-color #a5e0c4 !important
+	font-weight 500
+	
+.alert-danger
+	color #771937
+	background-color #fd506acc
+	border-color #f3a0b6 !important
+	font-weight 500*/
+		
+//styles for form elements
+form
+	input,select,.custom-select,textarea,button,.custom-file-label//,.form-control
+		background-color #fff
+		//border 1px solid #ced4da
+		border: 1px solid #a0a0a0;
+		border-radius 5px
+		box-sizing: border-box
+		display inline-block
+		font-size 16px
+		height auto
+		outline none !important
+		padding 7px
+		text-align left
+		text-transform uppercase !important
+		width 100%
+		&:focus
+			border 2px solid color3
+			box-shadow none
+	input[type="button"],input[type="submit"],button,a
+		border 0;
+		text-transform initial !important
+		outline none
+			
+	input:-webkit-autofill
+		-webkit-box-shadow 0 0 0 1000px #fff inset !important
+	input[type="date"]::-webkit-search-cancel-button
+				-webkit-appearance none
+
+	.custom-select
+		padding-right 30px
+		background-image url(../img/flecha_abajo.svg)
+		background-repeat no-repeat
+		background-size 10px
+
+	.custom-switch
+		padding-bottom 8px
+		padding-top 8px
+
+	.custom-control-input:checked~.custom-control-label::before
+		border-color color2
+		background-color color2
+	.custom-control
+		label.custom-control-label
+			font-size 16px
+	.custom-file
+		.custom-file-label
+			height auto
+			font-size 12px
+			padding 10px
+			&:after
+				content: "Buscar";
+				height auto
+				padding 10px
+	label.custom-label
+		color #aaa
+		display block
+		font-size 12px
+		margin 0
+		margin-bottom 0
+	p.large-control
+		color color1
+		font-size 16px
+		font-weight 500
+		margin-bottom 5px
+	.inputload
+		background-image url(../img/loading.gif)
+		background-position calc(100% - 5px) !important
+		background-size 10% !important
+		background-repeat no-repeat !important
+		padding-right 30px
+	
+//combo search
+.autocomplete
+	position: relative;
+	display: inline-block;
+	width 100%
+	/*&:before
+		content '';
+		background #ddd
+		height 100%
+		left 0
+		position absolute
+		top 0
+		width 30px*/
+
+	.autocomplete-items
+		background #fff
+		position: absolute;
+		/*border: 0//1px solid #d4d4d4;
+		border-bottom: none;*/
+		//border-top: none;
+		border-radius 5px
+		box-shadow: 0 2px 15px 0px #bbb;
+		left: 0;
+		margin-top 3px
+		//max-height 230px
+		//min-width 300px
+		overflow-y auto
+		/*position the autocomplete items to be the same width as the container:*/
+		right: 0;
+		top: 100%;
+		width 100%
+		z-index: 99;
+		
+		div
+			padding: 10px;
+			cursor: pointer;
+			background-color: #fff; 
+			border-bottom: 1px solid #eee;
+			font-size 14px
+			&:hover
+				background-color: #efefef;
+	.autocomplete-active
+		background-color: color2 !important;
+		color #fff
+		
+/*STYLES FOR LOADINGS*/
+//body
+body.loading
+	transition .5s all
+	&:before
+		background: rgb(255,255,255) url(../img/loading-infinity.svg) 50% no-repeat;
+		background-size: 100px;
+		content ''
+		left 0
+		height 100%
+		position fixed
+		top 0
+		width 100%
+		z-index 2000
+//table
+table.loading
+	position relative
+	&:before
+		background: #ffffffee url(../img/loading-infinity.svg) 50% 30% no-repeat;
+		background-size: 50px;
+		content ''
+		left 0
+		height 100%
+		position absolute
+		top 0
+		width 100%
+//inputs submit y button, buttons, a
+input[type='submit'].loading,input[type='button'].loading,button.loading,a.loading
+	/*background-position: 90% 50%;
+	background-repeat: no-repeat;
+	background-size: 20%;
+	transition: .3s all;*/
+	background-color: #555;
+	background-image: url(../img/loading-points.svg);
+	background-position: 50%;
+	background-repeat: no-repeat;
+	background-size: 50px;
+	color transparent !important
+	//padding-right: 40%;
+	
+/*input[type='submit'].loading,input[type='button'].loading,button.loading,a.loading
+	background-image: url(../img/loading-white.svg);
+	padding-right: 40%;*/
+
+//inputs text, emails, etc.
+input[type='text'].loading
+	background-image: url(../img/loading-color.svg);
+	background-position: 95% 50%;
+	background-repeat: no-repeat;
+	background-size: 13%;
+	padding-right: 22%;
+	//transition: none;
+
+/*END STYLES LOADINGS*/
+
+/*.autocomplete {
+	position: relative;
+	display: inline-block;
+	width 100%
+}*/
+
+/*autocomplete-items {
+	background #fff
+	position: absolute;
+	//border-top: none;
+	border-radius 5px
+	box-shadow: 0 2px 15px 0px #bbb;
+	left: 0;
+	margin-top 3px
+	max-height 230px
+	//min-width 300px
+	overflow-y scroll
+	right: 0;
+	top: 100%;
+	width 100%
+	z-index: 99;
+}
+
+.autocomplete-items div {
+	padding: 10px;
+	cursor: pointer;
+	background-color: #fff; 
+	border-bottom: 1px solid #eee;
+}*/
+
+/*when hovering an item:*/
+/*.autocomplete-items div:hover {
+	background-color: #efefef; 
+}*/
+
+/*when navigating through the items using the arrow keys:*/
+/*.autocomplete-active
+	background-color: color2 !important;
+	color #fff*/
+
+//fin combo search
+
+
+//styles for disabled elements
+input[disabled], input[readonly], button[disabled], button[readonly], textarea[disabled], textarea[readonly], select[disabled], select[readonly]
+	background #ccc !important
+	color #888 !important
+	&:hover
+		opacity 1
+
+/*#cont-combo
+	position relative
+	.autocompletar
+		border-right: 0
+		text-align left !important
+	#btn-select
+		background #fff
+		border 2px solid #ddd
+		border-left 1px solid #fefefe
+		border-radius 0
+		box-sizing: border-box
+		margin-right 0
+		margin-bottom 8px
+		outline none
+		&:active
+			background: #eee
+		i:before
+			margin 0
+			font-size 15px
+	#options-select
+		background #fff
+		border 1px solid #ddd
+		border-radius 5px
+		box-sizing border-box
+		display none
+		padding 5px
+		position absolute
+		text-align left
+		top 45px
+		p
+			color #ddd
+			font-size 17px
+			font-weight bold
+			padding 5px
+			margin-bottom 0
+		hr
+			background #ddd
+			margin 0 auto
+			width 95%
+		.options
+			span
+				color #000
+				cursor pointer
+				display block
+				font-size 14px
+				padding 7px
+				padding-bottom 10px
+				&:hover
+					background #eee*/
+.error
+	background-image url(../img/cerrar.svg)
+	background-position 95% !important
+	background-size 6% !important
+	background-repeat no-repeat !important
+	border 2px solid #d9534f !important
+	padding-right 35px
+
+//styles for buttons
+.b-style
+	border 0
+	border-radius 50px
+	box-sizing: border-box
+	cursor pointer
+	color #fff
+	font-size 16px
+	padding 7px 10px
+	text-align center
+	&:hover
+		opacity .8
+.b-style-color1
+	@extends .b-style
+	background color1
+.b-style-color2
+	@extends .b-style
+	background color2
+.b-style-color3
+	@extends .b-style
+	background color3
+.b-style-color4
+	@extends .b-style
+	background color4
+.b-style-cancel
+	@extends .b-style
+	background #bbbbbb
+
+	
+/*.b-float
+	bottom 15px
+	box-shadow 1px 1px 3px 0 #8c8c8c
+	position fixed
+	right 15px*/
+
+/*.load,.load:hover
+	background-color color3 !important
+	background-image url(../img/loading.gif) !important
+	background-position 95% 50% !important
+	background-repeat no-repeat !important
+	background-size 20px !important*/
+	
+//item de menu seleccionado 
+/*.item-selected
+	background #f8f8f8 !important
+	border-left 3px solid color2*/
+
+hr
+	border 0
+	height 1px
+	width 100%
+	&.light
+		background #ddd
+	
+.fondo-dark
+	background rgba(0, 0, 0, .75)
+	display none
+	height 100%
+	left 0
+	position absolute
+	top 0
+	width 100%
+	z-index 1100
+
+.modal
+	background rgba(0, 0, 0, .75)
+	.modal-header,.modal-body, .modal-footer
+		border-bottom 0 !important
+		border-top 0 !important
+	
+
+//////DASHBOARD/////////////
+header
+	background: #fff
+	.cont_logo
+		padding 0
+		.btnmenu
+			position: relative
+			z-index: 1010
+			i:before
+				color color1
+				font-size: 25px
+				margin-left 0
+		.logo
+			padding-left 5px
+			a
+				max-width 70px
+				outline none
+				img
+					width 100%	
+.nav_bar
+	padding: 10px
+	.items_mnubar
+		padding: 0
+	i:before
+		color color1
+		font-size 18px
+		margin 0 10px
+		
+	.ciclo-cosecha
+		span.titleCicloActual
+			display none
+			color color3
+			font-weight 500
+			padding-right 5px
+			position relative
+			top -1px
+		.menu-dropdown
+			.menu-items
+				cursor pointer
+				padding 7px
+				&:hover
+					background rgba(0,0,0,.08)
+	.user
+		margin-left: 5px
+		padding: 0
+		margin-right 10px
+		& > a
+			background: #fff
+			border 0//1px solid color1
+			border-radius: 50%
+			height 35px
+			overflow: hidden
+			text-decoration none
+			width: 35px
+			img
+				width 100%      
+.main-content
+	background: #f8f8f8
+	max-height calc(100% - 55px) !important
+	overflow-y auto
+	overflow-x hidden
+	position relative
+
+.barra_lateral
+	background-color #2a2e44
+	box-sizing border-box
+	height auto !important
+	left -100%
+	max-width 250px
+	min-height 100% !important
+	min-width 200px
+	padding: 0
+	position fixed
+	top: 55px
+	transition all .5s
+	z-index 1010
+	
+	nav
+		box-sizing: border-box
+		padding-top: 10px
+		.leyenda
+			color: #aaa
+			display none
+			font-size 13px
+			padding 7px 15px
+			padding-bottom 10px
+			a
+				color #aaa
+				display inline
+				font-weight normal
+		ul,li
+			list-style: none
+			margin 0
+			padding 0
+		li,a
+			font-family: 'Rubik', 'sans-serif'
+			font-weight: bold
+			a
+				color #fff
+				display block
+				font-size 15px
+				font-weight 500
+				padding: 7px 15px
+				text-decoration: none
+				&:before
+					font-size 23px
+					margin-left 0
+					margin-right 15px
+					top 3px
+					position relative
+				&:hover
+					background #1d202d
+.mostrarmenu
+	left 0
+
+main.contenido
+	overflow-y auto
+	overflow-x hidden
+	padding 0
+	section, aside
+		padding 15px
+	aside
+		padding-top 0
+
+#migasdepan
+	display none
+	padding 0 15px !important
+	padding-top 10px !important
+	.leyenda
+		a,span
+			color #888
+			font-size 13px
+		a:hover
+			text-decoration underline
+		b
+			font-weight 500
+
+//STYLES FOR INPUT SEARCH PERSONALIZED
+.busqueda
+	margin 0
+	margin-bottom 15px
+	#box-input-search
+		background #fff
+		border 2px solid #eee
+		border-radius 50px
+		transition .5s all
+		&:focus
+			border-color color2
+		&:hover > input#bsearch
+			background-color #eee
+		&:focus > input#bsearch
+			background-color color2
+			color #fff
+				
+	input#search_main
+		background transparent
+		border 0
+		box-shadow none
+		color #000
+		font-size 15px
+		margin 0
+		padding 7px 70px 7px 15px
+		transition .5s all
+		width 100%
+		&::-webkit-search-cancel-button
+			-webkit-appearance none
+		&::placeholder
+			text-transform initial
+		/*&:-ms-input-placeholder
+			color #888*/
+	input#bsearch
+		background transparent
+		border 0
+		border-radius 50px
+		color color2
+		font-size 14px
+		font-weight 500
+		outline none
+		//text-decoration none
+		top 0
+		right 0
+		height 37px
+		padding 0 10px
+		text-transform initial !important
+		transition .5s all 
+		width auto     
+		&:before
+			font-size 23px
+			margin: 0 auto
+			margin-top 3px
+			
+//STYLES FOR TABLES
+.table-responsive
+	padding 10px 0 !important
+	#tabla_wrapper
+		display flex !important
+		flex-wrap wrap !important
+		justify-content space-between !important
+		.dt-buttons
+			display flex
+			margin-bottom 10px
+			.dt-button
+				align-self: center!important;
+				border 0
+				border-radius 5px
+				color #fff
+				margin 2px
+				padding 7px 10px
+				&:hover
+					opacity .9
+			.buttons-excel
+					background #2abd79 !important
+			.buttons-pdf
+					background #ec5664 !important
+			.buttons-print
+					background #6c757d !important
+		#tabla_filter
+			align-self: center!important;
+			margin-bottom 10px
+			label
+				margin-bottom 0
+				input
+					background: #ddd;
+					border: 0;
+					border-radius: 50px;
+					font-size: 14px;
+					padding: 7px 10px;
+					text-transform: initial !important;
+	table.table
+		font-size 14px
+		font-weight 400
+		text-transform uppercase
+		width 100% !important
+		thead
+			border 0
+			color color1
+			font-weight 500
+			th
+				border 0
+				font-weight 500
+				padding 6px
+		tbody
+			color #888
+			tr
+				border-top 1px solid #eee
+				td
+					border 0
+					max-width 120px
+					padding 6px
+					a
+						color #000
+						&:hover
+							text-decoration underline
+					a.edit
+						background #0070ff
+						border-radius 50%
+						color #fff
+						margin 0 !important
+						padding 7px
+						text-decoration none
+						&:before
+							color #fff
+							font-size 15px
+							font-weight 500
+							margin 0
+							margin-left 2px
+					a.deleteItem
+						background #e00a45
+						border-radius 50px
+						color #fff
+						cursor pointer
+						padding 7px
+						text-decoration none
+						&:hover,&:focus
+							background #f53167
+						&:before
+							color #fff
+							font-size 15px
+							font-weight 500
+							margin 0
+							margin-left 2px
+				.tbcellLayout
+					span
+						border-radius: 50px;
+						color: #fff;
+						font-weight: 500;
+						padding: 5px 8px;
+				.tbcellLayout.success
+					span
+						background: #27d6ad;
+				.tbcellLayout.danger
+					span
+						background: #d62750;
+	
+	#tabla_info
+		color #888
+		font-size 14px
+		margin-bottom 6px
+	#tabla_paginate
+		a[aria-controls='tabla']
+			background #fff
+			border 1px solid #ccc
+			border-right 0
+			//border-radius 3px
+			color color1
+			cursor pointer
+			font-size 14px
+			font-weight 400
+			padding 7px 12px
+			&:hover
+				background #eee
+			&:focus
+				opacity .8
+		.paginate_button.Anterior
+			border-radius 50px 0 0 50px
+		.paginate_button.Siguiente
+			border-right 1px solid #ccc
+			border-radius 0 50px 50px 0
+		.paginate_button.current
+			border-radius 0
+		
+//Styles Menu dropdown
+.dropdown-container
+	position static
+	.menu-dropdown
+		background #fff
+		border 1px solid #ddd
+		border-radius 3px
+		box-sizing border-box
+		display none
+		position absolute
+		right 0
+		top 55px
+		width 100%
+		z-index 2000
+		
+		.header-toggle
+			color #aaa
+			font-family "Rubik"
+			font-weight 400
+			margin 0
+			padding 7px
+		
+		hr
+			background #eee
+			margin auto
+			margin-top 2px
+			width 98%
+		a
+			color #000
+			text-decoration none
+			&:hover
+				color #000
+			.menu-items
+				padding 7px
+				&:hover
+					background rgba(0,0,0,.08)
+			span
+				font-size 14px
+		.selected
+			background rgba(0,0,0,.04)
+			span
+				color color3
+				font-weight 500
+				
+//estilos para botones flotantes
+.button-primary-new
+	bottom 15px
+	position fixed
+	right 15px
+	z-index 3000
+	a,button
+		background #fff
+		border 0
+		border-radius 50px
+		box-shadow 1px 1px 7px 0 #797979
+		color color1
+		display inline-block
+		height 50px
+		font-size 16px
+		margin 0
+		padding 10px
+		color color2
+		font-weight 500
+		text-align center
+		transition .2s all
+		width 50px
+		&:hover
+			box-shadow 1px 2px 12px 4px #8888
+			opacity .8
+		&:before
+			margin 0 !important
+	a.selected,button.selected
+		background color2
+		box-shadow none
+		color #fff
+		transform: rotate(225deg);
+#boxNew
+	background rgba(0,0,0,.80)
+	display none
+	padding 15px
+	text-align right !important
+	top 0
+	transition .5s all
+	width 100%
+	z-index 2000
+	
+	#boxButtons
+		bottom: 70px;
+		position: absolute;
+		right: 10px;
+		text-align right
+		width 100%
+		.item-button
+			display none
+			padding 5px
+			label
+				background: #d2d2d2
+				border-radius: 50px;
+				color: #000;
+				font-size: 13px;
+				font-weight: 500;
+				padding: 2px 11px;
+			a
+				background: color2;
+				border-radius: 50px;
+				color: #fff;
+				margin: 5px;
+				padding: 10px;
+				&:before
+					margin 0 !important
+				&:hover
+					opacity .8
+		/*.item-button.active
+			label,a
+				background color3
+			a:before
+				color #fff*/
+.buttons-active
+	background rgba(0, 0, 0, 0.89)
+//Styles for error 404
+#error404
+	text-align center
+	.btnmenu
+		display none !important
+	.logo
+		padding-left 7px !important
+	h1
+		color color2
+		font-family "Rubik"
+		font-size 80px
+		font-weight bold
+	h5
+		color #aaa
+		font-family "Rubik"
+		font-size 20px
+	#volver
+		background color3
+		border-radius 3px
+		display inline-block
+		color #fff
+		font-weight 600
+		margin-top 20px
+		outline none
+		padding 7px 10px
+		width auto
+@media(min-width 414px)
+	.card
+		padding 20px
+		h3
+			font-size 30px
+			&:before
+				font-size 35px
+	.nav_bar
+		.ciclo-cosecha
+			span.titleCicloActual
+				display inline
+				
+@media(min-width 576px)
+
+	#error404
+		h1
+			font-size 250px
+		h5
+			font-size 30px
+			
+	#migasdepan
+		display block
+		
+	.b-style-float
+		bottom 25px
+		right 30px
+				
+@media(min-width 768px)
+	.dropdown-container
+		position relative
+		.menu-dropdown
+			top 45px
+			width 300px
+				
+@media(min-width 992px)
+
+	main.contenido
+		section
+			width calc(100% - 320px) !important
+		aside
+			padding-left 0
+			padding-top 15px
+			min-width 300px
+			
+@media(min-width 768px)
+	.cont_logo
+		min-width 200px
+	.barra_lateral
+		//border-right 1px solid #eee
+		position static
+		max-width 250px
+		min-width 250px
+
+	header
+		.cont_logo h1
+			font-size 25px
+			margin: 10px
+			margin-left 15px
+	.nav_bar
+		i:before
+			font-size 21px
+		.busqueda
+			input#search_main
+				font-size 14px  

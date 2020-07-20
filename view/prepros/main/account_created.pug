@@ -1,0 +1,59 @@
+|<?php
+|	session_start();
+|
+|	if (isset($_SESSION["sepa_login"]) && $_SESSION["sepa_login"]===true) {
+|		header("location: ./dashboard");
+|	}
+|
+|	if(!isset($_SESSION["accountcreated"]) && $_SESSION["accountcreated"]===true){
+|		header("location:./");
+|	}
+|
+|?>
+|
+|
+doctype
+html(lang="es")
+head
+	include ../includes/head_common.pug
+	meta(charset="UTF-8")
+	title ¡Cuenta creada!
+	style.
+		body,html{
+			height:100% !important;
+		}
+		.cont-success{
+			text-align: center;
+		}
+		h1{
+			color:#6641b8;
+			font-size:60px;
+			font-weight:800;
+		}
+		p{
+			color:#aaa;
+		}
+		a{
+			background:#2fc797;
+			border-radius: 50px;
+			color:#fff;
+			display:inline-block;
+			font-weight:500;
+			padding: 10px 20px;
+			text-decoration:none !important;
+			vertical-align:top;
+			width:auto;
+		}
+		a:hover{
+			color:#fff;
+		}
+
+body
+	.container.h-100
+		.row.justify-content-center.align-items-center.h-100
+			.col.align-self-center
+				.cont-success
+					h1 ¡Felicidades!
+					h3 Tu cuenta ha sido creada exitosamente.
+					p En breves momentos recibiras un correo para activar tu cuenta.
+					a(href="./") Ir al inicio

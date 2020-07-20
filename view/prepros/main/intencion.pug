@@ -1,0 +1,572 @@
+-var modulo = 'intención de Siembra';
+-var estilosCss = 'css/intencion.css?v=1';
+-var formato_archivos = '';
+
+
+|<?php
+|	include("../controller/mainscript.php");
+|	require_once("../controller/class.productores.php");
+|	require_once("../controller/class.entidad.php");
+| require_once("../controller/class.direction.php");
+|	error_reporting(E_ERROR | E_WARNING | E_PARSE);
+|	//obtener listado de productores
+| $productores = new Productores();
+|	$list_productores = $productores->buscar();
+|	$JSONproductores = json_encode($list_productores,JSON_FORCE_OBJECT);
+|
+|	//obtener listado de entidades
+|	$JSONentidad = json_encode("");
+|	if($_SESSION['nivel']=='MUNICIPAL' || $_SESSION['nivel']=='ADMINISTRADOR'){
+|		$entidadfinanciera = new Entidad();
+|		$listentidad = $entidadfinanciera->buscar();
+|		$JSONentidad = json_encode($listentidad,JSON_FORCE_OBJECT);
+|	}
+|
+|?>
+|
+doctype
+
+html.h-100(lang="es")
+	head
+		include ../includes/head_common.pug
+		title Sepa
+		link(rel="stylesheet" href=estilosCss)
+		script.
+			let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+			//var listEstados = JSON.parse(`<?php //echo $obtener_estados; ?>`);
+			var ssdata = JSON.parse(`<?php echo $session_data; ?>`);
+			//console.log(ssdata.filtro);
+
+	body.h-100
+		#fondoDark
+		.container-fluid.h-100
+			
+			include ../includes/header.pug
+			.main-content.row.h-100
+				.barra_lateral.col-12.col-md-auto
+					nav
+						.leyenda
+							a(href="./dashboard" + formato_archivos) Principal
+							span  / 
+							a(href="./operaciones" + formato_archivos) Operaciones
+							span  / #{modulo}
+						include ../includes/mnu_operaciones.pug
+				main#main.contenido.col.position-relative
+					.row.m-0
+						section#migasdepan.col-12
+							.leyenda
+								a(href="./dashboard" + formato_archivos) Principal
+								span  > 
+								a(href="./operaciones" + formato_archivos) Operaciones
+								span 
+									| > 
+									b #{modulo}
+						section.col-12.col-lg
+							#cont-intencion.card
+								.row.m-0.position-relative
+									#listIntencionBox.col.p-0
+										.row.m-0
+											.col.p-0
+												h3.flaticon-agricultor Intención de Siembra
+											.col-12.p-0.mt-2
+												form#form-listado-intencion(name='formbuscar' action='' method='post' autocomplete='off')
+													.row.m-0
+														.col-12.col-sm.p-1
+															select#lestado.custom-select(name='estado')
+																option(value="") Estado
+																|<?php 
+																|	$direccion = new Direccion();
+																|	$data = $direccion->getEstados();
+																|	$estado = $data["estado"];
+																|	$desc = $data["descripcion"];
+																|	$reg = $data["data"];
+																|	foreach ($reg as $key => $value) {
+																|		echo '<option value="'.$value['codigo'].'">'.$value["nombre"].'</option>';
+																|	}?>														
+														.col-12.col-sm.p-1
+															select#lmunicipio.custom-select(name='municipio')
+																option(value="") Municipio
+														.col-12.col-sm.p-1
+															select#lparroquia.custom-select(name='parroquia')
+																option(value="") Parroquia		
+														.col-12.col-sm.p-1.autocomplete
+															select#lsector.custom-select(name='sector')
+																option(value="") Sector
+														.w-100
+														.col-12.col-sm.p-1
+															select#lentidad.custom-select(name='entidad')
+																option(value="") Entidad
+														|<?php
+														|	if($_SESSION["nivel"]=='PRODUCTOR'){ ?>
+														input#lproductor(type='hidden' name='productor' data-twovalue='')
+														|<?php }else{ ?>
+														.col-12.col-sm.p-1
+															.autocomplete
+																input#lproductor(type="text" placeholder='Productor' name='productor' data-twovalue='')
+														|<?php } ?>
+														|
+														.col-12.col-sm.p-1
+															select#lrubro.custom-select(name="rubro")
+																option(value="") Rubros
+																|
+																|<?php
+																|	$sql = "SELECT * FROM rubros";
+																|	$param=[];
+																|	$rQuery = Querys::QUERYBD($sql,$param);
+																|	$state=$rQuery["state"];
+																|	if($state){
+																|		$stmt = $rQuery["stmt"];
+																|		while($f=$stmt->fetch()){
+																|			echo "<option value='".$f['codrubro']."'>".$f['desrubro']."</option>";
+																|		}
+																|	}
+																|?>												
+														.col-auto.p-1.align-self-center
+															input#buscar.b-style-color2(type="submit" value='Buscar')
+											//.col-12.p-0.mt-2
+												.row.m-0
+													.col-auto.p-1
+														input#newIntention.b-style-color3(type='button' value='Nueva intención')
+											.col-12.p-0.mt-2
+												#listadoIntencion
+													.table-responsive
+														table#table.table.table-sm
+															thead
+																tr
+																	th Entidad
+																	th Productor
+																	th Rubro
+																	th.align-right H. Intención
+															tbody
+				.button-primary-new
+					a#buttonNew.flaticon-anadir(href="javascript:void(0)")
+				#boxNew.row.m-0.position-fixed.h-100
+						#boxButtons.align-self-end
+							//.item-button
+								label Intención de siembra
+								a.flaticon-escritura(href="./intencion")
+							.item-button
+								label Financiamiento
+								a.flaticon-tractor(href="./unidad_produccion")
+							.item-button
+								label Nueva intención
+								a.flaticon-escritura(href='javascript:void(0)' onclick="newIntencionForm()")
+		#newIntencionBox.col-12.p-0.p-sm-3
+			#headerNewIntencion.row.m-0
+				#boxButtonAtras.col-auto.p-1.align-self-center.position-sm-absolute
+					button#atras.button-primary Atras
+				.col.col-sm-auto.p-1.align-self-center
+					h5 Nueva Intención
+			form#fintencion.forms.form-module(action="#" method="post" autocomplete="off")
+				.row.m-0.pt-3
+					.group-input.col-12.col-sm.autocomplete.p-1
+						label.custom-label(for="entidad") Entidad *
+						input#entidad(type="text" name='entidad' data-twovalue='%')
+					.group-input.col-12.col-sm.autocomplete.p-1
+						label.custom-label(for="productor") Productor *
+						input#productor(type="text" name='productor' data-twovalue='%')
+					.group-select.col-12.col-sm.p-1
+						label.custom-label(for="undproduccion") Unidad de producción *
+						select#undproduccion.custom-select(name="undproduccion")
+							option(value="") Seleccione una opción
+					.w-100
+					.group-select.col-12.col-sm.p-1
+						label.custom-label(for="rubros") Rubros *
+						select#rubros.custom-select(name="rubros")
+							option(value selected) Seleccione una opción
+							|<?php 
+							|	$sql='SELECT * from rubros';
+							|	$param=[];
+							|	$resultQuery = Querys::QUERYBD($sql,$param);
+							|	$state = $resultQuery["state"];
+							|	if ($state){
+							| 	$stmt = $resultQuery["stmt"];
+							|		while ($f=$stmt->fetch()) {
+							|			echo '<option value="'.$f['codrubro'].'">'.$f['desrubro'].'</option>';
+							|		}
+							|	}
+							|?>															
+					.group-input.col-12.col-sm-3.p-1
+						label.custom-label(for="haintencion") Hectareas *
+						input#haintencion.number(type="text", name="haintencion")
+					.group-select.col-12.col-sm.p-1
+						label.custom-label(for='ndoctecnico') Tecnico de campo
+						select#ndoctecnico.custom-select(name="doctecnico")
+							|<?php
+							|	$sql='SELECT * from tecnico';
+							|	$param=[];
+							|	$resultQuery = Querys::QUERYBD($sql,$param);
+							|	$state = $resultQuery["state"];
+							|	if ($state){
+							| 	$stmt = $resultQuery["stmt"];
+							|		while ($f=$stmt->fetch()) {
+							|			echo '<option value="'.$f['cedtecnico'].'">'.$f["nomtecnico"].'</option>';
+							|		}
+							|	}
+							|?>															
+					.w-100
+					#btnFinalizarBox.group-input.col-auto.p-1
+						input#btnFinalizar.b-style-color3(type="submit", value="Agregar")
+		//fin de formulario nueva intencion			
+
+	include ../includes/scripts.pug
+	script(src="js/class.intencion.js?v=4")
+	script.
+
+		var main = new Main();
+		var dashboard = new Dashboard();
+		dashboard.getCicle(jsonCiclos);
+		main.boxNew();
+
+		let n = `<?php echo $_SESSION["nivel"]; ?>`;
+
+
+		//id de elementos
+		let ciclo = jsonCiclos.ciclo_actual;
+
+		var lentidad = js("#form-listado-intencion #lentidad");
+		var lproductor = js("#form-listado-intencion #lproductor");
+		var lestado = js("#form-listado-intencion #lestado");
+		var lmunicipio = js("#form-listado-intencion #lmunicipio");
+		var lparroquia = js("#form-listado-intencion #lparroquia");
+		var lsector = js("#form-listado-intencion #lsector");
+		var lrubro = js("#form-listado-intencion #lrubro");
+
+		var entidad = js("#fintencion #entidad");
+		var productor = js("#fintencion #productor");
+		var undproduccion = js("#fintencion #undproduccion");
+		var rubros = js("#fintencion #rubros");
+		var haintencion = js("#fintencion #haintencion");
+		var ndoctecnico = js("#fintencion #ndoctecnico");
+
+		var docentidad = '';
+
+		IMask(haintencion,{mask:EXPnumberDecimal});
+
+		let intencion = new IntencionSiembra(
+		ciclo,
+		lrubro,
+		lestado,
+		lmunicipio,
+		lparroquia,
+		lsector,
+		lentidad,
+		lproductor,
+		entidad,
+		productor,
+		undproduccion,
+		rubros,
+		haintencion,
+		ndoctecnico
+		);
+
+		intencion.validNivel();
+
+		intencion.getLentidad(lestado.value, lmunicipio.value, lparroquia.value, lsector.value,lentidad,docentidad,function(){
+			intencion.getProductor(lentidad.value,lproductor);
+		});
+		
+		intencion.getIntencion();
+		
+		//llenar select de municipio y parroquia//////////////////////////////
+		lestado.addEventListener("change",function(){
+			main.getMunicipio(this.value,lmunicipio,'');
+			main.getParroquia(999999,lparroquia,'');
+			main.getSelectSector(999999,lsector,'');
+			intencion.getLentidad(lestado.value, lmunicipio.value, lparroquia.value, lsector.value,lentidad);
+		});
+		lmunicipio.addEventListener("change",function(){
+			main.getParroquia(this.value,lparroquia,'');
+			main.getSelectSector(999999,lsector,'');
+			intencion.getLentidad(lestado.value, lmunicipio.value, lparroquia.value, lsector.value,lentidad,'','');
+			//intencion.getProductor(lentidad.value,lproductor);
+		});
+		lparroquia.addEventListener("change",function(){
+			//console.log(lparroquia)
+			//lsector.value = '';
+			//lsector.dataset.twovalue = '';
+			main.getSelectSector(this.value,lsector,'');
+			intencion.getLentidad(lestado.value, lmunicipio.value, lparroquia.value, lsector.value,lentidad,'','');
+			//intencion.getProductor(lentidad.value,lproductor);
+		});
+		lsector.addEventListener("change",function(){
+			intencion.getLentidad(lestado.value, lmunicipio.value, lparroquia.value, lsector.value,lentidad,'','');
+			//intencion.getProductor(lentidad.value,lproductor);
+		});
+		/*lsector.addEventListener("blur",function(){
+			intencion.getLentidad(lestado.value,lmunicipio.value,lparroquia.value,this.dataset.twovalue,lentidad,'');
+		});*/
+		lentidad.addEventListener("change",function(){
+			console.log("sss")
+			intencion.getProductor(lentidad.value,lproductor);
+		});
+
+		//buscar intencion de siembra/////////////////////////////////////////
+		js("#form-listado-intencion").addEventListener("submit",function(e){
+			e.preventDefault();
+			intencion.getIntencion();
+		});
+
+		//SCRIPT PARA NUEVA SECCION DE NUEVA INTENCION///////////////////
+
+		//mostrar ventada de nueva intencion
+		/*js("#listIntencionBox #newIntention").addEventListener("click",function(){
+			js("#newIntencionBox").style.top = "0";
+		});*/
+		function newIntencionForm(){
+			main.hideBoxNew();
+			js("#newIntencionBox").style.top = "0";
+		}
+
+		js("#newIntencionBox button#atras").addEventListener("click",function(){
+			js("#newIntencionBox").style.top = "110%";
+			js('#buttonNew').removeAttribute('style');
+		});
+
+		//cargar listado de entidades////////////////////////////////////////
+		var entidades = JSON.parse(`<?php echo $JSONentidad; ?>`);
+		if(typeof entidades == "object"){
+			var arrEntidades=[];
+			for(let i in entidades.data){
+				arrEntidades.push([
+					entidades.data[i].rif,
+					entidades.data[i].razonsocial			
+				]);
+			}
+			main.inputsearch(entidad,arrEntidades);
+		}else{
+			entidad.parentElement.setAttribute("style","display:none;")
+			//entidad.setAttribute("disabled","disabled");
+			entidad.dataset.twovalue=ssdata.entidad;
+			intencion.getProductor(entidad.dataset.twovalue,productor);
+		}
+
+		//obtener productores
+		entidad.addEventListener("blur",function(){
+			let value = '';
+			if(ssdata.nivel==='PRODUCTOR') value=ssdata.cirif;
+			intencion.getProductor(this.dataset.twovalue,productor,value);
+		});
+
+		//obtener unidades de produccion
+		productor.addEventListener("blur",function(){
+			let value = '';
+			if(ssdata.nivel==='PRODUCTOR') value=ssdata.cirif;
+			intencion.getUNDproduccion(this.dataset.twovalue,undproduccion);
+		});
+
+		js("#fintencion").addEventListener("submit",function(e){
+			e.preventDefault();
+			intencion.newIntencion();
+		});
+
+		//- docintencion.value = '<?php echo $DOCintencion;?>';
+
+		//- let f = new Date();
+		//- let d = f.getDate();
+		//- let m = f.getMonth()+1;
+		//- let y = f.getFullYear();
+		//- fechaintencion.value = `${y}-${m}-${d}`;
+		//- let fechaactual = document.querySelector("#fechaactual");
+		//- fechaactual.innerText = `Fecha: ${d}/${m}/${y}`;
+
+		//- let intencion = new IntencionModule(
+		//- ciclo,
+		//- formbuscar,
+		//- formintencion,
+		//- docproductor,
+		//- undproduccion,
+		//- codfichapredial,
+		//- tenencia,
+		//- destenencia,
+		//- rubros,
+		//- haintencion,
+		//- tecnico,
+		//- );
+
+		//- window.addEventListener("load",function(e){
+		//- 	intencion.getMunicipios();
+		//- 	intencion.getRubros();
+		//- 	intencion.getIntencion();
+
+		//- 	if(n !== 'PRODUCTOR'){
+		//- 		intencion.getEntidad();
+		//- 		intencion.getProductor();
+		//- 	}
+		//- })
+		//- formbuscar.addEventListener("submit",function(e){
+		//- 	e.preventDefault();
+		//- 	intencion.getIntencion();
+		//- });
+		
+		//- //botton mostrar detalle de tabla
+		//- $(document).on("click","#options #mas",function(){
+		//- 	let button = $(this);
+		//- 	tr = button.parents("tr");
+		//- 	let docint = tr.children("td").eq(1).text();
+			
+		//- 	$(`.detalletabla[data-intencion=${docint}]`).slideToggle("fast",function(){
+		//- 		button.toggleClass("show");
+		//- 	});
+		//- 	//if(button.text()=='-') {button.text("+"); return};
+		//- 	//button.text("-");
+		//- });
+		//- //fin de boton mostrar
+
+		//- //boton agregar mas registros a intencion existente
+		//- $(document).on("click", "#options #add",function(){
+		//- 		let button = $(this);
+		//- 		let docint = button.data("intencion");
+
+		//- 		$("#new").animate({
+		//- 			left:0
+		//- 		});
+
+		//- 		docintencion.value = docint;
+		//- 		let spanDocintencion = document.querySelector("#nrointencion");
+		//- 		spanDocintencion.innerText = "Intención Nº: " + docintencion.value
+				
+		//- 		let doc = ssdata.cirif;
+
+		//- 		intencion.getNewProductor(doc);
+				
+		//- 		intencion.getNewRubros();
+		//- 		intencion.getTecnico();
+		//- 		let ent = ssdata.entidad || '%';
+		//- 		if(n == "ADMINISTRADOR") intencion.getNewEntidad(ent);
+
+		//- });
+
+		//- //nuevo registro
+		//- let newInt = document.querySelector("#nuevaintencion");
+		
+		//- newInt.addEventListener("click",function(){
+		//- 	$("#new").animate({
+		//- 		left:0
+		//- 	});
+
+		//- 	let spanDocintencion = document.querySelector("#nrointencion");
+		//- 	spanDocintencion.innerText = "Intención Nº: " + docintencion.value
+		//- 	let doc = ssdata.cirif;
+
+		//- 	intencion.getNewProductor(doc);
+			
+		//- 	intencion.getNewRubros();
+		//- 	intencion.getTecnico();
+		//- 	let ent = ssdata.entidad || '%';
+		//- 	if(n == "ADMINISTRADOR") intencion.getNewEntidad(ent);
+		//- });
+
+		//- let cancelNewInt = document.querySelector("#closeNewIntencion");
+		//- cancelNewInt.addEventListener("click",function(){
+		//- 	$("#new").animate({
+		//- 		left:'100%'
+		//- 	});
+
+		//- 	docintencion.value = '<?php echo $DOCintencion;?>';
+
+		//- })
+
+		//- newentidad.addEventListener("change",function(){
+		//- 	let desentidad = document.querySelector("#desentidad-desc");
+
+		//- 	let i = this.selectedIndex;
+		//- 	desentidad.value = this.options[i].innerText;
+			
+		//- });
+
+		//- undproduccion.addEventListener("change",function(){
+		//- 	let i = this.selectedIndex;
+
+
+		//- 	propietario.innerText = '';
+		//- 	if(this.value=='OTHER'){
+		//- 		intencion.codfichapredial.value="";
+		//- 		intencion.codfichapredial.attributes["data-nombreund"].value = "";
+		//- 		intencion.tenencia.value="";
+
+		//- 		$("#otraundproduccion").fadeIn("fast");
+		//- 	}else{
+		//- 		$("#otraundproduccion").fadeOut("fast");
+		//- 		intencion.codfichapredial.value=this.value;
+		//- 		intencion.codfichapredial.attributes["data-nombreund"].value = this.options[i].innerText;
+		//- 		intencion.tenencia.value=this.options[i].dataset.tenencia;
+		//- 	}
+		//- });
+
+		//- docproductor.addEventListener("blur",function(){
+		//- 	intencion.getUNDproduccion(this.value);
+		//- });
+
+		//- codfichapredial.addEventListener("blur",function(){
+		//- 	let f = new FormData();
+		//- 	let url = '../controller/class.undproduccion.php';
+		//- 	f.append("busqueda",this.value);
+		//- 	f.append("method",1);
+
+		//- 	let axios = pmain.axios('',url,f);
+		//- 	axios.then(function(response){
+		//- 		let resp = response.data;
+		//- 		let estado = resp.estado;
+		//- 		let descripcion = resp.descripcion;
+		//- 		let datos = resp.data;
+
+		//- 		let propietario = document.querySelector("#propietario");
+		//- 		propietario.innerText = "";
+		//- 		codfichapredial.dataset.nombreund = '';
+		//- 		if(estado){
+		//- 			codfichapredial.dataset.nombreund = datos[0].razonsocial;
+		//- 			propietario.innerText = datos[0].razonsocial;
+		//- 		}
+
+		//- 	})
+		//- })
+
+		//- IMask(haintencion,{mask:EXPnumberDecimal});
+
+		//- let bAdd = document.querySelector("#addList");
+		//- bAdd.addEventListener("click",function(){
+		//- 	intencion.addIntencion();
+		//- });
+
+		//- //let datosDetalle;
+		//- let documento = $(document);
+		//- var tr='';
+
+		//- documento.on("click","#delete",function(){
+		//- 	//$("#deleteIntencion")
+		//- 	tr = $(this).parents("tr");
+		//- 	$(".modal-title").text("Eliminar Intención de Siembra");
+		//- 	$(".modal-body p").text("Si eliminas la intención de siembra no podras revertir los cambios ¿Estas seguro de continuar?");
+		//- })
+
+		//- let deleteIntencion = $("#aceptar");
+
+		//- deleteIntencion.on("click",function(){
+			
+		//- 	let docintencion = tr.children('td').eq(0).text();
+		//- 	let docproductor = tr.children('td').eq(3).text();
+		//- 	let docrubro = tr.children('td').eq(4).text();
+		//- 	let docfichapredial = tr.children('td').eq(5).text();
+
+		//- 	intencion.deleteIntencion(
+		//- 		docintencion,
+		//- 		docproductor,
+		//- 		docrubro,
+		//- 		docfichapredial
+		//- 	);
+		//- });
+
+		//- documento.on("click","#removeIntencion",function(){
+		//- 	let padre = $(this).parents('.mTr');
+		//- 	let index = padre.index();
+		//- 	padre.remove()
+		//- })
+
+
+		//- let bGuardar = document.querySelector("#bguardar");
+		//- bGuardar.addEventListener("click",function(){
+		//- 	intencion.guardarIntencion();
+		//- })
+
+

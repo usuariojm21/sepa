@@ -1,0 +1,31 @@
+header.row
+	.cont_logo.col-auto.d-flex.justify-content-star
+		#btn-menu.btnmenu.col-auto.align-self-center.d-md-none
+			a(href="#"): i.flaticon-boton-de-menu
+		.logo.d-flex: a.align-self-center(href="./"): img(src="./img/logotipo-color.svg", alt="")
+	.nav_bar.col.align-self-center.d-flex.justify-content-end.position-static
+		//.items_mnubar.busqueda.col.align-self-center.d-flex
+		.items_mnubar.ciclo-cosecha.col-auto.align-self-center.dropdown-container
+			span.titleCicloActual
+			a#cicloCosecha.menu-toggle(href="#" title="Ciclo de Consecha"): i.flaticon-recycle-water
+			.menu-dropdown(data-id="cicloCosecha")
+				.dropdown-title.d-flex
+					h6.header-toggle.col Ciclos de Cosecha
+					a.close-dropdown.col-2(href="#")
+				hr
+		//.items_mnubar.notificacion.col-auto.align-self-center.dropdown-container
+			a#notification.menu-toggle(href="#" title="Notificaciones"): i.flaticon-notificacion
+			.menu-dropdown(data-id="notification")
+				h6.header-toggle Notificaciones
+				hr
+				a(href="#"): .menu-items
+					span Esta es una notificación
+		.items_mnbar.user.col-auto.align-self-center.d-flex.justify-content-center.align-items-center.dropdown-container
+			a#perfiluser.menu-toggle.align-selft-center(href="#"): img(src="img/037-persona.svg", alt="")
+			.menu-dropdown(data-id="perfiluser")
+				h6.header-toggle Hola, <?php echo $_SESSION["usuario"]; ?>
+				hr
+				//a(href="#"): .menu-items
+					span Configuración de Usuario
+				a(href="../controller/logout.session.php"): .menu-items
+					span Cerrar Sesión

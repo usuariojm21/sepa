@@ -1,0 +1,21 @@
+color1 = #373f5d
+color2 = #710dd5ff
+color3 = #2fc797
+color4 = #d50d69
+colorGradient = linear-gradient(to right bottom, rgba(0,84,209,1) 0%, rgba(114,63,181,1) 100%)
+
+transition(s,t)
+	-webkit-transition: s t
+	-o-transition: s t
+	-ms-transition: s t
+	transition: s t
+			
+//Con la funcion collapsed agregue tres puntos suspensivos (...) cuando el texto sobrepase el ancho del elemento padre
+collapsed()
+	overflow hidden 
+	white-space nowrap
+	text-overflow ellipsis
+	
+menu_selected()
+	background #1d202d !important
+	border-left 3px solid color3

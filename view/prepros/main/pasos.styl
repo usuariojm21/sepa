@@ -1,0 +1,93 @@
+@import url("./main.css");
+@import "../includes/varandfunctions.styl"
+
+body
+	background #f8f8f8
+	
+
+.cont_logo
+	.btnmenu
+		display none !important
+
+header .nav_bar .ciclo-cosecha
+	display none			
+
+#cont-up
+	h1
+		color #999
+		font-size 30px
+		font-weight 900
+		text-align center
+
+.pasos
+	background #fff
+	transition .5s all
+	h3
+		margin 10px 0
+		padding 0 5px
+		text-align center
+		strong
+			background: #710dd5;
+			border-radius: 100px;
+			color: #fff;
+			display inline-block
+			margin-right: 10px;
+			padding: 5px 15px;
+		span
+			display block
+			font-size: smaller
+			font-weight 500
+			margin-top 5px
+
+#paso1.complete
+	margin-left -100%
+	opacity 0
+#paso2
+	margin-left 100%
+	opacity 0
+	z-index 1
+#paso2.visible
+	opacity 1
+	margin-left 0
+
+form.form-module
+	.row
+		margin 0 5px !important
+		.group-input,.group-select,.form-subtitle
+			margin-bottom 5px
+			padding 0 3px !important
+			
+			label
+				color #555
+			p.large-control
+				color color2
+				font-size 16px
+				font-weight 500
+				margin-bottom 5px
+			label.custom-control-label
+				font-size 16px
+			.custom-file
+				.custom-file-label
+					height auto
+					padding 10px
+					&:after
+						content: "Buscar";
+						height auto
+						padding 10px						
+@media(min-width 576px)
+	#primerospasos
+		h1
+			font-size -webkit-xxx-large
+		h4
+			font-size 30px
+		input, select, .custom-select, textarea, .form-control
+			padding 7px
+	#cont-up
+		h1
+			text-align left
+	.pasos
+		h3
+			text-align left
+			span
+				display inline-block
+				font-size 30px

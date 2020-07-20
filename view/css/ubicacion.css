@@ -1,0 +1,2 @@
+@import url("./main.css");
+body{background:#f8f8f8}#ubicacion{background:#1d202d !important;border-left:3px solid #2fc797}@media (min-width:414px){.form-module{display:flex;flex-flow:row wrap;align-items:center;}.form-module input,.form-module .custom-select{flex:auto;width:auto}.form-module #coEstado,.form-module #coMunicipio,.form-module #coParroquia,.form-module #coSector{max-width:150px}.form-module .btn-reg{flex:none}}

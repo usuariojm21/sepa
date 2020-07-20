@@ -1,0 +1,118 @@
+|<?php
+|
+|	//error_reporting(E_ERROR | E_WARNING | E_PARSE);
+|	session_start();
+|	require_once("../model/class.conexion.php");
+|	require_once("../model/class.querys.php");
+|	require_once("../controller/methods.php");
+|	//require_once("../controller/class.direction.php");
+|	if (isset($_SESSION["sepa_login"]) && $_SESSION["sepa_login"]===true) {
+|		header("location: ./dashboard");
+|	}
+|?>
+|
+doctype
+html.h-100(lang="es")
+	head
+		include ../includes/head_common.pug
+		title Sepa
+		link(rel="stylesheet" href="css/users.css")
+		script.
+	body.h-100
+		.container.h-100
+			.row.justify-content-center.mt-10
+				.col-auto
+					a.logotipo(href="./")
+						picture
+							img(src="./img/logotipo-color.svg", alt="")
+			.row.justify-content-center
+				section#singup.col-12.col-md-8.align-self-center
+					h2 Crea una nueva cuenta
+					form#fusers.form-module(autocomplete="off")
+						.row.m-0
+							.col-12.p-1.position-relative
+								//#loading
+									i.flaticon-cargar
+								input.form-control.v-rif#cirif(type="text" name="cirif" placeholder="CI/Rif (Ej. V87654321)")
+							.col-12.p-1
+								input.form-control#rsocial(type="text", name="rsocial" placeholder="Razón Social" maxlength="100")
+							.col-12.p-1
+								input.form-control#correo(type="email", name="correo" placeholder="Correo Electrónico" maxlength="")
+							.col-12.p-1
+								input.form-control#representante(type="text" name="nombrepresentante" placeholder="Representante Legal")
+							.col-12.p-1
+								input.form-control#dfiscal.large-control(type="text", name="dfiscal" placeholder="Dirección Fiscal" maxlength="255")
+							.col-12.p-1
+								input.form-control#nuser(type="text" name="usuario" placeholder="Usuario")
+							.col-6.p-1
+								input.form-control#pass(type="password" name="clave" placeholder="Contraseña")
+							.col-6.p-1
+								input.form-control#repeatpass(type="password" placeholder="Confirmar contraseña")
+							.col-12.p-1
+								input#regusers.button-primary(type="button", value="Crear Cuenta")
+	include ../includes/scripts.pug
+	//script(src="js/imask.js")
+	script(src="js/class.users.js")
+	script.
+		var main = new Main();
+
+		//let entAutoFinan = 'A000000001';
+
+		let forms = document.querySelector('#fusers');
+		let cirif = document.getElementById("cirif");
+		let representante = document.getElementById("representante");
+		let nuser = document.getElementById("nuser");
+		let pass = document.getElementById("pass");
+		let repeatpass = document.getElementById("repeatpass");
+		let rsocial = document.getElementById("rsocial");
+		let correo = document.getElementById("correo");
+		let dfiscal = document.getElementById("dfiscal");
+		let regusers = document.getElementById("regusers");
+
+
+		let blockElement = [];
+
+		IMask(cirif,{mask:EXPrifMask});
+
+		let users = new Users(
+			//entAutoFinan,
+			cirif,
+			representante,
+			nuser,
+			pass,
+			repeatpass,
+			rsocial,
+			correo,
+			dfiscal
+		);
+
+		//events
+		/*window.addEventListener("load",function(){
+			pmain.obtenerEstados(estados);
+		});*/
+
+
+		cirif.addEventListener("keypress",function(e){
+			let keycode = (event.keyCode ? event.keyCode : event.which);
+		});
+
+		cirif.addEventListener("blur",function(){
+			users.buscar_productor(this);
+		})
+
+		pass.addEventListener("keyup",function(){
+			repeatpass.placeholder=this.value
+			repeatpass.placeholder = repeatpass.placeholder || "Confirmar Contraseña" 
+		})
+
+		regusers.addEventListener("click",function(){
+			users.validar();
+		});
+
+		/*var element = cirif;
+		var maskOptions = {
+		  mask: '[VG]'
+		};
+		var mask = IMask(cirif, {
+			mask: /^([VEJPG]{1})([0-9]{7,9})$/
+		});*/

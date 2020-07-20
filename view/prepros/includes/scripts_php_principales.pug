@@ -1,0 +1,19 @@
+|<?php
+|	session_start();
+| require_once("../controller/obtener_ciclos.php");
+| require_once("../controller/class.datausers.php");
+|$ciclos = new Ciclo;
+|	if ($_GET) {
+|		$cod_ciclo = $_GET["c"];
+|	$total_ciclos = $ciclos->obtener_ciclo($cod_ciclo);
+|	}else{
+|	$total_ciclos = $ciclos->obtener_ciclo();
+|}
+|	
+|	$usuarios = new Usuarios();
+|	$show = $usuarios->verificarNivelesUsuarios(); //variable para las vistas por nivel de usuarios
+| $session_data = $usuarios->session();
+|
+|?>
+|
+|
