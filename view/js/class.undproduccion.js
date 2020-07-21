@@ -249,8 +249,7 @@ class UNDProduccion{
 		}).then(function(response){
 
 			let resp = response.data;
-			console.log(resp)
-			
+			console.log(resp)		
 			let estado = resp.estado;
 			let descripcion = resp.descripcion
 
