@@ -214,6 +214,7 @@ productor_entidad.ced_rif = productor.ced_rif AND productor.ced_rif LIKE :ndoc "
 			$this->d['lproductores'] = json_decode($this->d['lproductores'],true);
 			$update = $this->d["update"];
 			$c = $this->d;
+			//return $c;
 			
 			if ($c["codfichapredial"]!=='') {
 				$fileUpload = $this->cargar_ficha_predial();
@@ -330,52 +331,55 @@ productor_entidad.ced_rif = productor.ced_rif AND productor.ced_rif LIKE :ndoc "
 			$lproductores = $this->d["lproductores"];
 
 			//VALIDAR SI LOS PRODUCTORES INGRESADOS SE ENCUENTRAN EN LA BASE DE DATOS
-			$validproductor = $this->VALIDproductor();
-			if($validproductor["estado"]===false) return $validproductor;
+				$validproductor = $this->VALIDproductor();
+				if($validproductor["estado"]===false) return $validproductor;
 
 			//VALIDAR QUE LAS HECTAREAS DISPONIBLES NO EXCEDAN LAS PRODUCTIVAS
-			$validHectareas = $this->VALIDtotalHectareas();
-			if($validHectareas["estado"]===false) return $validHectareas;
+				$validHectareas = $this->VALIDtotalHectareas();
+				if($validHectareas["estado"]===false) return $validHectareas;
 
 			//ELIMINAR REGISTROS ANTERIORES DE LA TABLA DETALLE
-			$sql="DELETE FROM undprod_productor WHERE codundprod=:codundprod";
-			$param=array("codundprod"=>$c["undproduccion"]);
+				$sql="DELETE FROM undprod_productor WHERE codundprod=:codundprod";
+				$param=array("codundprod"=>$c["undproduccion"]);
 
-			$rQuery = Querys::QUERYBD($sql,$param);
-			$state = $rQuery["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$rQuery["error"]);
-
-			$return = '';
-			foreach ($lproductores as $key => $value) {
-
-				$sql = "INSERT INTO undprod_productor (ced_rif,codtenencia,codundprod,hadisponibles,codfichapredial) VALUES(:codprod, :tenencia, :undproduccion, :hadisponibles, :codigoficha)";
-				$param=array(
-					":codprod"=>$value["docproductor"],
-					":tenencia"=>$value["codtenencia"],
-					":undproduccion"=>$c["undproduccion"],
-					":hadisponibles"=>$value["hadisponibles"],
-					":codigoficha"=>$c["codfichapredial"]
-				);
 				$rQuery = Querys::QUERYBD($sql,$param);
 				$state = $rQuery["state"];
-				if(!$state) {
-					$return = Methods::arrayMsj(false,"Error en la consulta. ".$rQuery["error"]);
-					break;
-				};
+				if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$rQuery["error"]);
 
-				$return = Methods::arrayMsj(true,"Los datos han sido registrados exitosamente.");
-			}
+				$return = '';
+				foreach ($lproductores as $key => $value) {
+
+					$sql = "INSERT INTO undprod_productor (ced_rif,codtenencia,codundprod,hadisponibles,codfichapredial) VALUES(:codprod, :tenencia, :undproduccion, :hadisponibles, :codigoficha)";
+					$param=array(
+						":codprod"=>$value["docproductor"],
+						":tenencia"=>$value["codtenencia"],
+						":undproduccion"=>$c["undproduccion"],
+						":hadisponibles"=>$value["hadisponibles"],
+						":codigoficha"=>$c["codfichapredial"]
+					);
+					$rQuery = Querys::QUERYBD($sql,$param);
+					$state = $rQuery["state"];
+					if(!$state) {
+						$return = Methods::arrayMsj(false,"Error en la consulta. ".$rQuery["error"]);
+						break;
+					};
+
+					$return = Methods::arrayMsj(true,"Los datos han sido registrados exitosamente.");
+				}
 
 			return $return;
 		}
 
 		public function VALIDproductor(){
+
+			require_once("./class.productores.php");
 			$lproductores = $this->d["lproductores"];
-			return $lproductores;
+			//return $lproductores[0];
 
 			$return='';
 			foreach ($lproductores as $key => $value) {
-				$validproductor = $this->getproductor($value["docproductor"]);
+				$productores = new Productores(array("busqueda"=>$value['docproductor']));
+				$validproductor = $productores->buscar();
 				$return = $validproductor;
 				if($validproductor["estado"]===false) break;
 			}
@@ -392,7 +396,7 @@ productor_entidad.ced_rif = productor.ced_rif AND productor.ced_rif LIKE :ndoc "
 			}
 
 			if ($ha > $this->d["haProductivas"]) return Methods::arrayMsj(false,"El total de hecteras disponibles para los productores seleccionados excede a las productivas.");
-			return Methods::arrayMsj(true);			
+			return Methods::arrayMsj(true);
 		}
 
 
