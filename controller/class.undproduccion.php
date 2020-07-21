@@ -210,72 +210,100 @@ productor_entidad.ced_rif = productor.ced_rif AND productor.ced_rif LIKE :ndoc "
 		}
 
 		public function guardar(){
+			//AJUSTES Y VALIDACIONES A LOS VALORES DEL ARREGLO RECIBIDO DESDE JAVASCRIPT
+				$estatus=0;
+				$this->d["estatus"] ? ($estatus = 1):($estatus = 0);
+				$this->d["estatus"] = $estatus;
+				$this->d['lproductores'] = json_decode($this->d['lproductores'],true);
+				$update = $this->d["update"];
+				$c = $this->d;
+				
+				if ($c["codfichapredial"]!=='') {
+					$fileUpload = $this->cargar_ficha_predial();
+					if($fileUpload[0]===false) return Methods::arrayMsj(false,$fileUpload[1]);
+				}
 
-			$this->d['lproductores'] = json_decode($this->d['lproductores'],true);
-			$update = $this->d["update"];
-			$c = $this->d;
-			//return $c;
-			
-			if ($c["codfichapredial"]!=='') {
-				$fileUpload = $this->cargar_ficha_predial();
-				if($fileUpload[0]===false) return Methods::arrayMsj(false,$fileUpload[1]);
-			}
+				if ($c["undproduccion"]=='' || $c["undproduccion"]=='POR ASIGNAR' || $c["undproduccion"]=='undefined') {
+					$codundproduccion=Methods::JSONautoincrementable("../controller/config.json","unidadproduccion");
+					$c["undproduccion"] = "UNDP".str_pad($codundproduccion, 7,"0", STR_PAD_LEFT);
+					$this->d["undproduccion"] = $c["undproduccion"];
+				}
 
-			if ($c["undproduccion"]=='' || $c["undproduccion"]=='POR ASIGNAR' || $c["undproduccion"]=='undefined') {
-				$codundproduccion=Methods::JSONautoincrementable("../controller/config.json","unidadproduccion");
-				$c["undproduccion"] = "UNDP".str_pad($codundproduccion, 7,"0", STR_PAD_LEFT);
-				$this->d["undproduccion"] = $c["undproduccion"];
-			}
+			//ENVIAR PARAMETROS PARA CONSTRUIR LA SENTENCIA SQL
+				$paramSQL = array(
+					"campos" => [
+						"codundprod",
+						"nomundprod",
+						"dirundprod",
+						"estado",
+						"municipio",
+						"parroquia",
+						"sector",
+						"hatotal",
+						"haproductivas",
+						"coorprinlat",
+						"coorprinlog",
+						"estatus",
+						"codfichapredial",
+						"urldocumentoficha"
+					],
+					"values" => [
+						$c["undproduccion"],
+						$c["nombre"],
+						$c["direccion"],
+						$c["estado"],
+						$c["municipio"],
+						$c["parroquia"],
+						$c["codigosector"],
+						$c["haTotal"],
+						$c["haProductivas"],
+						$c["latitud"],
+						$c["longitud"],
+						$c["estatus"],
+						$c["codfichapredial"],
+						$fileUpload[1]
+					],
+					"tabla" => "unidadproduccion",
+					"filtro" => array(
+						"state" => true,
+						"condicion" => ["codundprod",$c["undproduccion"]],
+						"operador" => "=",
+						"param_adicionales" => ""
+					)
+				);
+				$consultas = new Querys();
+				$resultSQL = $consultas->select($paramSQL);
+				$resultado=[];
+				$add=[];
 
-			//enviar parametros para construir sentencias SQL
-			$paramSQL = array(
-				"campos" => [
-					"codundprod",
-					"nomundprod",
-					"dirundprod",
-					"estado",
-					"municipio",
-					"parroquia",
-					"sector",
-					"hatotal",
-					"haproductivas",
-					"coorprinlat",
-					"coorprinlog",
-					"estatus",
-					"codfichapredial",
-					"urldocumentoficha"
-				],
-				"values" => [
-					$c["undproduccion"],
-					$c["nombre"],
-					$c["direccion"],
-					$c["estado"],
-					$c["municipio"],
-					$c["parroquia"],
-					$c["codigosector"],
-					$c["haTotal"],
-					$c["haProductivas"],
-					$c["latitud"],
-					$c["longitud"],
-					$c["estatus"],
-					$c["codfichapredial"],
-					$fileUpload[1]
-				],
-				"tabla" => "unidadproduccion",
-				"filtro" => array(
-					"state" => true,
-					"condicion" => ["codundprod",$c["undproduccion"]],
-					"operador" => "=",
-					"param_adicionales" => ""
-				)
-			);
-			$consultas = new Querys();
-			$resultSQL = $consultas->select($paramSQL);
-			$resultado=[];
-			$add=[];
+				if($resultSQL->rowCount() > 0){
+					if ($update==1 || $update=="1") {
+						
+						//actualizar o registrar sectores
+						$direccion = new Direccion(array(
+							"codestado"=>$c["estado"],
+							"cparroquia"=>$c["parroquia"],
+							"codigosector"=>$c["codigosector"],
+							"sector"=>$c["sector"]
+						));
+						$savesectores = $direccion->newAndupdateSectores();
+						if($savesectores["estado"]===false) return $savesectores;
 
-			if($resultSQL->rowCount() > 0){
-				if ($update==1 || $update=="1") {
+						#actualizar
+						$updateSQL = $consultas->update($paramSQL);
+						
+						if ($updateSQL===true) {
+							return $this->detalle();
+							/*return Methods::arrayMsj(true,"La unidad de producción ha sido modificada.",array(
+								"undproduccion"=>$c["undproduccion"]
+							));*/
+						}else{
+							return Methods::arrayMsj(false,$updateSQL);
+						}
+					}else{
+						return Methods::arrayMsj(false,"Esta unidad de producción ya se encuentra registrada");
+					}
+				}else{
 					
 					//actualizar o registrar sectores
 					$direccion = new Direccion(array(
@@ -285,44 +313,18 @@ productor_entidad.ced_rif = productor.ced_rif AND productor.ced_rif LIKE :ndoc "
 						"sector"=>$c["sector"]
 					));
 					$savesectores = $direccion->newAndupdateSectores();
+
+					//return $savesectores;
 					if($savesectores["estado"]===false) return $savesectores;
 
-					#actualizar
-					$updateSQL = $consultas->update($paramSQL);
-					
-					if ($updateSQL===true) {
+					//insertar
+					$insertSQL = $consultas->insert($paramSQL);
+					if ($insertSQL===true) {
 						return $this->detalle();
-						/*return Methods::arrayMsj(true,"La unidad de producción ha sido modificada.",array(
-							"undproduccion"=>$c["undproduccion"]
-						));*/
 					}else{
-						return Methods::arrayMsj(false,$updateSQL);
+						return Methods::arrayMsj(false,$insertSQL);
 					}
-				}else{
-					return Methods::arrayMsj(false,"Esta unidad de producción ya se encuentra registrada");
 				}
-			}else{
-				
-				//actualizar o registrar sectores
-				$direccion = new Direccion(array(
-					"codestado"=>$c["estado"],
-					"cparroquia"=>$c["parroquia"],
-					"codigosector"=>$c["codigosector"],
-					"sector"=>$c["sector"]
-				));
-				$savesectores = $direccion->newAndupdateSectores();
-
-				//return $savesectores;
-				if($savesectores["estado"]===false) return $savesectores;
-
-				//insertar
-				$insertSQL = $consultas->insert($paramSQL);
-				if ($insertSQL===true) {
-					return $this->detalle();
-				}else{
-					return Methods::arrayMsj(false,$insertSQL);
-				}
-			}
 		}
 
 		public function detalle(){
