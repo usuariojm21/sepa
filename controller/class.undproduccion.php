@@ -151,21 +151,19 @@
 
 		}
 
-		public function getproductor($ndoc = '%'){
+		/*public function getproductor($ndoc = '%'){
 
 			$c = $this->d;
 
 			$sql = "SELECT 
-			productor.ced_rif as rif,
-			productor.razonsocial as rsocial,
-			productor.dirfiscal as direccion,
-			productor.telefonos as telefono,
-			productor.representante as representante,
-			productor.correoe as correo,
-			productor.pagina as pagina,
-			productor.estatus as estatus
-FROM productor, productor_entidad WHERE
-productor_entidad.ced_rif = productor.ced_rif AND productor.ced_rif LIKE :ndoc " . $this->filtro;
+				productor.ced_rif as rif,
+				productor.razonsocial as rsocial,
+				productor.dirfiscal as direccion,
+				productor.telefonos as telefono,
+				productor.representante as representante,
+				productor.correoe as correo,
+				productor.pagina as pagina,
+				productor.estatus as estatus FROM productor, productor_entidad WHERE productor_entidad.ced_rif = productor.ced_rif AND productor.ced_rif LIKE :ndoc " . $this->filtro;
 
 			
 			$modelo = new conexion();
@@ -207,7 +205,7 @@ productor_entidad.ced_rif = productor.ced_rif AND productor.ced_rif LIKE :ndoc "
 				return Methods::arrayMsj(false,"Problemas de conexión: ". $e->getMessage());
 			}		
 
-		}
+		}*/
 
 		public function guardar(){
 			//AJUSTES Y VALIDACIONES A LOS VALORES DEL ARREGLO RECIBIDO DESDE JAVASCRIPT

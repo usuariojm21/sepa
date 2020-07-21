@@ -45,7 +45,7 @@
 		}else if($class==='undproduccion'){
 			$class = new UNDproduccion($_POST);
 			if($method==1) return $class->buscar();
-			if($method==2) return $class->getproductor();
+			//if($method==2) return $class->getproductor();
 			if($method==3) return $class->guardar();
 		}else if($class==='direccion'){
 			$class = new Direccion($_POST);
