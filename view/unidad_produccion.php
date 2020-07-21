@@ -286,7 +286,7 @@ $nUNDproduccion = count($undproduccion["data"]);
                         <div class="w-100"></div>
                         <div class="col-12 p-1">
                           <div class="custom-control custom-switch">
-                            <input class="custom-control-input" id="switchUP" type="checkbox" name="">
+                            <input class="custom-control-input" id="switchUP" type="checkbox" name="estatus">
                             <label class="custom-control-label" for="switchUP">Activo/Inactivo</label>
                           </div>
                         </div>
