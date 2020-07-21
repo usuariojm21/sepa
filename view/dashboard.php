@@ -100,11 +100,9 @@ $productores = new Productores();
             <div class="menu-dropdown" data-id="perfiluser">
               <h6 class="header-toggle">Hola, <?php echo $_SESSION["usuario"]; ?></h6>
               <hr>
-              <a href="../controller/logout.session.php">
-                <div class="menu-items">
-                  <span>Cerrar Sesión</span>
-                </div>
-              </a>
+              <!--a(href="#"): .menu-itemsspan Configuración de Usuario
+              --><a href="../controller/logout.session.php">
+                <div class="menu-items"><span>Cerrar Sesión</span></div></a>
             </div>
           </div>
         </div>
