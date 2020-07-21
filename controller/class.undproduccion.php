@@ -209,9 +209,13 @@
 
 		public function guardar(){
 			//AJUSTES Y VALIDACIONES A LOS VALORES DEL ARREGLO RECIBIDO DESDE JAVASCRIPT
-				$estatus=0;
-				$this->d["estatus"] ? ($estatus = 1):($estatus = 0);
-				$this->d["estatus"] = $estatus;
+				$estatus = $this->d["estatus"];
+				if($estatus=='true'){
+					$this->d["estatus"] = 1;
+				}else{
+					$this->d["estatus"] = 0;
+				}
+
 				$this->d['lproductores'] = json_decode($this->d['lproductores'],true);
 				$update = $this->d["update"];
 				$c = $this->d;
