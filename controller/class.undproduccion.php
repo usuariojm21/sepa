@@ -39,127 +39,115 @@
 
 		public function buscar(){
 
-			$modelo = new conexion();
-			$conexion = $modelo->get_conexion();
+			//$modelo = new conexion();
+			//$conexion = $modelo->get_conexion();
+
+			$filtro = $this->filtro;
 
 			$sql = "SELECT
-	unidadproduccion.codundprod AS codigound,
-	unidadproduccion.codfichapredial AS codficha,
-	unidadproduccion.urldocumentoficha AS urldocumentoficha,
-	unidadproduccion.nomundprod AS nombreund,
-	unidadproduccion.dirundprod AS direccion,
-	unidadproduccion.estado,
-	unidadproduccion.municipio,
-	unidadproduccion.parroquia,
-	unidadproduccion.sector,
-	unidadproduccion.hatotal,
-	unidadproduccion.haproductivas,
-	unidadproduccion.hadisponibles,
-	unidadproduccion.coorprinlat,
-	unidadproduccion.coorprinlog,
-	unidadproduccion.estatus 
-FROM
-	unidadproduccion,
-	undprod_productor,
-	productor,
-	productor_entidad 
-WHERE
-	unidadproduccion.codundprod = undprod_productor.codundprod 
-	AND undprod_productor.ced_rif = productor.ced_rif 
-	AND productor.ced_rif = productor_entidad.ced_rif 
-	AND unidadproduccion.nomundprod LIKE :busqueda " . $this->filtro . " 
-GROUP BY
-	unidadproduccion.codundprod";
-			$statement = $conexion->prepare($sql);
-			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$modelo=null;
+					unidadproduccion.codundprod AS codigound,
+					unidadproduccion.codfichapredial AS codficha,
+					unidadproduccion.urldocumentoficha AS urldocumentoficha,
+					unidadproduccion.nomundprod AS nombreund,
+					unidadproduccion.dirundprod AS direccion,
+					unidadproduccion.estado,
+					unidadproduccion.municipio,
+					unidadproduccion.parroquia,
+					unidadproduccion.sector,
+					unidadproduccion.hatotal,
+					unidadproduccion.haproductivas,
+					unidadproduccion.hadisponibles,
+					unidadproduccion.coorprinlat,
+					unidadproduccion.coorprinlog,
+					unidadproduccion.estatus 
+				FROM
+					unidadproduccion,
+					undprod_productor,
+					productor,
+					productor_entidad 
+				WHERE
+					unidadproduccion.codundprod = undprod_productor.codundprod 
+					AND undprod_productor.ced_rif = productor.ced_rif 
+					AND productor.ced_rif = productor_entidad.ced_rif 
+					AND unidadproduccion.nomundprod LIKE :busqueda $filtro	GROUP BY
+					unidadproduccion.codundprod";
+			$param = array(":busqueda"=>$this->busqueda);
 
-			try {
+			$rQuery = Querys::QUERYBD($sql,$param);
+			$state = $rQuery['state'];
+			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$rQuery["error"]);
 
-				$statement->execute(
-					array(":busqueda"=>$this->busqueda)
-				);
-
+			$stmt = $rQuery["stmt"];
+			if ($stmt->rowCount()>0) {
 				$arrayUNDprod=[];
+				while ($f = $stmt->fetch()) {
+					/*OBTENER LISTADO DE PRODUCTORES ASOCIADOS A LA UNIDAD DE PRODUCCION*/
+					$ARRproductores=[];
+					$sql2="SELECT
+						productor.ced_rif,
+						productor.razonsocial,
+						tenencia.codtenencia,
+						tenencia.destenencia,
+						undprod_productor.hadisponibles
+					FROM
+						undprod_productor,
+						productor,
+						tenencia 
+					WHERE
+						productor.ced_rif = undprod_productor.ced_rif
+						AND tenencia.codtenencia = undprod_productor.codtenencia
+						AND undprod_productor.codundprod = :codigo";
+					$param2 = array(":codigo" => $f['codigound']);
 
-				if ($statement->rowCount() > 0) {
+					$rQuery2 = Querys::QUERYBD($sql2,$param2);
+					$state2 = $rQuery2["state"];
+					
+					if (!$state2) {
+						return Methods::arrayMsj(false,"Error en la consulta numero 2. ".$rQuery2["error"]);
+						break;
+					}else{
 
-					while ($f = $statement->fetch()) {
-						/*OBTENER LISTADO DE PRODUCTORES ASOCIADOS A LA UNIDAD DE PRODUCCION*/
-						$ARRproductores=[];
-						$sql2="SELECT
-							productor.ced_rif,
-							productor.razonsocial,
-							tenencia.codtenencia,
-							tenencia.destenencia,
-							undprod_productor.hadisponibles
-						FROM
-							undprod_productor,
-							productor,
-							tenencia 
-						WHERE
-							productor.ced_rif = undprod_productor.ced_rif
-							AND tenencia.codtenencia = undprod_productor.codtenencia
-							AND undprod_productor.codundprod = :codigo";
-						$param2 = array(":codigo", $f['codigound']);
-
-						$rQuery2 = Querys::QUERYBD($sql2,$param2);
-						$state2 = $rQuery2["state"];
-						
-						if (!$state2) {
-							return Methods::arrayMsj(false,"Error en la consulta numero 2. ".$rQuery2["error"]);
-							break;
-						}else{
-
-							$stmt2 = $rQuery2["stmt"];
-							if($stmt2->rowCount()>0){
-								while ($x = $stmt2->fetch()) {
-									array_push($ARRproductores, array(
-										"cedrif"=>$x["ced_rif"],
-										"razons"=>$x["razonsocial"],
-										"codtenencia"=>$x["codtenencia"],
-										"destenencia"=>$x["destenencia"],
-										"hadisponibles"=>$x["hadisponibles"]
-									));
-								}
+						$stmt2 = $rQuery2["stmt"];
+						if($stmt2->rowCount()>0){
+							while ($x = $stmt2->fetch()) {
+								array_push($ARRproductores, array(
+									"cedrif"=>$x["ced_rif"],
+									"razons"=>$x["razonsocial"],
+									"codtenencia"=>$x["codtenencia"],
+									"destenencia"=>$x["destenencia"],
+									"hadisponibles"=>$x["hadisponibles"]
+								));
 							}
-
 						}
 
-						/*LLENAR ARREGLO FINAL*/
-						array_push($arrayUNDprod,array(
-							"codigo"=> $f["codigound"],
-							"codficha"=>$f["codficha"],
-							"urldocumentoficha"=>$f["urldocumentoficha"],
-							"nombreund"=> $f["nombreund"],
-							"direccion"=> $f["direccion"],
-							//"crif"=> $f["rif"],
-							//"razonsocial"=> $f["rsocial"],							
-							"estado"=> $f["estado"],
-							"municipio"=> $f["municipio"],
-							"parroquia"=> $f["parroquia"],
-							"sector"=> $f["sector"],
-							"hatotal"=> $f["hatotal"],
-							"haproductivas"=> $f["haproductivas"],
-							"coorprinlat"=> $f["coorprinlat"],
-							"coorprinlog"=> $f["coorprinlog"],
-							"estatus"=> $f["estatus"],
-							"dataproductores"=>$ARRproductores
-						));
 					}
 
-					return Methods::arrayMsj(true,"",$arrayUNDprod);
-
-				}else{
-					#no hay registros
-					return Methods::arrayMsj(false,"No se encontró ningun registro");
+					/*LLENAR ARREGLO FINAL*/
+					array_push($arrayUNDprod,array(
+						"codigo"=> $f["codigound"],
+						"codficha"=>$f["codficha"],
+						"urldocumentoficha"=>$f["urldocumentoficha"],
+						"nombreund"=> $f["nombreund"],
+						"direccion"=> $f["direccion"],
+						//"crif"=> $f["rif"],
+						//"razonsocial"=> $f["rsocial"],							
+						"estado"=> $f["estado"],
+						"municipio"=> $f["municipio"],
+						"parroquia"=> $f["parroquia"],
+						"sector"=> $f["sector"],
+						"hatotal"=> $f["hatotal"],
+						"haproductivas"=> $f["haproductivas"],
+						"coorprinlat"=> $f["coorprinlat"],
+						"coorprinlog"=> $f["coorprinlog"],
+						"estatus"=> $f["estatus"],
+						"dataproductores"=>$ARRproductores
+					));
 				}
 
-			} catch (PDOException $e) {
-				return "Problemas de conexión: ". $e->getMessage();
+				return Methods::arrayMsj(true,"",$arrayUNDprod);
+			}else{
+				return Methods::arrayMsj(true,"No se encontró ningun registro");
 			}
-
-			//return $r;
 
 		}
 
@@ -343,7 +331,7 @@ productor_entidad.ced_rif = productor.ced_rif AND productor.ced_rif LIKE :ndoc "
 
 			//VALIDAR SI LOS PRODUCTORES INGRESADOS SE ENCUENTRAN EN LA BASE DE DATOS
 			$validproductor = $this->VALIDproductor();
-			/*if($validproductor["estado"]===false)*/ return $validproductor;
+			if($validproductor["estado"]===false) return $validproductor;
 
 			//VALIDAR QUE LAS HECTAREAS DISPONIBLES NO EXCEDAN LAS PRODUCTIVAS
 			$validHectareas = $this->VALIDtotalHectareas();
