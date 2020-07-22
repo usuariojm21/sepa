@@ -216,7 +216,7 @@ form){
 			f.append("ciclo",jsonCiclos.ciclo_actual);
 			f.append("entidad",this.entidad.value);
 			//f.append("productor",this.lproductor.value || '%');
-			//f.append("rubro",this.rubros.value);
+			f.append("rubro",this.rubros.value);
 			let axios = main.axios('',url,f);
 			axios.then(function(r){
 				let resp = r.data;

@@ -123,22 +123,6 @@
 					$ARRpaquete=[];
 
 					while ($f = $stmt->fetch()) {
-
-						/*array_push($ARRpaquete,array(
-							"codigo"=>$f['codigo'],
-							"rifentidad"=>$f['rifentidad'],
-							"ced_rif"=>$f['ced_rif'],
-							"ciclo"=>$f['ciclo'],
-							"descripcion"=>$f['descripcion'],
-							"clasificacion"=>$f['clasificacion'],
-							"unidadmedida"=>$f['unidadmedida'],
-							"cantidad"=>$f['cantidad'],
-							"costounitariomercado"=>$f['costounitariomercado'],
-							"costototalmercado"=>$f['costototalmercado'],
-							"costounitarioencisa"=>$f["costounitarioencisa"],
-							"costototalencisa"=>$f["costototalencisa"]
-						));*/
-
 						array_push($ARRpaquete, array(
 							"iddetalle"=>$f["iddetalle"],
 							"codcostop"=>$f["codcostop"],
@@ -169,11 +153,12 @@
 		}
 
 		public function newPaquete(){
-			//return $this->d;
 			$update = $this->d["update"];
 
-			$ndoc = $this->d["entidad"];
-			$codigocostop = 'CP'.$this->d["ciclo"].$ndoc;
+			$entidad = $this->d["entidad"];
+			$ciclo = $this->d["ciclo"];
+			$rubro = $this->d["rubro"];
+			$codigocostop = "CP-$ciclo-$entidad-$rubro";
 			$this->codcostop = $codigocostop;
 			
 			/**************BUSCAR REGISTRO EN LA TABLA COSTOPRODUCCION************/
@@ -187,18 +172,9 @@
 			$stmt = $rQuery["stmt"];
 			if ($stmt->rowCount()>0){
 				
-				//$this->codcostop = $getPaqueteTec["data"][0]["codigo"];
 				return $this->detallepaquete();
-				/*if ($update==1) {
-					//update
-					
-				}else{
-					//no update
-					return Methods::arrayMsj(false,"Ya existe un registro perteneciente a este rubro");
-				}*/
-			}else{
 
-				//if($this->nivel==="PRODUCTOR") $ndoc = $this->d["productor"];
+			}else{
 
 				$sql="INSERT INTO costoproduccion VALUES(:codcostop, :rifentidad, '', :ciclo, :rubro)";
 				$param=array(
@@ -228,8 +204,8 @@
 
 			$parametros=array(
 				":codigocosto"=>$this->codcostop,
-				":descrip"=>$this->d["desc"],
-				":clasificacion"=>$this->d["clasificacion"],
+				":descrip"=>strtoupper($this->d["desc"]),
+				":clasificacion"=>strtoupper($this->d["clasificacion"]),
 				":undmedida"=>$this->d["undmedida"],
 				":cantidad"=>$this->d["cantidad"],
 				":costoum"=>$this->d["costoum"],
