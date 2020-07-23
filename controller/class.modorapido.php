@@ -30,7 +30,7 @@
 			$consultas = new Querys();
 			$resultSQL = querys::QUERYBD($sql,$param);
 			$state=$resultSQL["state"];
-			if (!$state) return Methods::arrayMsj(false,$resultSQL["error"]);
+			if (!$state) return Methods::returnArray(false,$resultSQL["error"]);
 			$stmt = $resultSQL["stmt"];
 			if($stmt->rowCount()>0){
 				/*if ($update==1) {
@@ -54,10 +54,10 @@
 						$consultas = new Querys;
 						$resultSQL = querys::QUERYBD($sql,$param);
 						$state=$resultSQL["state"];
-						if(!$state) return Methods::arrayMsj(false,"No se pueden guardar los datos del productor ".$resultSQL["error"]);
+						if(!$state) return Methods::returnArray(false,"No se pueden guardar los datos del productor ".$resultSQL["error"]);
 
 				}else{*/
-					return Methods::arrayMsj(false,"No se pueden actualizar los datos del productor"); 
+					return Methods::returnArray(false,"No se pueden actualizar los datos del productor"); 
 				//}
 			}else{
 					$sql = "INSERT INTO productor VALUES(:ndoc,:rsocial,:dfiscal,:rlegal,:tlf,:correo,:paginas,:estatus)";
@@ -74,7 +74,7 @@
 					//$consultas = new Querys;
 					$resultSQL = querys::QUERYBD($sql,$param);
 					$state=$resultSQL["state"]; 
-					if(!$state) return Methods::arrayMsj(false,"No se pueden guardar los datos del productor ".$resultSQL["error"]);
+					if(!$state) return Methods::returnArray(false,"No se pueden guardar los datos del productor ".$resultSQL["error"]);
 
 					//ascociar productor con entidad
 					$sql = "INSERT INTO productor_entidad VALUES(:ndocent,'',:ndoc,:rsocial,'')";
@@ -86,11 +86,11 @@
 					//$consultas = new Querys;
 					$resultSQL = querys::QUERYBD($sql,$param);
 					$state=$resultSQL["state"];
-					if(!$state) return Methods::arrayMsj(false,"No se pudo completar el registro del productor. Detalles del error: ".$resultSQL["error"]);
+					if(!$state) return Methods::returnArray(false,"No se pudo completar el registro del productor. Detalles del error: ".$resultSQL["error"]);
 					
 			}
 
-			return Methods::arrayMsj(true, "Datos guardados en el modulo de productores");
+			return Methods::returnArray(true, "Datos guardados en el modulo de productores");
 		}
 
 		public function newundproduccion(){
@@ -172,14 +172,14 @@
 					//$resp =  $updateSQL;
 					
 					if ($updateSQL===true) {
-						return Methods::arrayMsj(true,"La unidad de producción ha sido modificada.",array(
+						return Methods::returnArray(true,"La unidad de producción ha sido modificada.",array(
 							"undproduccion"=>$undproduccion
 						));
 					}else{
-						return Methods::arrayMsj(false,$updateSQL);
+						return Methods::returnArray(false,$updateSQL);
 					}*/
 				//}else{
-					return Methods::arrayMsj(false,"Esta unidad de producción ya se encuentra registrada");
+					return Methods::returnArray(false,"Esta unidad de producción ya se encuentra registrada");
 				//}
 			}else{
 				
@@ -200,7 +200,7 @@
 				if ($insertSQL===true) {
 					return $this->vinculeProductorANDundproduccion($undproduccion);
 				}else{
-					return Methods::arrayMsj(false,$insertSQL);
+					return Methods::returnArray(false,$insertSQL);
 				}
 			}
 
@@ -245,13 +245,13 @@
 					$rQuery = $consultas->insert($paramSQL);
 
 					if ($rQuery===true) {
-						return Methods::arrayMsj(true,"La unidad de producción ha sido registrada exitosamente.",array("codundprod"=>$codundprod));
+						return Methods::returnArray(true,"La unidad de producción ha sido registrada exitosamente.",array("codundprod"=>$codundprod));
 					}else{
-						return Methods::arrayMsj(false,$rQuery);
+						return Methods::returnArray(false,$rQuery);
 					}
 				}
 			} catch (PDOException $e) {
-				return Methods::arrayMsj(false,"Problemas con la consulta: ". $e->getMessage());
+				return Methods::returnArray(false,"Problemas con la consulta: ". $e->getMessage());
 			}
 
 		}
@@ -274,12 +274,12 @@
 
 			$hectareasDisponibles = $this->verifyHectareasDisponibles($this->d["ndoc"], $codundprod);
 			if ($hectareasDisponibles<$haintencion) {
-				return Methods::arrayMsj(false,"El numero de hectareas seleccionado es superior al total de hectareas disponibles para este productor.");
+				return Methods::returnArray(false,"El numero de hectareas seleccionado es superior al total de hectareas disponibles para este productor.");
 			}
 
 			//Verificar si existe un registro con el rubro y el productor y el ciclo seleccionado.
 			$verifyRubro = $this->verifyRubro();
-			if ($verifyRubro) return Methods::arrayMsj(false,"Ya existe un registro con este rubro.");
+			if ($verifyRubro) return Methods::returnArray(false,"Ya existe un registro con este rubro.");
 
 			//////////////////FIN DE VALIDACIONES
 
@@ -304,7 +304,7 @@
 
 			$query = Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
 			$stmt = $query["stmt"];
 			$consultas = new Querys();
@@ -320,7 +320,7 @@
 
 				$query = Querys::QUERYBD($sql,$param);
 				$state = $query["state"];
-				if(!$state) return Methods::arrayMsj(false,"Error en la consulta. No se pudo actualizar la información. ".$query["error"]);
+				if(!$state) return Methods::returnArray(false,"Error en la consulta. No se pudo actualizar la información. ".$query["error"]);
 
 				return $this->newDetalleIntencion($nintencion,$codundprod,$hectareasDisponibles);
 
@@ -331,7 +331,7 @@
 
 				$query = Querys::QUERYBD($sql,$param);
 				$state = $query["state"];
-				if(!$state) return Methods::arrayMsj(false,"Error en la consulta. No se pudo guardar la información. ".$query["error"]);
+				if(!$state) return Methods::returnArray(false,"Error en la consulta. No se pudo guardar la información. ".$query["error"]);
 
 				return $this->newDetalleIntencion($nintencion,$codundprod,$hectareasDisponibles);
 			}
@@ -372,7 +372,7 @@
 				$query = Querys::QUERYBD($sql,$param);
 				$state = $query["state"];
 				if(!$state) {
-					$result = Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+					$result = Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 					break;
 				}
 
@@ -387,7 +387,7 @@
 						$query = Querys::QUERYBD($sql,$param);
 						$state = $query["state"];
 						if(!$state) {
-							$result = Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+							$result = Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 							break;
 						}else{
 							$stmt=$query["stmt"];
@@ -400,7 +400,7 @@
 								$detalle[$i]["sector"] = $r["sector"];
 
 							}else{
-								$result = Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+								$result = Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 								break;
 							}
 						}						
@@ -409,7 +409,7 @@
 					//VERIFICAR HECTAREAS DISPONIBLES
 					/*$hectareasDisponibles = $this->verifyHectareasDisponibles($this->d["ndoc"], $undproduccion);
 					if ($hectareasDisponibles<$detalle[$i]["haintencion"]) {
-						$result = Methods::arrayMsj(false,"El numero de hectareas seleccionado es superior al total de hectareas disponibles para este productor.");
+						$result = Methods::returnArray(false,"El numero de hectareas seleccionado es superior al total de hectareas disponibles para este productor.");
 						break;
 					}*/
 
@@ -466,7 +466,7 @@
 					$rQuery = Querys::QUERYBD($sql,$param);
 					$state = $rQuery["state"];
 					if(!$state) {
-						$result = Methods::arrayMsj(false,"Error al intentar registrar la intención de siembra. ".$rQuery["error"]);
+						$result = Methods::returnArray(false,"Error al intentar registrar la intención de siembra. ".$rQuery["error"]);
 						break;
 					}else{
 						$result = $this->restarHectareas($this->d["ndoc"],$undproduccion,$detalle[$i]["haintencion"], $hectareasDisponibles);	
@@ -518,16 +518,16 @@
 					$resultSQL = $consultas->insert($paramSQL);
 					
 					if ($resultSQL===false) {
-						$result = Methods::arrayMsj(false,"No se pudo guardar la intención de siembra. ".$resultSQL);
+						$result = Methods::returnArray(false,"No se pudo guardar la intención de siembra. ".$resultSQL);
 						break;
 					}else{
 
-						$result = Methods::arrayMsj(true,"detalleintencion");//$this->restarHectareas($this->d["ndoc"],$undproduccion,$detalle[$i]["haintencion"], $hectareasDisponibles);
+						$result = Methods::returnArray(true,"detalleintencion");//$this->restarHectareas($this->d["ndoc"],$undproduccion,$detalle[$i]["haintencion"], $hectareasDisponibles);
 
-						//$result =  Methods::arrayMsj(true,'Tu intención de siembra ha sido guardada exitosamente. ');
+						//$result =  Methods::returnArray(true,'Tu intención de siembra ha sido guardada exitosamente. ');
 					}*/
 				}else{
-					$result = Methods::arrayMsj(false,"Ya existe un registro con este rubro");
+					$result = Methods::returnArray(false,"Ya existe un registro con este rubro");
 					break;
 				}
 			}
@@ -544,7 +544,7 @@
 
 			$query = Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
 			$stmt=$query["stmt"];
 			if($stmt->rowCount()>0){
@@ -567,7 +567,7 @@
 
 			$query = Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
 			$stmt=$query["stmt"];
 			if($stmt->rowCount()>0) return true; //si se encuentra el rubro
@@ -587,9 +587,9 @@
 
 			$query = Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
-			return Methods::arrayMsj(true,"Tu intención de siembra ha sido guardada exitosamente.");
+			return Methods::returnArray(true,"Tu intención de siembra ha sido guardada exitosamente.");
 
 		}
 

@@ -37,10 +37,10 @@
 				}
 
 
-				$resultado = $globalf->arrayMsj(true,"",$arrayData);
+				$resultado = $globalf->returnArray(true,"",$arrayData);
 
 			}else{
-				$resultado = $globalf->arrayMsj(false,"No se encontró ningun registro");
+				$resultado = $globalf->returnArray(false,"No se encontró ningun registro");
 			}
 
 			return $resultado;
@@ -57,7 +57,7 @@
 		$resp = $municipio->obtener_municipios($_POST["codigo"],$globalf);
 		
 	}else{
-		$resp = $globalf->arrayMsj(false,"No se recibieron los datos por POST");
+		$resp = $globalf->returnArray(false,"No se recibieron los datos por POST");
 	}
 
 	header('Content-Type: application/json');

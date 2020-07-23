@@ -37,10 +37,10 @@
 				}
 
 
-				$resultado = $fGlobal->arrayMsj(true,"",$arrayData);
+				$resultado = $fGlobal->returnArray(true,"",$arrayData);
 
 			}else{
-				$resultado = $fGlobal->arrayMsj(false,"No se encontró ningun registro");
+				$resultado = $fGlobal->returnArray(false,"No se encontró ningun registro");
 			}
 
 			return $resultado;
@@ -57,7 +57,7 @@
 		$resp = $parroquia->obtener_parroquias($_POST["codigo"],$fGlobal);
 		
 	}else{
-		$resp = $fGlobal->arrayMsj(false,"No se recibieron los datos por POST");
+		$resp = $fGlobal->returnArray(false,"No se recibieron los datos por POST");
 	}
 
 	header('Content-Type: application/json');

@@ -38,10 +38,10 @@
 						"nombre"=> $f["nomestado"]
 					));
 				}
-				return Methods::arrayMsj(true,"",$arrayData);
+				return Methods::returnArray(true,"",$arrayData);
 
 			}else{
-				return Methods::arrayMsj(false,"No se encontró ningun registro");
+				return Methods::returnArray(false,"No se encontró ningun registro");
 			}
 		}
 		public function newAndupdateEstados(){
@@ -83,10 +83,10 @@
 				}
 
 
-				return Methods::arrayMsj(true,"",$arrayData);
+				return Methods::returnArray(true,"",$arrayData);
 
 			}else{
-				return Methods::arrayMsj(false,"No se encontró ningun registro");
+				return Methods::returnArray(false,"No se encontró ningun registro");
 			}
 		}
 		public function newAndupdateMunicipios(){
@@ -127,10 +127,10 @@
 				}
 
 
-				return Methods::arrayMsj(true,"",$arrayData);
+				return Methods::returnArray(true,"",$arrayData);
 
 			}else{
-				return Methods::arrayMsj(false,"No se encontró ningun registro");
+				return Methods::returnArray(false,"No se encontró ningun registro");
 			}
 		}
 		public function newAndupdateParroquias(){
@@ -171,10 +171,10 @@
 				}
 
 
-				return Methods::arrayMsj(true,"",$arrayData);
+				return Methods::returnArray(true,"",$arrayData);
 
 			}else{
-				return Methods::arrayMsj(false,"No se encontró ningun registro");
+				return Methods::returnArray(false,"No se encontró ningun registro");
 			}
 		}
 		public function newAndupdateSectores(){
@@ -188,7 +188,7 @@
 
 			$rQuery = Querys::QUERYBD($sql,$param);
 			$state=$rQuery["state"];
-			if (!$state) return Methods::arrayMsj(false,$rQuery["error"],[]);
+			if (!$state) return Methods::returnArray(false,$rQuery["error"],[]);
 			$stmt = $rQuery["stmt"];
 
 			if($stmt->rowCount()<1){
@@ -205,7 +205,7 @@
 
 				$rQuery = Querys::QUERYBD($sql,$param);
 				$state=$rQuery["state"];
-				if (!$state) return Methods::arrayMsj(false,$rQuery["error"],[]);
+				if (!$state) return Methods::returnArray(false,$rQuery["error"],[]);
 				$stmt = $rQuery["stmt"];
 
 				if($stmt->rowCount()<1){
@@ -222,10 +222,10 @@
 
 				$rQuery = Querys::QUERYBD($sql,$param);
 				$state=$rQuery["state"];
-				if (!$state) return Methods::arrayMsj(false,$rQuery["error"],[]);
+				if (!$state) return Methods::returnArray(false,$rQuery["error"],[]);
 			}
 
-			return Methods::arrayMsj(true,"",[]);
+			return Methods::returnArray(true,"",[]);
 		}
 		public function deleteSectores(){
 

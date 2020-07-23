@@ -36,12 +36,12 @@
 				
 				if ($updateSQL===true) {
 
-					$resp = $fglobal->arrayMsj(true,"El productor ha sido modificado.");
+					$resp = $fglobal->returnArray(true,"El productor ha sido modificado.");
 				}else{
-					$resp = $fglobal->arrayMsj(true,$updateSQL);
+					$resp = $fglobal->returnArray(true,$updateSQL);
 				}
 			}else{
-				$resp = $fglobal->arrayMsj(false,"Este productor ya se encuentra registrado");
+				$resp = $fglobal->returnArray(false,"Este productor ya se encuentra registrado");
 			}
 		}else{
 			#insertar
@@ -65,18 +65,18 @@
 
 				$insertSQL2 = $consultas->insert($paramSQL2);
 				if ($insertSQL2 === true) {
-					$resp = $fglobal->arrayMsj(true,"El productor ha sido registrado exitosamente.");
+					$resp = $fglobal->returnArray(true,"El productor ha sido registrado exitosamente.");
 				}else{
-					$resp = $fglobal->arrayMsj(false,$insertSQL2);
+					$resp = $fglobal->returnArray(false,$insertSQL2);
 				}
 				
 			}else{
 				# error en el registro
-				$resp = $fglobal->arrayMsj(false,$insertSQL);
+				$resp = $fglobal->returnArray(false,$insertSQL);
 			}
 		}
 	}else{
-		$resp = $fglobal->arrayMsj(false,"ERROR: No se recibieron los datos por POST. Por favor contacte con Soporte Tecnico");
+		$resp = $fglobal->returnArray(false,"ERROR: No se recibieron los datos por POST. Por favor contacte con Soporte Tecnico");
 	}
 
 	header('Content-Type: application/json');

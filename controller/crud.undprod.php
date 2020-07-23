@@ -55,12 +55,12 @@
 				$resp =  $updateSQL;
 				
 				if ($updateSQL===true) {
-					$resp = $fglobal->arrayMsj(true,"La unidad de producción ha sido modificada.");
+					$resp = $fglobal->returnArray(true,"La unidad de producción ha sido modificada.");
 				}else{
-					$resp = $fglobal->arrayMsj(false,$updateSQL);
+					$resp = $fglobal->returnArray(false,$updateSQL);
 				}
 			}else{
-				$resp = $fglobal->arrayMsj(false,"Esta unidad de producción ya se encuentra registrada");
+				$resp = $fglobal->returnArray(false,"Esta unidad de producción ya se encuentra registrada");
 			}
 		}else{
 			#insertar
@@ -68,7 +68,7 @@
 			if ($insertSQL===true) {
 				# registro realizado exitosamente
 
-				//$resp = $fglobal->arrayMsj(true,"La unidad de producción ha sido registrada exitosamente.");
+				//$resp = $fglobal->returnArray(true,"La unidad de producción ha sido registrada exitosamente.");
 
 				$modelo = new conexion();
 				$conexion = $modelo->get_conexion();
@@ -98,24 +98,24 @@
 						$insertSQL2 = $consultas->insert($paramSQL2);
 
 						if ($insertSQL2===true) {
-							$resp = $fglobal->arrayMsj(true,"La unidad de producción ha sido registrada exitosamente.");
+							$resp = $fglobal->returnArray(true,"La unidad de producción ha sido registrada exitosamente.");
 						}else{
-							$resp = $fglobal->arrayMsj(false,$insertSQL2);
+							$resp = $fglobal->returnArray(false,$insertSQL2);
 						}
 					}
 
 
 				} catch (PDOException $e) {
-					$resp = $fglobal->arrayMsj(false,"Problemas con la consulta: ". $e->getMessage());
+					$resp = $fglobal->returnArray(false,"Problemas con la consulta: ". $e->getMessage());
 				}
 				
 			}else{
 				# error en el registro
-				$resp = $fglobal->arrayMsj(false,$insertSQL);
+				$resp = $fglobal->returnArray(false,$insertSQL);
 			}
 		}
 	}else{
-		$resp = $fglobal->arrayMsj(false,"ERROR: No se recibieron los datos por POST. Por favor contacte con Soporte Tecnico");
+		$resp = $fglobal->returnArray(false,"ERROR: No se recibieron los datos por POST. Por favor contacte con Soporte Tecnico");
 	}
 
 	header('Content-Type: application/json');

@@ -43,16 +43,16 @@
 					//$_SESSION["clave"]=$r["clave"];
 					$_SESSION["filtro"]=$r["filtro"];
 
-					return global_functions::arrayMsj(true,"¡Bienvenido! ".$r["usuario"]);
+					return global_functions::returnArray(true,"¡Bienvenido! ".$r["usuario"]);
 
 					//si se encontro
 				}else{
 					//no se encontro
-					return global_functions::arrayMsj(false,"Usuario o contraseña no encontrado");
+					return global_functions::returnArray(false,"Usuario o contraseña no encontrado");
 				}
 
 			} catch (PDOException $e) {
-				return global_functions::arrayMsj(false,"Problemas con la consulta: ". $e->getMessage());
+				return global_functions::returnArray(false,"Problemas con la consulta: ". $e->getMessage());
 			}
 
 		}
@@ -63,7 +63,7 @@
 		$login = new Login($_POST);
 		$resp = $login->entrar();
 	}else{
-		$resp = global_functions::arrayMsj(false,"ERROR: No se recibieron los datos por POST. Por favor contacte con Soporte Tecnico");
+		$resp = global_functions::returnArray(false,"ERROR: No se recibieron los datos por POST. Por favor contacte con Soporte Tecnico");
 	}
 
 	header('Content-Type: application/json');

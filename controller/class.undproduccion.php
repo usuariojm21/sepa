@@ -75,7 +75,7 @@
 
 			$rQuery = Querys::QUERYBD($sql,$param);
 			$state = $rQuery['state'];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$rQuery["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$rQuery["error"]);
 
 			$stmt = $rQuery["stmt"];
 			if ($stmt->rowCount()>0) {
@@ -103,7 +103,7 @@
 					$state2 = $rQuery2["state"];
 					
 					if (!$state2) {
-						return Methods::arrayMsj(false,"Error en la consulta numero 2. ".$rQuery2["error"]);
+						return Methods::returnArray(false,"Error en la consulta numero 2. ".$rQuery2["error"]);
 						break;
 					}else{
 
@@ -144,9 +144,9 @@
 					));
 				}
 
-				return Methods::arrayMsj(true,"",$arrayUNDprod);
+				return Methods::returnArray(true,"",$arrayUNDprod);
 			}else{
-				return Methods::arrayMsj(true,"No se encontró ningun registro");
+				return Methods::returnArray(true,"No se encontró ningun registro");
 			}
 
 		}
@@ -194,15 +194,15 @@
 						));
 					}
 
-					return Methods::arrayMsj(true,"",$arrayUNDprod);
+					return Methods::returnArray(true,"",$arrayUNDprod);
 
 				}else{
 					#no hay registros
-					return Methods::arrayMsj(false,"No hay productores registrados o el productor seleccionado no coincide con nuestros registros.");
+					return Methods::returnArray(false,"No hay productores registrados o el productor seleccionado no coincide con nuestros registros.");
 				}
 
 			} catch (PDOException $e) {
-				return Methods::arrayMsj(false,"Problemas de conexión: ". $e->getMessage());
+				return Methods::returnArray(false,"Problemas de conexión: ". $e->getMessage());
 			}		
 
 		}*/
@@ -222,7 +222,7 @@
 				
 				if ($c["codfichapredial"]!=='') {
 					$fileUpload = $this->cargar_ficha_predial();
-					if($fileUpload[0]===false) return Methods::arrayMsj(false,$fileUpload[1]);
+					if($fileUpload[0]===false) return Methods::returnArray(false,$fileUpload[1]);
 				}
 
 				if ($c["undproduccion"]=='' || $c["undproduccion"]=='POR ASIGNAR' || $c["undproduccion"]=='undefined') {
@@ -296,14 +296,14 @@
 						
 						if ($updateSQL===true) {
 							return $this->detalle();
-							/*return Methods::arrayMsj(true,"La unidad de producción ha sido modificada.",array(
+							/*return Methods::returnArray(true,"La unidad de producción ha sido modificada.",array(
 								"undproduccion"=>$c["undproduccion"]
 							));*/
 						}else{
-							return Methods::arrayMsj(false,$updateSQL);
+							return Methods::returnArray(false,$updateSQL);
 						}
 					}else{
-						return Methods::arrayMsj(false,"Esta unidad de producción ya se encuentra registrada");
+						return Methods::returnArray(false,"Esta unidad de producción ya se encuentra registrada");
 					}
 				}else{
 					
@@ -324,7 +324,7 @@
 					if ($insertSQL===true) {
 						return $this->detalle();
 					}else{
-						return Methods::arrayMsj(false,$insertSQL);
+						return Methods::returnArray(false,$insertSQL);
 					}
 				}
 		}
@@ -348,7 +348,7 @@
 
 				$rQuery = Querys::QUERYBD($sql,$param);
 				$state = $rQuery["state"];
-				if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$rQuery["error"]);
+				if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$rQuery["error"]);
 
 				$return = '';
 				foreach ($lproductores as $key => $value) {
@@ -364,11 +364,11 @@
 					$rQuery = Querys::QUERYBD($sql,$param);
 					$state = $rQuery["state"];
 					if(!$state) {
-						$return = Methods::arrayMsj(false,"Error en la consulta. ".$rQuery["error"]);
+						$return = Methods::returnArray(false,"Error en la consulta. ".$rQuery["error"]);
 						break;
 					};
 
-					$return = Methods::arrayMsj(true,"Los datos han sido registrados exitosamente.");
+					$return = Methods::returnArray(true,"Los datos han sido registrados exitosamente.");
 				}
 
 			return $return;
@@ -399,8 +399,8 @@
 				$ha = $ha + $value["hadisponibles"];
 			}
 
-			if ($ha > $this->d["haProductivas"]) return Methods::arrayMsj(false,"El total de hecteras disponibles para los productores seleccionados excede a las productivas.");
-			return Methods::arrayMsj(true);
+			if ($ha > $this->d["haProductivas"]) return Methods::returnArray(false,"El total de hecteras disponibles para los productores seleccionados excede a las productivas.");
+			return Methods::returnArray(true);
 		}
 
 
@@ -438,15 +438,15 @@
 					$insertSQL2 = $consultas->insert($paramSQL);
 
 					if ($insertSQL2===true) {
-						return Methods::arrayMsj(true,"La unidad de producción ha sido registrada exitosamente.",array(
+						return Methods::returnArray(true,"La unidad de producción ha sido registrada exitosamente.",array(
 							"undproduccion"=>$codundprod
 						));
 					}else{
-						return Methods::arrayMsj(false,$insertSQL2);
+						return Methods::returnArray(false,$insertSQL2);
 					}
 				}
 			} catch (PDOException $e) {
-				return Methods::arrayMsj(false,"Problemas con la consulta: ". $e->getMessage());
+				return Methods::returnArray(false,"Problemas con la consulta: ". $e->getMessage());
 			}*/
 
 		//}
@@ -460,7 +460,7 @@
 
 			$query = Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
 			$stmt=$query["stmt"];
 			if($stmt->rowCount()>0){
@@ -521,7 +521,7 @@
 		}
 
 	}else{
-		$resp = Methods::arrayMsj(false,"No se recibieron los datos por POST");
+		$resp = Methods::returnArray(false,"No se recibieron los datos por POST");
 	}
 
 	header('Content-Type: application/json');

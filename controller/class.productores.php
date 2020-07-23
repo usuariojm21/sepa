@@ -86,11 +86,11 @@
 						));
 					}
 
-					$r = $fglobal->arrayMsj(true,"",$arrayProd);
+					$r = $fglobal->returnArray(true,"",$arrayProd);
 
 				}else{
 					#no hay registros
-					$r = $fglobal->arrayMsj(false,"No se encontró ningun registro");
+					$r = $fglobal->returnArray(false,"No se encontró ningun registro");
 				}
 
 			} catch (PDOException $e) {
@@ -111,7 +111,7 @@
 			$consultas = new Querys();
 			$resultSQL = querys::QUERYBD($sql,$param);
 			$state=$resultSQL["state"];
-			if (!$state) return Methods::arrayMsj(false,$resultSQL["error"]);
+			if (!$state) return Methods::returnArray(false,$resultSQL["error"]);
 			$stmt = $resultSQL["stmt"];
 			if($stmt->rowCount()>0){
 				if ($update==1) {
@@ -135,10 +135,10 @@
 						$consultas = new Querys;
 						$resultSQL = querys::QUERYBD($sql,$param);
 						$state=$resultSQL["state"];
-						if(!$state) return Methods::arrayMsj(false,"No se pueden guardar los datos del productor ".$resultSQL["error"]);
+						if(!$state) return Methods::returnArray(false,"No se pueden guardar los datos del productor ".$resultSQL["error"]);
 
 				}else{
-					return Methods::arrayMsj(false,"No se pueden actualizar los datos del productor"); 
+					return Methods::returnArray(false,"No se pueden actualizar los datos del productor"); 
 				}
 			}else{
 					$sql = "INSERT INTO productor VALUES(:ndoc,:rsocial,:dfiscal,:rlegal,:tlf,:correo,:paginas,:estatus)";
@@ -156,7 +156,7 @@
 					//$consultas = new Querys;
 					$resultSQL = querys::QUERYBD($sql,$param);
 					$state=$resultSQL["state"];
-					if(!$state) return Methods::arrayMsj(false,"No se pueden guardar los datos del productor ".$resultSQL["error"]);
+					if(!$state) return Methods::returnArray(false,"No se pueden guardar los datos del productor ".$resultSQL["error"]);
 
 					//ascociar productor con entidad
 					$sql = "INSERT INTO productor_entidad VALUES(:ndocent,'',:ndoc,:rsocial,'')";
@@ -168,11 +168,11 @@
 					//$consultas = new Querys;
 					$resultSQL = querys::QUERYBD($sql,$param);
 					$state=$resultSQL["state"];
-					if(!$state) return Methods::arrayMsj(false,"No se pudo completar el registro del productor. Detalles del error: ".$resultSQL["error"]);
+					if(!$state) return Methods::returnArray(false,"No se pudo completar el registro del productor. Detalles del error: ".$resultSQL["error"]);
 					
 			}
 
-			return Methods::arrayMsj(true,"",[]);
+			return Methods::returnArray(true,"",[]);
 		}
 
 	}

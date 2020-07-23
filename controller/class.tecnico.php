@@ -102,7 +102,7 @@ WHERE
 
 				}
 
-				return Methods::arrayMsj(true,"",$arrayProd);
+				return Methods::returnArray(true,"",$arrayProd);
 
 			} catch (PDOException $e) {
 				return "Problemas de conexión: ". $e->getMessage();
@@ -118,7 +118,7 @@ WHERE
 
 			$rQuery = Querys::QUERYBD($sql,$param);
 			$state = $rQuery['state'];
-			if(!$state) return Methods::arrayMsj(false,$rQuery['error']);
+			if(!$state) return Methods::returnArray(false,$rQuery['error']);
 
 			$stmt = $rQuery["stmt"];
 			$ARRtecnico=[];
@@ -148,7 +148,7 @@ WHERE
 				}
 			}
 
-			return Methods::arrayMsj(true,'',$ARRtecnico);
+			return Methods::returnArray(true,'',$ARRtecnico);
 		}
 
 		public function guardar(){
@@ -206,16 +206,16 @@ WHERE
 
 			if($resultSQL->rowCount() > 0){
 
-				if ($update==0 || $update=="0") return Methods::arrayMsj(false,"El tecnico ya se encuentra registrado.");
+				if ($update==0 || $update=="0") return Methods::returnArray(false,"El tecnico ya se encuentra registrado.");
 
 				//actualizar
 				$resultSQL = $consultas->update($paramSQL);
 
 				if ($resultSQL===true) {
-					//return Methods::arrayMsj(true,'El Tecnico ha sido actualizado exitosamente.');
+					//return Methods::returnArray(true,'El Tecnico ha sido actualizado exitosamente.');
 					return $this->vincular();
 				}else{
-					return Methods::arrayMsj(false,$resultSQL);
+					return Methods::returnArray(false,$resultSQL);
 				}
 				
 			}else{
@@ -230,7 +230,7 @@ WHERE
 
 				}else{
 					#problemas con la actualizacion
-					return Methods::arrayMsj(false,$resultSQL);
+					return Methods::returnArray(false,$resultSQL);
 				}
 
 			}
@@ -248,10 +248,10 @@ WHERE
 
 			$rQuery = Querys::QUERYBD($sql,$param);
 			$state = $rQuery['state'];
-			if(!$state) return Methods::arrayMsj(false,$rQuery['error']);
+			if(!$state) return Methods::returnArray(false,$rQuery['error']);
 
 			$stmt = $rQuery["stmt"];
-			if ($stmt->rowCount()>0) return Methods::arrayMsj(true);
+			if ($stmt->rowCount()>0) return Methods::returnArray(true);
 
 			$paramSQL = array( 
 				"campos" => [
@@ -278,10 +278,10 @@ WHERE
 
 			if($resultSQL===true){
 				//listo
-				return Methods::arrayMsj(true);				
+				return Methods::returnArray(true);				
 			}else{
 				//problemas con el registro
-				return Methods::arrayMsj(false,$resultSQL);
+				return Methods::returnArray(false,$resultSQL);
 			}
 
 		}

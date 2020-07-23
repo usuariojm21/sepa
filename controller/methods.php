@@ -2,7 +2,7 @@
 
 	class Methods{
 
-		public function arrayMsj($state=true,$description="",$data=[]){
+		public function returnArray($state=true,$description="",$data=[]){
 			
 			return array(
 				"estado"=>$state,
@@ -21,14 +21,14 @@
 			file_put_contents($url, $json_string);
 		}
 
-		public function autoincremento($c){
+		/*public function autoincremento($c){
 			if (strlen($c) == 1)  return "00000" . $c;
 			if (strlen($c) == 2)  return "0000" . $c;
 			if (strlen($c) == 3)  return "000" . $c;
 			if (strlen($c) == 4)  return "00" . $c;
 			if (strlen($c) == 5)  return "0" . $c;
 			if (strlen($c) > 6)  return $c;
-		}
+		}*/
 		public function JSONautoincrementable($url,$variable){
 			$json = file_get_contents($url);
 			$json =  json_decode($json, true);
@@ -39,7 +39,7 @@
 			return $correlativo;
 
 		}
-		public function BDautoincrementable($rifproveedor,$correlativo){
+		/*public function BDautoincrementable($rifproveedor,$correlativo){
 			$sql = "SELECT $correlativo as correlativo FROM proveedor where rifproveedor = :ndoc";
 			$param = array(
 				":ndoc"=>$rifproveedor
@@ -47,12 +47,12 @@
 			$consultas = new Querys();
 			$resultSQL = $consultas->QUERYBD($sql,$param);
 			$state=$resultSQL["state"];
-			if (!$state) return Methods::arrayMsj(false,$resultSQL["error"]);
+			if (!$state) return Methods::returnArray(false,$resultSQL["error"]);
 			$stmt = $resultSQL["stmt"];
 
 			$r = $stmt->fetch();
 			return $r["correlativo"]+1;
-		}
+		}*/
 		
 		public function getMilisegundos($datetime=""){
 			$fecha = new DateTime($datetime);
@@ -101,7 +101,7 @@
 			$consultas = new Consultas();
 			$resultSQL = $consultas->QUERYBD($sql,$param);
 			$state=$resultSQL["state"];
-			if (!$state) return Methods::arrayMsj(false,$resultSQL["error"]);
+			if (!$state) return Methods::returnArray(false,$resultSQL["error"]);
 		}
 	}
 

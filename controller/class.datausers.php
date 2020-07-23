@@ -63,7 +63,7 @@
 
 			$rQuery = Querys::QUERYBD($sql,$param);
 			$state = $rQuery["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$rQuery["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$rQuery["error"]);
 
 			$stmt=$rQuery["stmt"];
 			if($stmt->rowCount()>0){
@@ -123,7 +123,7 @@
 						));
 					}
 
-					$_SESSION["dataproductor"]=Methods::arrayMsj(true,"",$dataproductor);
+					$_SESSION["dataproductor"]=Methods::returnArray(true,"",$dataproductor);
 					return $_SESSION["dataproductor"];
 
 				}else{
@@ -169,16 +169,16 @@
 						));
 					}
 
-					$r=Methods::arrayMsj(true,"",$dataEntidad);
+					$r=Methods::returnArray(true,"",$dataEntidad);
 				}else{
-					$r=Methods::arrayMsj(false,"No hay Entidades registradas");
+					$r=Methods::returnArray(false,"No hay Entidades registradas");
 				}
 
 				$_SESSION["dataEntidad"] = $r;
 				return $_SESSION["dataEntidad"];	
 
 			} catch (PDOException $e) {
-				$r=Methods::arrayMsj(false,"¡ERROR FATAL! ".$e->getMessage());
+				$r=Methods::returnArray(false,"¡ERROR FATAL! ".$e->getMessage());
 			}
 
 		}
@@ -252,17 +252,17 @@
 
 					}
 
-					return Methods::arrayMsj(true,"",$undproduccion);
+					return Methods::returnArray(true,"",$undproduccion);
 
 				}else{
-					return Methods::arrayMsj(false,"No hay Unidades de producción registradas");
+					return Methods::returnArray(false,"No hay Unidades de producción registradas");
 				}
 
 				//$_SESSION["dataUNDproduccion"] = $r;
 				//return $_SESSION["dataUNDproduccion"];
 
 			} catch (PDOException $e) {
-				return Methods::arrayMsj(false,"¡ERROR FATAL! ".$e->getMessage());
+				return Methods::returnArray(false,"¡ERROR FATAL! ".$e->getMessage());
 			}
 
 		}

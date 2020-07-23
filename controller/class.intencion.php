@@ -76,7 +76,7 @@
 
 			$rQuery = Querys::QUERYBD($sql,$param);
 			$state = $rQuery['state'];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$rQuery["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$rQuery["error"]);
 			$stmt = $rQuery["stmt"];
 			if($stmt->rowCount()>0){
 				$arrayInt=[];
@@ -111,9 +111,9 @@
 
 				}
 
-				return Methods::arrayMsj(true,"",$arrayInt);
+				return Methods::returnArray(true,"",$arrayInt);
 			}else{
-				return Methods::arrayMsj(true,"No se encontró ningun registro");
+				return Methods::returnArray(true,"No se encontró ningun registro");
 			}
 		}
 
@@ -127,12 +127,12 @@
 			//verificar hectareas disponibles
 			$hectareasDisponibles = $this->verifyHectareasDisponibles($detalle[0]["docproductor"], $detalle[0]["undproduccion"]);
 			if ($hectareasDisponibles<$detalle[0]["hectareas"]) {
-				return Methods::arrayMsj(false,"El numero de hectareas seleccionado es superior al total de hectareas disponibles para este productor.");
+				return Methods::returnArray(false,"El numero de hectareas seleccionado es superior al total de hectareas disponibles para este productor.");
 			}
 
 			//Verificar si existe un registro con el rubro y el productor y el ciclo seleccionado.
 			$verifyRubro = $this->verifyRubro();
-			if ($verifyRubro) return Methods::arrayMsj(false,"Ya existe un registro con este rubro.");
+			if ($verifyRubro) return Methods::returnArray(false,"Ya existe un registro con este rubro.");
 
 			//////////////////FIN DE VALIDACIONES
 
@@ -155,7 +155,7 @@
 
 			$query = Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
 			$stmt = $query["stmt"];
 			$consultas = new Querys();
@@ -171,7 +171,7 @@
 
 				$query = Querys::QUERYBD($sql,$param);
 				$state = $query["state"];
-				if(!$state) return Methods::arrayMsj(false,"Error en la consulta. No se pudo actualizar la información. ".$query["error"]);
+				if(!$state) return Methods::returnArray(false,"Error en la consulta. No se pudo actualizar la información. ".$query["error"]);
 
 				return $this->newDetalleIntencion();
 
@@ -182,7 +182,7 @@
 
 				$query = Querys::QUERYBD($sql,$param);
 				$state = $query["state"];
-				if(!$state) return Methods::arrayMsj(false,"Error en la consulta. No se pudo guardar la información. ".$query["error"]);
+				if(!$state) return Methods::returnArray(false,"Error en la consulta. No se pudo guardar la información. ".$query["error"]);
 
 				return $this->newDetalleIntencion();
 			}
@@ -219,7 +219,7 @@
 				$query = Querys::QUERYBD($sql,$param);
 				$state = $query["state"];
 				if(!$state) {
-					$result = Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+					$result = Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 					break;
 				}
 
@@ -234,7 +234,7 @@
 						$query = Querys::QUERYBD($sql,$param);
 						$state = $query["state"];
 						if(!$state) {
-							$result = Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+							$result = Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 							break;
 						}else{
 							$stmt=$query["stmt"];
@@ -247,7 +247,7 @@
 								$detalle[$i]["sector"] = $r["sector"];
 
 							}else{
-								$result = Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+								$result = Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 								break;
 							}
 						}						
@@ -256,7 +256,7 @@
 					//VERIFICAR HECTAREAS DISPONIBLES
 					$hectareasDisponibles = $this->verifyHectareasDisponibles($detalle[$i]["docproductor"], $detalle[$i]["undproduccion"]);
 					if ($hectareasDisponibles<$detalle[$i]["hectareas"]) {
-						$result = Methods::arrayMsj(false,"El numero de hectareas seleccionado es superior al total de hectareas disponibles para este productor.");
+						$result = Methods::returnArray(false,"El numero de hectareas seleccionado es superior al total de hectareas disponibles para este productor.");
 						break;
 					}
 
@@ -317,16 +317,16 @@
 					$resultSQL = $consultas->insert($paramSQL);
 					
 					if ($resultSQL===false) {
-						$result =  Methods::arrayMsj(false,"No se pudo guardar la intención de siembra. ".$resultSQL);
+						$result =  Methods::returnArray(false,"No se pudo guardar la intención de siembra. ".$resultSQL);
 						break;
 					}else{
 
 						$result = $this->restarHectareas($detalle[$i]["docproductor"],$detalle[$i]["undproduccion"],$detalle[$i]["hectareas"], $hectareasDisponibles);
 
-						//$result =  Methods::arrayMsj(true,'Tu intención de siembra ha sido guardada exitosamente. ');
+						//$result =  Methods::returnArray(true,'Tu intención de siembra ha sido guardada exitosamente. ');
 					}
 				}else{
-					$result = Methods::arrayMsj(false,"Ya existe un registro con este rubro");
+					$result = Methods::returnArray(false,"Ya existe un registro con este rubro");
 					break;
 				}
 			}
@@ -354,7 +354,7 @@
 
 			$query= Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
 			$stmt = $query["stmt"];
 			if($stmt->rowCount()>0){
@@ -373,9 +373,9 @@
 				}
 
 
-				return Methods::arrayMsj(true,"",$arrayEntidad);
+				return Methods::returnArray(true,"",$arrayEntidad);
 			}else{
-				return Methods::arrayMsj(true,"");
+				return Methods::returnArray(true,"");
 			}
 
 		}
@@ -394,7 +394,7 @@
 
 			$query= Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
 			$stmt = $query["stmt"];
 			if($stmt->rowCount()>0){
@@ -408,9 +408,9 @@
 					));
 				}
 
-				return Methods::arrayMsj(true,"",$arrProductor);
+				return Methods::returnArray(true,"",$arrProductor);
 			}else{
-				return Methods::arrayMsj(true,"");
+				return Methods::returnArray(true,"");
 			}
 
 		}
@@ -442,7 +442,7 @@
 
 			$query= Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
 			$stmt = $query["stmt"];
 			if($stmt->rowCount()>0){
@@ -460,9 +460,9 @@
 					));
 				}
 
-				return Methods::arrayMsj(true,"",$arrUNDprod);
+				return Methods::returnArray(true,"",$arrUNDprod);
 			}else{
-				return Methods::arrayMsj(true,"");
+				return Methods::returnArray(true,"");
 			}
 
 		}
@@ -476,7 +476,7 @@
 
 			$query = Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
 			$stmt=$query["stmt"];
 			if($stmt->rowCount()>0){
@@ -497,7 +497,7 @@
 
 			$query = Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
 			$stmt=$query["stmt"];
 			if($stmt->rowCount()>0) return true; //si se encuentra el rubro
@@ -517,9 +517,9 @@
 
 			$query = Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
-			return Methods::arrayMsj(true,"Tu intención de siembra ha sido guardada exitosamente.");
+			return Methods::returnArray(true,"Tu intención de siembra ha sido guardada exitosamente.");
 
 		}
 
@@ -535,10 +535,10 @@
 			try {
 				$statement->execute(array(":ndoc"=>$this->d['nintencion']));
 
-				return Methods::arrayMsj(true,'');
+				return Methods::returnArray(true,'');
 
 			} catch (PDOException $e) {
-				return Methods::arrayMsj(false,"ERROR FATAL. ".$e->getMessage());
+				return Methods::returnArray(false,"ERROR FATAL. ".$e->getMessage());
 			}
 
 		*/

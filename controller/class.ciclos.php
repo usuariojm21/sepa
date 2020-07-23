@@ -38,10 +38,10 @@
 					));
 				}
 
-				return Methods::arrayMsj(true,"",$ARRAYciclos);
+				return Methods::returnArray(true,"",$ARRAYciclos);
 
 			}else{
-				return Methods::arrayMsj(false,"No se encontró ningun registro");
+				return Methods::returnArray(false,"No se encontró ningun registro");
 			}
 		}
 		public function newCiclo(){
@@ -71,22 +71,22 @@
 					$updateSQL = $consultas->update($paramSQL);
 					
 					if ($updateSQL===true) {
-						return Methods::arrayMsj(true,"El ciclo ha sido modificado.");
+						return Methods::returnArray(true,"El ciclo ha sido modificado.");
 					}else{
-						return Methods::arrayMsj(true,$updateSQL);
+						return Methods::returnArray(true,$updateSQL);
 					}
 				}else{
-					return Methods::arrayMsj(false,"Este ciclo ya se encuentra registrado");
+					return Methods::returnArray(false,"Este ciclo ya se encuentra registrado");
 				}
 			}else{
 				#insertar
 				$insertSQL = $consultas->insert($paramSQL);
 				if ($insertSQL===true) {
 					# registro realizado exitosamente
-					return Methods::arrayMsj(true,"El ciclo ha sido registrado exitosamente.");
+					return Methods::returnArray(true,"El ciclo ha sido registrado exitosamente.");
 				}else{
 					# error en el registro
-					return Methods::arrayMsj(true,$insertSQL);
+					return Methods::returnArray(true,$insertSQL);
 				}
 			}
 		}
@@ -96,9 +96,9 @@
 			$param=array(":codigo"=>$this->d["codigo"]);
 			$rQuery = Querys::QUERYBD($sql,$param);
 			$state = $rQuery["state"];
-			if (!$state===true) return Methods::arrayMsj(false,$rQuery["error"]);
+			if (!$state===true) return Methods::returnArray(false,$rQuery["error"]);
 
-			return Methods::arrayMsj(true,"");
+			return Methods::returnArray(true,"");
 
 		}
 	}

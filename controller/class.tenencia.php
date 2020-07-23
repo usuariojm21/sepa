@@ -31,7 +31,7 @@
 			$resp= $tenencia->buscar();
 		}
 	}else{
-		$resp=global_functions::arrayMsj(false,"No se recibieron los datos por POST");
+		$resp=global_functions::returnArray(false,"No se recibieron los datos por POST");
 	}
 
 	header('Content-Type: application/json');

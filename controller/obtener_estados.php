@@ -37,10 +37,10 @@
 				}
 
 
-				$resultado = $globalf->arrayMsj(true,"",$arrayData);
+				$resultado = $globalf->returnArray(true,"",$arrayData);
 
 			}else{
-				$resultado = $globalf->arrayMsj(false,"No se encontró ningun registro");
+				$resultado = $globalf->returnArray(false,"No se encontró ningun registro");
 			}
 
 			return json_encode($resultado, JSON_FORCE_OBJECT);

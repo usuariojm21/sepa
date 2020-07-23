@@ -28,7 +28,7 @@
 
 				$f = $resultSQL->fetch();
 
-				return Methods::arrayMsj(true,'',array(
+				return Methods::returnArray(true,'',array(
 					"razonsocial" => $f["razonsocial"],
 					"dirfiscal" => $f["dirfiscal"],
 					"representante" => $f["representante"],
@@ -36,7 +36,7 @@
 				));
 
 			}else{
-				return Methods::arrayMsj(false,'No se encuentra registrado');
+				return Methods::returnArray(false,'No se encuentra registrado');
 			}
 		}
 
@@ -88,7 +88,7 @@
 			$resultSQL = $consultas->select($paramSQL);
 
 			if($resultSQL->rowCount() > 0){
-				return Methods::arrayMsj(false,"Este usuario ya se encuentra registrado.");
+				return Methods::returnArray(false,"Este usuario ya se encuentra registrado.");
 			}else{
 				#Registrar nuevo usuario
 
@@ -100,13 +100,13 @@
 					
 					if ($productor["estado"]===true) {
 						$_SESSION["accountcreated"]=true;
-						return Methods::arrayMsj(true,"Tu cuenta se ha creado exitosamente.");
+						return Methods::returnArray(true,"Tu cuenta se ha creado exitosamente.");
 					}else{
-						return Methods::arrayMsj(false,$productor["descripcion"]);
+						return Methods::returnArray(false,$productor["descripcion"]);
 					}
 
 				}else{
-					return Methods::arrayMsj(false,$resultSQLinsert);
+					return Methods::returnArray(false,$resultSQLinsert);
 				}
 			}
 		}
@@ -162,7 +162,7 @@
 				return $this->newProductorEntidad();
 			}else{
 				//error en la consulta
-				return Methods::arrayMsj(false,$resultSQL);
+				return Methods::returnArray(false,$resultSQL);
 			}
 
 		}
@@ -202,10 +202,10 @@
 
 			if ($resultSQL===true) {
 				//informacion de productor ingresada o actualizada
-				return Methods::arrayMsj(true,'');
+				return Methods::returnArray(true,'');
 			}else{
 				//error en la consulta
-				return Methods::arrayMsj(false,$resultSQL);
+				return Methods::returnArray(false,$resultSQL);
 			}
 
 		}

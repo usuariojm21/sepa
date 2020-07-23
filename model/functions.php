@@ -56,7 +56,7 @@
 			}
 		}
 
-		public function arrayMsj($state,$description="",$data=[]){
+		public function returnArray($state,$description="",$data=[]){
 			
 			return array(
 				"estado"=>$state,

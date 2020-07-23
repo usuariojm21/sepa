@@ -121,11 +121,11 @@
 						);
 					}
 
-					return Methods::arrayMsj(true,"",$rowArray);
+					return Methods::returnArray(true,"",$rowArray);
 
 				}else{
 					#no hay registros
-					return Methods::arrayMsj(false,"No se encontró ningun registro");
+					return Methods::returnArray(false,"No se encontró ningun registro");
 				}
 
 			} catch (PDOException $e) {
@@ -196,12 +196,12 @@
 					
 					if ($updateSQL===true) {
 
-						return $this->newuser();//Methods::arrayMsj(true,"El ente financiero ha sido modificado exitosamente.");
+						return $this->newuser();//Methods::returnArray(true,"El ente financiero ha sido modificado exitosamente.");
 					}else{
-						return Methods::arrayMsj(true,$updateSQL);
+						return Methods::returnArray(true,$updateSQL);
 					}
 				}else{
-					return Methods::arrayMsj(false,"Este ente financiero ya se encuentra registrada");
+					return Methods::returnArray(false,"Este ente financiero ya se encuentra registrada");
 				}
 			}else{
 				#insertar
@@ -209,10 +209,10 @@
 				$insertSQL = $consultas->insert($paramSQL);
 				if ($insertSQL===true) {
 					# registro realizado exitosamente
-					return $this->newuser();//Methods::arrayMsj(true,"El ente financiero ha sido registrado exitosamente.");
+					return $this->newuser();//Methods::returnArray(true,"El ente financiero ha sido registrado exitosamente.");
 				}else{
 					# error en el registro
-					return Methods::arrayMsj(false,$insertSQL);
+					return Methods::returnArray(false,$insertSQL);
 				}
 			}
 		}
@@ -230,7 +230,7 @@
 
 			$rQuery = Querys::QUERYBD($sql,$param);
 			$state=$rQuery["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$rQuery["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$rQuery["error"]);
 
 			$stmt = $rQuery["stmt"];
 
@@ -250,9 +250,9 @@
 
 			$rQuery2 = Querys::QUERYBD($sql2,$param2);
 			$state = $rQuery2["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$rQuery2["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$rQuery2["error"]);
 
-			return Methods::arrayMsj(true,"Los datos de esta entidad han sido registrados exitosamente.");
+			return Methods::returnArray(true,"Los datos de esta entidad han sido registrados exitosamente.");
 
 		}
 
@@ -269,7 +269,7 @@
 		}
 
 	}else{
-		$resp = Methods::arrayMsj(false,"No se recibieron los datos por POST");
+		$resp = Methods::returnArray(false,"No se recibieron los datos por POST");
 	}
 
 	header('Content-Type: application/json');

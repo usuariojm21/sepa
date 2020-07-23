@@ -43,9 +43,9 @@
 			$resultSQL = $consultas->insert($paramSQL);
 
 			if($resultSQL===true){
-				$r = $fglobal->arrayMsj(true,"Grupo guardado exitosamente. Agrega ahora los subgrupos correspondientes");
+				$r = $fglobal->returnArray(true,"Grupo guardado exitosamente. Agrega ahora los subgrupos correspondientes");
 			}else{
-				$r = $fglobal->arrayMsj(false,$resultSQL);
+				$r = $fglobal->returnArray(false,$resultSQL);
 			}
 
 			return $r;
@@ -82,9 +82,9 @@
 			$resultSQL = $consultas->insert($paramSQL);
 
 			if($resultSQL===true){
-				$r = $fglobal->arrayMsj(true,"Sub-Grupo guardado exitosamente. Agrega ahora los rubros correspondientes");
+				$r = $fglobal->returnArray(true,"Sub-Grupo guardado exitosamente. Agrega ahora los rubros correspondientes");
 			}else{
-				$r = $fglobal->arrayMsj(false,$resultSQL);
+				$r = $fglobal->returnArray(false,$resultSQL);
 			}
 
 			return $r;
@@ -122,9 +122,9 @@
 			$resultSQL = $consultas->insert($paramSQL);
 
 			if($resultSQL===true){
-				$r = $fglobal->arrayMsj(true,"Rubro guardado exitosamente.");
+				$r = $fglobal->returnArray(true,"Rubro guardado exitosamente.");
 			}else{
-				$r = $fglobal->arrayMsj(false,$resultSQL);
+				$r = $fglobal->returnArray(false,$resultSQL);
 			}
 
 			return $r;
@@ -159,11 +159,11 @@
 						);
 					}
 
-					$r = $fglobal->arrayMsj(true,"",$arrayProd);
+					$r = $fglobal->returnArray(true,"",$arrayProd);
 
 				}else{
 					#no hay registros
-					$r = $fglobal->arrayMsj(false,"No se encontró ningun registro");
+					$r = $fglobal->returnArray(false,"No se encontró ningun registro");
 				}
 
 			} catch (PDOException $e) {
@@ -216,11 +216,11 @@
 						);
 					}
 
-					$r = $fglobal->arrayMsj(true,"",$arrayProd);
+					$r = $fglobal->returnArray(true,"",$arrayProd);
 
 				}else{
 					#no hay registros
-					$r = $fglobal->arrayMsj(false,"No se encontró ningun registro");
+					$r = $fglobal->returnArray(false,"No se encontró ningun registro");
 				}
 
 			} catch (PDOException $e) {
@@ -247,10 +247,10 @@
 			try {
 				$statement->execute(array(":codigo"=>$this->rubro));
 
-				return global_functions::arrayMsj(true,"");
+				return global_functions::returnArray(true,"");
 
 			} catch (PDOException $e) {
-				return global_functions::arrayMsj(false,"¡ERROR FATAL! ".$e->getMessage());
+				return global_functions::returnArray(false,"¡ERROR FATAL! ".$e->getMessage());
 			}
 
 		}
@@ -278,7 +278,7 @@
 		}
 
 	}else{
-		$resp = global_functions::arrayMsj(false,"No se recibieron los datos por POST");
+		$resp = global_functions::returnArray(false,"No se recibieron los datos por POST");
 	}
 
 	header('Content-Type: application/json');
