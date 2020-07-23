@@ -158,7 +158,7 @@ class UNDProduccion{
 		valid = main.valid(this.form);
 		if (!valid[0]){
 
-			console.log(valid);
+			//console.log(valid);
 			swal("¡Error!", valid[2], "error",{
 				button:{
 				text: "Aceptar",
@@ -172,7 +172,7 @@ class UNDProduccion{
 
 			valid = [false,this.haProductivas,'Las hectareas productivas no pueden ser mayores que las hectareas totales'];
 			
-			console.log(valid);
+			//console.log(valid);
 			swal("¡Error!", valid[2], "error",{
 				button:{
 				text: "Aceptar",
@@ -185,7 +185,7 @@ class UNDProduccion{
 		}else if(tableproductores.length<1) {
 			valid = [false,this.ndocproductor,'Debe ingresar los productores asociados a esta unidad de producción'];
 
-			console.log(valid);
+			//console.log(valid);
 			swal("¡Error!", valid[2], "error",{
 				button:{
 				text: "Aceptar",

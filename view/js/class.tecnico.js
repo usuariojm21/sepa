@@ -274,7 +274,7 @@ form){
 				return;
 			}
 
-			console.log("Listo...")
+			//console.log("Listo...")
 			//location.reload();
 		});
 	}
