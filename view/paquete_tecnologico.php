@@ -205,13 +205,13 @@ $nUNDproduccion = count($undproduccion["data"]);
                     </div>
                     <form class="form-module" id="fpaquete" action="#" method="post" autocomplete="off">
                       <div class="row">
-                        <div class="col-12 col-sm p-1">
+                        <div class="col-12 col-sm p-1 autocomplete">
                           <label>Clasificación *</label>
                           <div class="autocomplete">
                             <input id="clasificacion" type="text" name="clasificacion" placeholder="Siembra, Insumos" v-model="clasificacion">
                           </div>
                         </div>
-                        <div class="col-12 col-sm p-1">
+                        <div class="col-12 col-sm p-1 autocomplete">
                           <label>Descripción *</label>
                           <input id="desc" type="text" name="desc" placeholder="Arado, Semilla" v-model="desc">
                         </div>
@@ -373,7 +373,8 @@ $nUNDproduccion = count($undproduccion["data"]);
     dashboard.getCicle(jsonCiclos);
     main.boxNew();
     
-    let arrProductor=[];
+    let arrclasif=[];
+    let arrdesc=[];
     
     let ciclo = jsonCiclos.ciclo_actual;
     
@@ -413,37 +414,6 @@ $nUNDproduccion = count($undproduccion["data"]);
     	form
     );
     
-    //obtener listado de productores
-    /*entidad.addEventListener("change",function(){
-    	paquetetec.getProductor(this.value,lproductor);
-    });*/
-    
-    /*var vm = new Vue({
-    	el: ".app",
-    	data:{
-    	},
-    	directives:{
-    		masknumberdc:{
-    			inserted: function(e){
-    				IMask(e,{mask:EXPnumberDecimal});
-    			}
-    		}
-    	},
-    	methods:{
-    		searchPaquete: function(){
-    			console.log("dddd");
-    		},
-    		newPaqueteForm: function(e){
-    			
-    		},
-    		saveNewPaquete: function(e){
-    			paquetetec.saveNewPaqueteTec();
-    		},
-    		cleanForm: function(){
-    			paquetetec.cleanForm();
-    		}
-    	}
-    });*/
     
     IMask(cantidad,{mask:EXPnumberDecimal});
     IMask(costoum,{mask:EXPnumberDecimal});
@@ -468,31 +438,39 @@ $nUNDproduccion = count($undproduccion["data"]);
     			valid[1].focus();
     			bNewPaquete.setAttribute("disabled","disabled");
     		});
-    	}else{
-    		//js("#tabNewpaquetetec").click();
-    		//main.hideBoxNew();
-    		//clasificacion.focus();
     	}		
     }
     
-    /*let bNewPaquete = js("#btnNewPaquete");
-    bNewPaquete.addEventListener("click",function(){
-    	let valid = main.valid(fbuscar);
-    	if(!valid[0]) {
-    		swal("¡Error!", valid[2], "error",{button:{
-    			text: "Aceptar",
-    			className:"errorSweetAlert",
-    			closeModal:true
-    		}}).then(function(){
-    			valid[1].focus();
-    			bNewPaquete.setAttribute("disabled","disabled");
-    		});
-    	}else{
-    		js("#tabNewpaquetetec").click();
-    		clasificacion.focus();
-    	}
-    })*/
+    //cargar lista de clasificaciones
+    paquetetec.getAutocompleteData('clasificacion',function(arrData){
+    	console.log(arrData)
+    	main.inputsearch(clasificacion,arrData);
+    });
     
+    //cargar lista de descripciones
+    paquetetec.getAutocompleteData('descripcion',function(arrData){
+    	console.log(arrData)
+    	main.inputsearch(desc,arrData);
+    });
+    
+    
+    /*for(let i in clasificacion.data){
+    	arrclasif.push([
+    		clasificacion.data[i].clasificacion
+    	]);
+    }
+    main.inputsearch(clasificacion,arrclasif);
+    
+    //cargar lista descripcion
+    var arrdescripcion=[];
+    for(let i in desc.data){
+    	arrdescripcion.push([
+    		desc.data[i].descripcion			
+    	]);
+    }
+    main.inputsearch(desc,arrdescripcion);*/
+    
+    //enviar datos para registrar el paquete		
     form.addEventListener('submit',function(e){
     	e.preventDefault();
     	paquetetec.saveNewPaqueteTec();
@@ -506,68 +484,5 @@ $nUNDproduccion = count($undproduccion["data"]);
     bBack.addEventListener("click",function(){
     	js("#tabListpaquetetec").click();
     });
-    
-    /*let arrayProductores = [];
-    let valueStatus = 0
-    let updateProductor = 0;
-    var blockElement = [cRif]; //elementos a ser bloqueados
-    
-    //validar campos con expresiones regulares. Cuando el usuario teclee
-    IMask(cRif,{mask:EXPrifMask});
-    IMask(tlf,{mask:'0000-0000000'});
-    
-    //isntanciar clase Productores en la variable productores
-    let productores = new Productores(
-    	cRif,
-    	razonsocial,
-    	tlf,
-    	email,
-    	url,
-    	direccion,
-    	representante,
-    	estatus
-    );
-    
-    window.addEventListener("load",function(){
-    	//productores.buscar();
-    	//pmain.obtenerEstados(listEstados);
-    });
-    
-    $('.tabla-productores').DataTable({
-    		dom: 'Bfrtip',
-    		buttons: [
-    				'excel', 'pdf', 'print'
-    		]
-    });	 
-    
-    //obtener datos del registro seleccionado y pasarlos al formulario editar
-    
-    $(document).on("click",".edit",function(e){
-    	let tr = $(this).parents("tr");
-    
-    	let data = {
-    		rif:tr.children("td").eq(1).text(),
-    		razonsocial:tr.children("td").eq(2).text(),
-    		direccion:tr.children("td").eq(3).text(),
-    		telefono:tr.children("td").eq(4).text(),
-    		representante:tr.children("td").eq(5).text(),
-    		correo:tr.children("td").eq(6).text(),
-    		pagina:tr.children("td").eq(7).text(),
-    		estatus:tr.children("td").eq(8).text()
-    	}
-    	productores.editar(data);
-    });
-    
-    //validar y guardar nuevo registro
-    forms.addEventListener('submit',function(e){
-    	e.preventDefault();
-    
-    	productores.guardar();
-    
-    });
-    
-    bLimpiar.addEventListener("click",function(e){
-    	productores.limpiar();
-    })*/
   </script>
 </html>

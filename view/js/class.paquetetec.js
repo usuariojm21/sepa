@@ -3,15 +3,15 @@ class PaqueteTec{
 		entidad,
 		//lproductor,
 		rubros,
-desc,
-clasificacion,
-undmedida,
-cantidad,
-costoum,
-//costotm,
-costoue,
-//costote,
-form){
+		desc,
+		clasificacion,
+		undmedida,
+		cantidad,
+		costoum,
+		//costotm,
+		costoue,
+		//costote,
+		form){
 		this.entidad = entidad;
 		//this.lproductor = lproductor;
 		this.rubros = rubros;
@@ -76,7 +76,7 @@ form){
 			//let f = new FormData(form);
 			let f = main.formData(form);
 			f.append("class",'paquetetec');
-			f.append("method",3);
+			f.append("method",2);
 			f.append("ciclo",jsonCiclos.ciclo_actual);
 			let axios = main.axios('',url,f);
 			axios.then(function(r){
@@ -198,18 +198,61 @@ form){
 			}
 		});
 	}
-	/*editarElementosTabla(element){
-		console.log("Editar")
-		let tr = element.parentElement.parentElement;
-		console.log(tr)
-	}*/
+	
+	getAutocompleteData(campo,callback){
+		callback = callback || '';
+		let url = "../controller/consultas.php";
+		let f = main.formData(this.form);
+		f.append("class",'paquetetec');
+		f.append("campo",campo)
+		f.append("method",3);
+		let axios = main.axios('',url,f);
+		axios.then(function(r){
+			let resp = r.data;
+			console.log(resp);
+			let estado = resp.estado;
+			let descripcion = resp.descripcion;
+			let data = resp.data;
+			if(estado){
+				let arrAutocompleteData = [];
+				for(let i in data){
+					arrAutocompleteData.push([data[i].campo])
+				}
+				if(typeof callback === 'function') callback(arrAutocompleteData);
+			}
+		});
+	}
+
+	getDescripcion(campo,callback){
+		let url = "../controller/consultas.php";
+		let f = main.formData(this.form);
+		f.append("class",'paquetetec');
+		f.append("campo",campo)
+		f.append("method",3);
+		let axios = main.axios('',url,f);
+		axios.then(function(r){
+			let resp = r.data;
+			console.log(resp);
+			let estado = resp.estado;
+			let descripcion = resp.descripcion;
+			let data = resp.data;
+			if(estado){
+				let arrAutocompleteData = [];
+				for(let i in data){
+					arrAutocompleteData.push(data.clasificacion)
+				}
+				if(typeof callback === 'function') callback();
+			}
+		});
+	}
 
 	saveNewPaqueteTec(){
 		let valid = main.valid(this.form);
 		if (valid[0]===true) {
 			js("#btnRegPaquete").classList.add("loading");
 			let url = "../controller/consultas.php";
-			let f = new FormData(this.form);
+			//let f = new FormData(this.form);
+			let f = main.formData(this.form);
 			f.append("class",'paquetetec');
 			f.append("method",4);
 			f.append("update",upPaqueteTec);
@@ -274,7 +317,7 @@ form){
 
 		upPaqueteTec = 1;
 
-		principal.bloquear_elementos(0,blockElement);
+		main.blockElement(0,blockElement);
 	}
 
 	cleanForm(){

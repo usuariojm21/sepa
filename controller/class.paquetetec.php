@@ -16,14 +16,14 @@
 		public function getEntidad(){
 			if ($this->nivel==="ADMINISTRADOR" || $this->nivel==="MUNICIPAL") $filtro ='';
 			if ($this->nivel==="ENTIDAD") $filtro = "WHERE ". $this->filtro;
-			if ($this->nivel==="PRODUCTOR") return Methods::arrayMsj();
+			if ($this->nivel==="PRODUCTOR") return Methods::returnArray();
 
 			$sql="SELECT * from entidad ".$filtro;
 			$param=[];
 
 			$rQuery = Querys::QUERYBD($sql,$param);
 			$state = $rQuery["state"];
-			if (!$state) return Methods::arrayMsj(false,$rQuery["error"]);
+			if (!$state) return Methods::returnArray(false,$rQuery["error"]);
 			$stmt = $rQuery["stmt"];
 			if($stmt->rowCount()>0){
 				$ARRentidad=[];
@@ -35,15 +35,14 @@
 					));
 				}
 
-				return Methods::arrayMsj(true,"",$ARRentidad);
+				return Methods::returnArray(true,"",$ARRentidad);
 			}else{
-				return Methods::arrayMsj(false,"No se encontraron registros",$ARRentidad);
+				return Methods::returnArray(false,"No se encontraron registros",$ARRentidad);
 			}
 		}
 
-		public function getProductor(){
+		/*public function getProductor(){
 			$c = $this->d;
-			//return $c;
 
 			$filtro='';
 			if($this->nivel==='PRODUCTOR') $filtro = "AND productor.".$this->filtro;
@@ -55,7 +54,7 @@
 
 			$query= Querys::QUERYBD($sql,$param);
 			$state = $query["state"];
-			if(!$state) return Methods::arrayMsj(false,"Error en la consulta. ".$query["error"]);
+			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 
 			$stmt = $query["stmt"];
 			if($stmt->rowCount()>0){
@@ -69,22 +68,22 @@
 					));
 				}
 
-				return Methods::arrayMsj(true,"",$arrProductor);
+				return Methods::returnArray(true,"",$arrProductor);
 			}else{
-				return Methods::arrayMsj(true,"");
+				return Methods::returnArray(true,"");
 			}
 
-		}
+		}*/
 
 		public function getPaqueteTec(){
 				$sql="SELECT
-					costoproduccion.codcostop AS codcostop,
-					costoproduccion.rifentidad AS rifentidad,
+					paquete_tecnologico.codcostop AS codcostop,
+					paquete_tecnologico.rifentidad AS rifentidad,
 					entidad.razonsocial AS rsocialentidad,
-					costoproduccion.ced_rif AS docproductor,
-					costoproduccion.ciclo AS ciclo,
+					paquete_tecnologico.ced_rif AS docproductor,
+					paquete_tecnologico.ciclo AS ciclo,
 					ciclos.desciclo AS desciclo,
-					costoproduccion.codrubro AS rubro,
+					paquete_tecnologico.codrubro AS rubro,
 					rubros.desrubro AS desrubro,
 					iddetalle,
 					clasificacion,
@@ -96,19 +95,19 @@
 					costounitarioencisa,
 					costototalencisa 
 				FROM
-					costoproduccion,
-					detalle_costoproduccion,
+					paquete_tecnologico,
+					dtpaquete_tecnologico,
 					entidad,
 					ciclos,
 					rubros 
 				WHERE
-					entidad.rifentidad = costoproduccion.rifentidad  
-					AND ciclos.ciclo = costoproduccion.ciclo 
-					AND rubros.codrubro = costoproduccion.codrubro
-					AND detalle_costoproduccion.codcostop = costoproduccion.codcostop
-					AND costoproduccion.ciclo LIKE :ciclo
-					AND costoproduccion.rifentidad LIKE :entidad
-					AND costoproduccion.codrubro LIKE :rubro";
+					entidad.rifentidad = paquete_tecnologico.rifentidad  
+					AND ciclos.ciclo = paquete_tecnologico.ciclo 
+					AND rubros.codrubro = paquete_tecnologico.codrubro
+					AND dtpaquete_tecnologico.codcostop = paquete_tecnologico.codcostop
+					AND paquete_tecnologico.ciclo LIKE :ciclo
+					AND paquete_tecnologico.rifentidad LIKE :entidad
+					AND paquete_tecnologico.codrubro LIKE :rubro";
 				$param = array(
 					":ciclo" => $this->d["ciclo"],
 					":entidad" => $this->d["entidad"],
@@ -117,7 +116,7 @@
 
 				$rQuery = Querys::QUERYBD($sql,$param);
 				$state = $rQuery["state"];
-				if (!$state) return Methods::arrayMsj(false,$rQuery["error"]);
+				if (!$state) return Methods::returnArray(false,$rQuery["error"]);
 				$stmt = $rQuery["stmt"];
 				if($stmt->rowCount()>0){
 					$ARRpaquete=[];
@@ -146,10 +145,32 @@
 
 					}
 
-					return Methods::arrayMsj(true,"",$ARRpaquete);
+					return Methods::returnArray(true,"",$ARRpaquete);
 				}else{
-					return Methods::arrayMsj(false,"No hay datos registrados.");
+					return Methods::returnArray(false,"No hay datos registrados.");
 				}
+		}
+
+		public function getAutocompleteData(){
+			$campo = $this->d['campo'];
+
+			$sql="SELECT $campo as campo FROM dtpaquete_tecnologico GROUP BY $campo ORDER BY :campo ASC";
+			$param = array(':campo' => $campo);
+			$rQuery = Querys::QUERYBD($sql,$param);
+			if (!$rQuery["state"]) return Methods::returnArray(false,$rQuery["error"]);
+			
+			$ARRdata=[];
+			$stmt = $rQuery["stmt"];
+			//return $stmt->rowCount();
+			if ($stmt->rowCount()>0){
+				while ($f = $stmt->fetch()) {
+					array_push($ARRdata, array(
+						"campo"=>$f['campo']
+					));
+				}
+			}
+
+			return Methods::returnArray(true,"",$ARRdata);
 		}
 
 		public function newPaquete(){
@@ -161,13 +182,13 @@
 			$codigocostop = "CP-$ciclo-$entidad-$rubro";
 			$this->codcostop = $codigocostop;
 			
-			/**************BUSCAR REGISTRO EN LA TABLA COSTOPRODUCCION************/
-			$sql="SELECT * from costoproduccion WHERE codcostop=:codigocosto";
+			/**************BUSCAR REGISTRO EN LA TABLA paquete_tecnologico************/
+			$sql="SELECT * from paquete_tecnologico WHERE codcostop=:codigocosto";
 			$param = array(":codigocosto"=>$this->codcostop);
 
 			$rQuery = Querys::QUERYBD($sql,$param);
 			$state = $rQuery["state"];
-			if (!$state) return Methods::arrayMsj(false,$rQuery["error"]);
+			if (!$state) return Methods::returnArray(false,$rQuery["error"]);
 			
 			$stmt = $rQuery["stmt"];
 			if ($stmt->rowCount()>0){
@@ -176,7 +197,7 @@
 
 			}else{
 
-				$sql="INSERT INTO costoproduccion VALUES(:codcostop, :rifentidad, '', :ciclo, :rubro)";
+				$sql="INSERT INTO paquete_tecnologico VALUES(:codcostop, :rifentidad, '', :ciclo, :rubro)";
 				$param=array(
 					":codcostop"=>$codigocostop,
 					":rifentidad"=>$this->d["entidad"],
@@ -187,7 +208,7 @@
 
 				$rQuery = Querys::QUERYBD($sql,$param);
 				$state = $rQuery["state"];
-				if (!$state) return Methods::arrayMsj(false,$rQuery["error"]);
+				if (!$state) return Methods::returnArray(false,$rQuery["error"]);
 
 				//registrar paquete tecnologico
 				return $this->detallepaquete();
@@ -216,25 +237,25 @@
 
 			if ($update) {
 				# update
-				/*$sql="UPDATE detalle_costoproduccion SET descripcion=:descrip, clasificacion=:clasificacion, unidadmedida=:undmedida, cantidad=:cantidad, costounitariomercado=:costoum, costototalmercado=:costotm, costounitarioencisa=:costoue, costototalencisa=:costote WHERE codcostop=:codigocosto";
+				/*$sql="UPDATE dtpaquete_tecnologico SET descripcion=:descrip, clasificacion=:clasificacion, unidadmedida=:undmedida, cantidad=:cantidad, costounitariomercado=:costoum, costototalmercado=:costotm, costounitarioencisa=:costoue, costototalencisa=:costote WHERE codcostop=:codigocosto";
 				$param=$parametros; //parametros declarados arriba
 
 				$rQuery = Querys::QUERYBD($sql,$param);
 				$state = $rQuery["state"];
-				if (!$state) return Methods::arrayMsj(false,$rQuery["error"]);
+				if (!$state) return Methods::returnArray(false,$rQuery["error"]);
 
-				return Methods::arrayMsj(true,"Tu paquete tecnológico se ha modificado exitosamente.");*/
+				return Methods::returnArray(true,"Tu paquete tecnológico se ha modificado exitosamente.");*/
 
 			}else{
 				#insert
-				$sql="INSERT INTO detalle_costoproduccion VALUES('', :codigocosto, :descrip, :clasificacion, :undmedida, :cantidad, :costoum, :costotm, :costoue, :costote)";
+				$sql="INSERT INTO dtpaquete_tecnologico VALUES('', :codigocosto, :descrip, :clasificacion, :undmedida, :cantidad, :costoum, :costotm, :costoue, :costote)";
 				$param=$parametros; //parametros declarados arriba
 
 				$rQuery = Querys::QUERYBD($sql,$param);
 				$state = $rQuery["state"];
-				if (!$state) return Methods::arrayMsj(false,$rQuery["error"]);
+				if (!$state) return Methods::returnArray(false,$rQuery["error"]);
 
-				return Methods::arrayMsj(true,"Tu paquete tecnológico se ha registrado exitosamente.");
+				return Methods::returnArray(true,"Tu paquete tecnológico se ha registrado exitosamente.");
 
 			}
 		}
@@ -245,7 +266,7 @@
 			$this->d["dataTable"] = json_decode($this->d["dataTable"],true);
 			//return $this->d["dataTable"];
 
-			$sql="DELETE FROM detalle_costoproduccion WHERE iddetalle=:id AND codcostop=:codigo";
+			$sql="DELETE FROM dtpaquete_tecnologico WHERE iddetalle=:id AND codcostop=:codigo";
 			$param=array(
 				":id"=>$this->d["dataTable"]["iddetalle"],
 				":codigo"=>$this->codcostop
@@ -253,9 +274,9 @@
 
 			$rQuery= Querys::QUERYBD($sql,$param);
 			$state=$rQuery["state"];
-			if (!$state) return Methods::arrayMsj(false,$rQuery["error"]);
+			if (!$state) return Methods::returnArray(false,$rQuery["error"]);
 
-			return Methods::arrayMsj(true,"El registro ha sido eliminado exitosamente.");
+			return Methods::returnArray(true,"El registro ha sido eliminado exitosamente.");
 		}
 
 	}

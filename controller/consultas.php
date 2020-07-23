@@ -83,8 +83,9 @@
 		}else if($class==='paquetetec'){
 			$class = new PaqueteTec($_POST);
 			if($method==1) return $class->getEntidad();
-			if($method==2) return $class->getProductor();
-			if($method==3) return $class->getPaqueteTec();
+			//if($method==2) return $class->getProductor();
+			if($method==2) return $class->getPaqueteTec();
+			if($method==3) return $class->getAutocompleteData();
 			if($method==4) return $class->newPaquete();
 			if($method==5) return $class->deletePaqueteTec();
 		}else if($class==='intencion'){
