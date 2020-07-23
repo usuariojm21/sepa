@@ -225,8 +225,8 @@
 
 			$parametros=array(
 				":codigocosto"=>$this->codcostop,
-				":descrip"=>strtoupper($this->d["desc"]),
 				":clasificacion"=>strtoupper($this->d["clasificacion"]),
+				":descrip"=>strtoupper($this->d["desc"]),
 				":undmedida"=>$this->d["undmedida"],
 				":cantidad"=>$this->d["cantidad"],
 				":costoum"=>$this->d["costoum"],
@@ -248,7 +248,7 @@
 
 			}else{
 				#insert
-				$sql="INSERT INTO dtpaquete_tecnologico VALUES('', :codigocosto, :descrip, :clasificacion, :undmedida, :cantidad, :costoum, :costotm, :costoue, :costote)";
+				$sql="INSERT INTO dtpaquete_tecnologico VALUES('', :codigocosto, :clasificacion, :descrip, :undmedida, :cantidad, :costoum, :costotm, :costoue, :costote)";
 				$param=$parametros; //parametros declarados arriba
 
 				$rQuery = Querys::QUERYBD($sql,$param);

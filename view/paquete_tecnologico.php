@@ -401,16 +401,13 @@ $nUNDproduccion = count($undproduccion["data"]);
     
     var paquetetec = new PaqueteTec(
     	entidad,
-    	//lproductor,
     	rubros,
     	desc,
     	clasificacion,
     	undmedida,
     	cantidad,
     	costoum,
-    	//costotm,
     	costoue,
-    	//costote,
     	form
     );
     
@@ -441,18 +438,7 @@ $nUNDproduccion = count($undproduccion["data"]);
     	}		
     }
     
-    //cargar lista de clasificaciones
-    paquetetec.getAutocompleteData('clasificacion',function(arrData){
-    	console.log(arrData)
-    	main.inputsearch(clasificacion,arrData);
-    });
-    
-    //cargar lista de descripciones
-    paquetetec.getAutocompleteData('descripcion',function(arrData){
-    	console.log(arrData)
-    	main.inputsearch(desc,arrData);
-    });
-    
+    paquetetec.loadInputSearch();
     
     /*for(let i in clasificacion.data){
     	arrclasif.push([

@@ -1,19 +1,15 @@
 class PaqueteTec{
 	constructor(
 		entidad,
-		//lproductor,
 		rubros,
 		desc,
 		clasificacion,
 		undmedida,
 		cantidad,
 		costoum,
-		//costotm,
 		costoue,
-		//costote,
 		form){
 		this.entidad = entidad;
-		//this.lproductor = lproductor;
 		this.rubros = rubros;
 		this.desc = desc;
 		this.clasificacion = clasificacion;
@@ -198,6 +194,19 @@ class PaqueteTec{
 			}
 		});
 	}
+
+	loadInputSearch(){
+		//cargar lista de clasificaciones
+		this.getAutocompleteData('clasificacion',function(arrData){
+			main.inputsearch(paquetetec.clasificacion,arrData);
+		});
+
+		//cargar lista de descripciones
+		this.getAutocompleteData('descripcion',function(arrData){
+			main.inputsearch(paquetetec.desc,arrData);
+		});
+
+	}
 	
 	getAutocompleteData(campo,callback){
 		callback = callback || '';
@@ -214,6 +223,9 @@ class PaqueteTec{
 			let descripcion = resp.descripcion;
 			let data = resp.data;
 			if(estado){
+				let lengthJSON = Object.entries(data).length;
+				if (lengthJSON===0) return
+
 				let arrAutocompleteData = [];
 				for(let i in data){
 					arrAutocompleteData.push([data[i].campo])
@@ -223,7 +235,7 @@ class PaqueteTec{
 		});
 	}
 
-	getDescripcion(campo,callback){
+	/*getDescripcion(campo,callback){
 		let url = "../controller/consultas.php";
 		let f = main.formData(this.form);
 		f.append("class",'paquetetec');
@@ -244,7 +256,7 @@ class PaqueteTec{
 				if(typeof callback === 'function') callback();
 			}
 		});
-	}
+	}*/
 
 	saveNewPaqueteTec(){
 		let valid = main.valid(this.form);
@@ -278,6 +290,9 @@ class PaqueteTec{
 					}}).then(function(){
 						paquetetec.searchPaquete(fbuscar);
 						paquetetec.cleanForm();
+
+						paquetetec.loadInputSearch();
+
 					});
 				}else{
 					swal("¡Error!", descripcion, "error",{
@@ -338,7 +353,7 @@ class PaqueteTec{
 
 		upPaqueteTec = 0;
 
-		principal.bloquear_elementos(1,blockElement);
+		main.blockElement(1,blockElement);
 		//document.querySelector("#tabListprod").click();
 		
 		this.clasificacion.focus();
