@@ -84,6 +84,7 @@ class Main{
 		inp.addEventListener("input", function(e) {
 
 				var a, b, i, val = this.value;
+				var varArrayToValue;
 				
 				/*close any already open lists of autocompleted values*/
 				closeAllLists();
@@ -101,17 +102,20 @@ class Main{
 				for (i = 0; i < arr.length; i++) {
 
 					/*check if the item starts with the same letters as the text field value:*/
-					if (arr[i][1].substr(0, val.length).toUpperCase() == val.toUpperCase() || val.toUpperCase() == '*') {
+					varArrayToValue = arr[i][0];
+					if(arr[i].length > 1) varArrayToValue = arr[i][1];
+					//console.log(varArrayToValue);
+					if (varArrayToValue.substr(0, val.length).toUpperCase() == val.toUpperCase() || val.toUpperCase() == '*') {
 						/*create a DIV element for each matching element:*/
 						b = document.createElement("DIV");
 						/*make the matching letters bold:*/
 						//let string_arr=`${arr[i][1]}`;
-						b.innerHTML = "<strong>" + arr[i][1].substr(0, val.length).toUpperCase()+"</strong>";
-						b.innerHTML += arr[i][1].substr(val.length).toUpperCase();
+						b.innerHTML = "<strong>" + varArrayToValue.substr(0, val.length).toUpperCase()+"</strong>";
+						b.innerHTML += varArrayToValue.substr(val.length).toUpperCase();
 						let value = arr[i][0];
-						let label = arr[i][0];
+						let label = varArrayToValue;//arr[i][0];
 						//console.log(value)
-						if (arr[i].length > 1) {label = arr[i][1]};
+						//if (arr[i].length > 1) {label = arr[i][1]};
 						b.setAttribute("data-twovalue",value);
 						/*b.innerHTML = "<strong>" + arr[i][0].substr(0, val.length).toUpperCase();
 						b.innerHTML += arr[i][0].substr(val.length).toUpperCase();
