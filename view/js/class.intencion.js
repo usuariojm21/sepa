@@ -36,6 +36,7 @@ class IntencionSiembra{
 
 		if(nivel==='ENTIDAD' || nivel==='PRODUCTOR') {
 			docentidad=ssdata.entidad;
+			this.entidad.dataset.twovalue = ssdata.entidad;
 			this.entidad.classList.add("no-valid");
 		}
 	}
@@ -220,7 +221,7 @@ class IntencionSiembra{
 								<td class='d-none'>${data[i].rifentidad}</td>
 								<td class='d-none'>${data[i].cedtecnico}</td>
 								<td>${data[i].rsocialentidad}</td>
-								<td>${data[i].rifproductor}</td>
+								<td data-doc="${data[i].rifproductor}">${data[i].rsproductor}</td>
 								<td>${data[i].desrubro}</td>
 								<td class='align-right'>${main.maskNumber(data[i].haintencion)}</td>
 							</tr>
@@ -266,7 +267,7 @@ class IntencionSiembra{
 		let detalle = [];
 		detalle.push({
 			docproductor:this.productor.dataset.twovalue,
-			productor:'',
+			productor:this.productor.value,
 			codfichapredial:'',
 			codtenencia:'',
 			codrubro:this.rubros.value,
@@ -343,7 +344,9 @@ class IntencionSiembra{
 		this.rubros.value='';
 		this.haintencion.value='';
 		IMask(this.haintencion,{mask:EXPnumberDecimal});
-		this.ndoctecnico.value='';
+		this.ndoctecnico.value='SINASIGNAR';
+
+		this.validNivel();
 	}
 
 	/*getMunicipios(){

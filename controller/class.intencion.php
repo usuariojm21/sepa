@@ -1,5 +1,4 @@
-<?php 
-
+<?php
 
 	class IntencionSiembra{
 		public $d;
@@ -17,8 +16,6 @@
 			if($this->d["productor"]=='' || $this->d["productor"]=='undefined')$this->d["productor"] = '%';
 			if($this->d["entidad"]=='' || $this->d["entidad"]=='undefined')$this->d["entidad"] = '%';
 
-			//return $this->d;
-
 			$filtro='';
 			if ($_SESSION["nivel"]!=="ADMINISTRADOR") {
 				$filtro = 'AND detalle_intencion.' . $this->filtro;
@@ -27,6 +24,7 @@
 			$sql="SELECT
 				detalle_intencion.nrointencion AS docintencion,
 				detalle_intencion.ced_rif AS ced_rif,
+				detalle_intencion.razonsocialproductor,
 				detalle_intencion.ciclo,
 				detalle_intencion.codundprod AS codundprod,
 				detalle_intencion.codrubro,
@@ -92,21 +90,18 @@
 						"docintencion"=>$f['docintencion'],
 						"ciclo"=>$f['ciclo'],
 						"rifproductor"=>$f['ced_rif'],
-						//"razonsocialproductor"=>$f['razonsocialproductor'],
+						"rsproductor"=>$f['razonsocialproductor'],
 						"codundprod"=>$f['codundprod'],
-						//"nomundprod"=>$f['nomundprod'],
 						"codrubro"=>$f['codrubro'],
 						"desrubro"=>$f['rubro'],
 						"rifentidad"=>$f['rifentidad'],
 						"rsocialentidad"=>$f['entidad'],
 						"cedtecnico"=>$f['cedtecnico'],
-						//"nomtecnico"=>$f['n  omtecnico'],
 						"haintencion"=>$f['ha_intencion'],
 						"hafinanciadas"=>$f['ha_financiadas'],
 						"hasembradas"=>$f['ha_sembradas'],
 						"hacosechadas"=>$f['ha_cosechadas'],
 						"haperdidas"=>$f['ha_perdidas']
-						//"hatotal"=>$f['hatotal']
 					));
 
 				}
@@ -122,24 +117,22 @@
 			$totalHectarea=0;
 			$detalle = json_decode($this->d['dataDetails'],true);
 
-
 			//////////////////VALIDACIONES PRINCIPALES
 			//verificar hectareas disponibles
-			$hectareasDisponibles = $this->verifyHectareasDisponibles($detalle[0]["docproductor"], $detalle[0]["undproduccion"]);
-			if ($hectareasDisponibles<$detalle[0]["hectareas"]) {
-				return Methods::returnArray(false,"El numero de hectareas seleccionado es superior al total de hectareas disponibles para este productor.");
-			}
+				$hectareasDisponibles = $this->verifyHectareasDisponibles($detalle[0]["docproductor"], $detalle[0]["undproduccion"]);
+				if ($hectareasDisponibles<$detalle[0]["hectareas"]) {
+					return Methods::returnArray(false,"El numero de hectareas seleccionado es superior al total de hectareas disponibles para este productor.");
+				}
 
 			//Verificar si existe un registro con el rubro y el productor y el ciclo seleccionado.
-			$verifyRubro = $this->verifyRubro();
-			if ($verifyRubro) return Methods::returnArray(false,"Ya existe un registro con este rubro.");
+				$verifyRubro = $this->verifyRubro();
+				if (!$verifyRubro["estado"]) return $verifyRubro;
 
 			//////////////////FIN DE VALIDACIONES
 
 			for ($i=0; $i < count($detalle); $i++) {
 				$detalle[$i]["hectareas"] = str_replace(".", "", $detalle[$i]["hectareas"]);
 				$detalle[$i]["hectareas"] = str_replace(",", ".", $detalle[$i]["hectareas"]);
-				//$detalle[$i]["hectareas"] = (real) $detalle[$i]["hectareas"];
 				$hectareastotales = $hectareastotales + $detalle[$i]["hectareas"];
 			}
 
@@ -164,7 +157,6 @@
 				$r = $stmt->fetch();
 				$this->d["nintencion"] = $r["nrointencion"];
 				$hectareastotales = $hectareastotales + $r["ha_total_hectareas"];
-				//return $hectareastotales;
 
 				$sql="UPDATE intencion SET ha_total_hectareas=:hectareas WHERE ciclo=:ciclo AND rifentidad=:rifentidad";
 				$param=array(":ciclo"=>$this->d['ciclo'],":rifentidad"=>$this->d['entidad'], ":hectareas"=>$hectareastotales);
@@ -190,13 +182,14 @@
 
 		public function newDetalleIntencion(){
 
-
-			$filtro='';
-			if ($_SESSION["nivel"]!=="ADMINISTRADOR") {
-				$filtro = 'AND ' . $this->filtro;
-			}
+			require_once('./class.undproduccion.php');
 
 			$detalle = json_decode($this->d['dataDetails'],true);
+
+			/*$filtro='';
+			if ($_SESSION["nivel"]!=="ADMINISTRADOR") {
+				$filtro = 'AND ' . $this->filtro;
+			}*/
 
 			/*$delete = $this->deleteIntencion();
 			if ($delete["estado"]===false) {
@@ -205,15 +198,9 @@
 
 			$result='';
 			for ($i=0; $i < count($detalle); $i++) {
-
-				//obtener direccion de entidad
-				/*$direccion = $this->getEntidad("AND rifentidad='".$this->d['entidad']."'");
-				$direccion = $direccion["data"];
-				$result = $direccion;
-				break;*/
-				
+			
 				//verificar si ya existe una intencion con el rubro seleccionado
-				$sql = "SELECT * FROM detalle_intencion WHERE ciclo=:ciclo AND rifentidad=:entidad AND codrubro=:rubro ".$filtro;
+				/*$sql = "SELECT * FROM detalle_intencion WHERE ciclo=:ciclo AND rifentidad=:entidad AND codrubro=:rubro";
 				$param=array(":ciclo"=>$this->d['ciclo'], ":entidad"=>$this->d['entidad'], ":rubro"=>$detalle[$i]["codrubro"]);
 
 				$query = Querys::QUERYBD($sql,$param);
@@ -221,114 +208,53 @@
 				if(!$state) {
 					$result = Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
 					break;
-				}
+				}*/
 
-				$stmt=$query["stmt"];
-				if ($stmt->rowCount()<1) {
+				//OBTENER DATOS DE LA UNIDAD DE PRODUCCION
+					$undproduccion = new UNDproduccion(array("busqueda"=>$detalle[$i]['undproduccion']));
+					$dataundproduccion =  $undproduccion->buscar();
+					if(!$dataundproduccion['estado']===true){$result = $dataundproduccion; break;}
+					
+					$data = $dataundproduccion['data'];
 
-					//OBTENER DIRECCION DE LA ENTIDAD SELECCIONADA SI EL USUARIO NO ES PRODUCTOR
-					if($_SESSION["nivel"]!=='PRODUCTOR'){
-						$sql = "SELECT * FROM entidad WHERE rifentidad=:docentidad";
-						$param=array(":docentidad"=>$this->d['entidad']);
+					//obtener datos de direccion
+					$estado = $data[0]['estado'];
+					$municipio = $data[0]['municipio'];
+					$parroquia = $data[0]['parroquia'];
+					$sector = $data[0]['sector'];
 
-						$query = Querys::QUERYBD($sql,$param);
-						$state = $query["state"];
-						if(!$state) {
-							$result = Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
-							break;
-						}else{
-							$stmt=$query["stmt"];
-							if($stmt->rowCount()>0){
-								$r=$stmt->fetch();
 
-								$detalle[$i]["estado"] = $r["estado"];
-								$detalle[$i]["municipio"] = $r["municipio"];
-								$detalle[$i]["parroquia"] = $r["parroquia"];
-								$detalle[$i]["sector"] = $r["sector"];
-
-							}else{
-								$result = Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
-								break;
-							}
-						}						
-					}
-
-					//VERIFICAR HECTAREAS DISPONIBLES
+				//VERIFICAR HECTAREAS DISPONIBLES
 					$hectareasDisponibles = $this->verifyHectareasDisponibles($detalle[$i]["docproductor"], $detalle[$i]["undproduccion"]);
 					if ($hectareasDisponibles<$detalle[$i]["hectareas"]) {
 						$result = Methods::returnArray(false,"El numero de hectareas seleccionado es superior al total de hectareas disponibles para este productor.");
 						break;
 					}
 
-					//registrar nueva intencion
-					$paramSQL = array(
-						"campos" => [
-							"nrointencion",
-							"ciclo",
-							"ced_rif",
-							"razonsocialproductor",
-							"codundprod",
-							"nomundprod",
-							"codrubro",
-							"desrubro",
-							"rifentidad",
-							"razonsocialentidad",
-							"ha_intencion",
-							"cedtecnico",
-							"nomtecnico",
-							"estado",
-							"municipio",
-							"parroquia",
-							"sector",
-							"fecha_intencion",
-							"estatus"
-						],
-						"values" => [
-							$this->d['nintencion'],
-							$this->d['ciclo'],
-							strtoupper($detalle[$i]["docproductor"]),
-							strtoupper($detalle[$i]["productor"]),
-							$detalle[$i]["undproduccion"],
-							'',
-							$detalle[$i]["codrubro"],
-							'',
-							$this->d['entidad'],
-							'',
-							$detalle[$i]["hectareas"],
-							$detalle[$i]["doctecnico"],
-							$detalle[$i]["tecnico"],
-							$detalle[$i]["estado"],
-							$detalle[$i]["municipio"],
-							$detalle[$i]["parroquia"],
-							$detalle[$i]["sector"],
-							date('Y-m-d h:m:s'),
-							1
-						],
-						"tabla" => "detalle_intencion",
-						"filtro" => array(
-							"state" => false,
-							"condicion" => [],
-							"operador" => " = ",
-							"param_adicionales" => ""
-						)
+				//REGISTRAR NUEVA INTENCION
+					$sql = "INSERT INTO detalle_intencion (nrointencion, ciclo, ced_rif, razonsocialproductor, codundprod, codrubro, rifentidad, ha_intencion, cedtecnico, estado, municipio, parroquia, sector, fecha_intencion, estatus) VALUES(:intencion, :ciclo, :productor, :descproductor, :undproduccion, :rubro, :entidad, :haintencion, :tecnico, :estado, :municipio, :parroquia, :sector, :fecha, :estatus)";
+					$param = array(
+						':intencion' => $this->d['nintencion'],
+						':ciclo' => $this->d['ciclo'],
+						':productor' => strtoupper($detalle[$i]["docproductor"]),
+						':descproductor' => $detalle[$i]["productor"],
+						':undproduccion' => $detalle[$i]["undproduccion"],
+						':rubro' => $detalle[$i]["codrubro"],
+						':entidad' => $this->d['entidad'],
+						':haintencion' => $detalle[$i]["hectareas"],
+						':tecnico' => $detalle[$i]["doctecnico"],
+						':estado' => $estado,
+						':municipio' => $municipio,
+						':parroquia' => $parroquia,
+						':sector' => $sector,
+						':fecha' => date('Y-m-d h:m:s'),
+						':estatus' => 1
 					);
 
-					$consultas = new Querys();
-					$resultSQL = $consultas->insert($paramSQL);
-					
-					if ($resultSQL===false) {
-						$result =  Methods::returnArray(false,"No se pudo guardar la intención de siembra. ".$resultSQL);
-						break;
-					}else{
+					$rQuery = Querys::QUERYBD($sql,$param);
+					if (!$rQuery['state']) return Methods::returnArray(false,'Error al intentar registrar la intención de siembra. ',$rQuery['error']);
 
-						$result = $this->restarHectareas($detalle[$i]["docproductor"],$detalle[$i]["undproduccion"],$detalle[$i]["hectareas"], $hectareasDisponibles);
-
-						//$result =  Methods::returnArray(true,'Tu intención de siembra ha sido guardada exitosamente. ');
-					}
-				}else{
-					$result = Methods::returnArray(false,"Ya existe un registro con este rubro");
-					break;
-				}
+					$result = $this->restarHectareas($detalle[$i]["docproductor"],$detalle[$i]["undproduccion"],$detalle[$i]["hectareas"], $hectareasDisponibles);
 			}
 
 			return $result;
@@ -488,21 +414,29 @@
 
 		public function verifyRubro(){
 
-			$filtro='';
-			if ($_SESSION["nivel"]!=="ADMINISTRADOR") $filtro = 'AND ' . $this->filtro;
 			$detalle = json_decode($this->d['dataDetails'],true);
 
-			$sql = "SELECT * FROM detalle_intencion WHERE ciclo=:ciclo AND rifentidad=:entidad AND codrubro=:rubro ".$filtro;
-			$param=array(":ciclo"=>$this->d['ciclo'], ":entidad"=>$this->d['entidad'], ":rubro"=>$detalle[$i]["codrubro"]);
+			for ($i=0; $i < count($detalle); $i++) { 
+				$sql = "SELECT * FROM detalle_intencion WHERE ciclo=:ciclo AND rifentidad=:entidad AND ced_rif = :productor AND codundprod = :undproduccion AND codrubro=:rubro";
+				$param=array(
+					":ciclo"=>$this->d['ciclo'],
+					":entidad"=>$this->d['entidad'],
+					":productor"=>$detalle[$i]["docproductor"],
+					":undproduccion"=>$detalle[$i]["undproduccion"],
+					":rubro"=>$detalle[$i]["codrubro"]
+				);
+	
+				$query = Querys::QUERYBD($sql,$param);
+				$state = $query["state"];
+				if(!$state) {$return = Methods::returnArray(false,"Error en la consulta. ".$query["error"]); break;}
+	
+				$stmt=$query["stmt"];
+				if($stmt->rowCount()>0) {$return = Methods::returnArray(false,"Ya existe una intención que coincide con estos datos", $detalle[$i]); break;}
+	
+				$return = Methods::returnArray(true,"");
+			}
 
-			$query = Querys::QUERYBD($sql,$param);
-			$state = $query["state"];
-			if(!$state) return Methods::returnArray(false,"Error en la consulta. ".$query["error"]);
-
-			$stmt=$query["stmt"];
-			if($stmt->rowCount()>0) return true; //si se encuentra el rubro
-
-			return false; //no se encuentra el rubro
+			return $return;
 		}
 
 		public function restarHectareas($docproductor,$docundprod,$haintencion,$hadisponibles){

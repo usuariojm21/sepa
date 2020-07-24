@@ -429,7 +429,7 @@ $productores = new Productores();
     	intencion.getLentidad(lestado.value,lmunicipio.value,lparroquia.value,this.dataset.twovalue,lentidad,'');
     });*/
     lentidad.addEventListener("change",function(){
-    	console.log("sss")
+    	//console.log("sss")
     	intencion.getProductor(lentidad.value,lproductor);
     });
     
