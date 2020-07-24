@@ -12,7 +12,7 @@
 		public $resp;
 		public $nivel;
 
-		public function __construct($d){
+		public function __construct($d=[]){
 			$this->busqueda = "%".$d["busqueda"]."%";
 			$this->filtro = $_SESSION["filtro"];
 			$this->nivel = $_SESSION["nivel"];
@@ -69,7 +69,7 @@
 					unidadproduccion.codundprod = undprod_productor.codundprod 
 					AND undprod_productor.ced_rif = productor.ced_rif 
 					AND productor.ced_rif = productor_entidad.ced_rif 
-					AND unidadproduccion.nomundprod LIKE :busqueda $filtro	GROUP BY
+					AND (unidadproduccion.nomundprod LIKE :busqueda OR unidadproduccion.codundprod LIKE :busqueda) $filtro	GROUP BY
 					unidadproduccion.codundprod";
 			$param = array(":busqueda"=>$this->busqueda);
 
