@@ -1,9 +1,5 @@
 <?php
 	include("../controller/mainscript.php");
-	require_once("../controller/class.productores.php");
-	require_once("../controller/class.intencion.php");
-$nUNDproduccion = count($undproduccion["data"]);
-
 	if($_SESSION["nivel"]=='PRODUCTOR'){
 		if($nUNDproduccion<1){
 			header("location:./primerospasos");
@@ -49,7 +45,7 @@ $nUNDproduccion = count($undproduccion["data"]);
     <title>Sepa</title>
     <link rel="stylesheet" href="css/productores.css">
     <script>
-      let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+      let jsonCiclos = JSON.parse(`<?php echo $totalCiclos; ?>`);
       //var listEstados = JSON.parse(`<?php //echo $obtener_estados; ?>`);
       var ssdata = JSON.parse(`<?php echo $session_data; ?>`);
       //console.log(ssdata.filtro);
@@ -206,7 +202,7 @@ $nUNDproduccion = count($undproduccion["data"]);
                         </div>
                         <div class="col-12 p-1">
                           <div class="custom-control custom-switch">
-                            <input class="custom-control-input" id="switchProd" type="checkbox" name="">
+                            <input class="custom-control-input" id="switchProd" type="checkbox" name="estatus">
                             <label class="custom-control-label" for="switchProd">Activo/Inactivo</label>
                           </div>
                         </div>
