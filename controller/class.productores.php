@@ -17,8 +17,6 @@
 		}
 
 		public function buscar(){
-
-
 			switch ($_SESSION["nivel"]) {
 				case 'MUNICIPAL':
 					$prefijo = 'AND entidad.';
@@ -35,8 +33,6 @@
 			}
 
 			$this->filtro = $prefijo . $this->filtro;
-
-			$fglobal = new global_functions();
 
 			$modelo = new conexion();
 			$conexion = $modelo->get_conexion();
@@ -86,22 +82,28 @@
 						));
 					}
 
-					$r = $fglobal->returnArray(true,"",$arrayProd);
+					return Methods::returnArray(true,"",$arrayProd);
 
 				}else{
 					#no hay registros
-					$r = $fglobal->returnArray(false,"No se encontró ningun registro");
+					return Methods::returnArray(false,"No se encontró ningun registro");
 				}
 
 			} catch (PDOException $e) {
-				$r = "Problemas de conexión: ". $e->getMessage();
+				return "Problemas de conexión: ". $e->getMessage();
 			}
-
-			return $r;
 
 		}
 
 		public function guardar(){
+
+			//AJUSTE DE LOS VALORES OBTENIDOS DEL ARREGLO ENVIADO POR POST
+			$estatus = $this->d["estatus"];
+			if($estatus=='true'){
+				$this->d["estatus"] = 1;
+			}else{
+				$this->d["estatus"] = 0;
+			}
 
 			$c = $this->d;
 			$update = $this->d["update"];

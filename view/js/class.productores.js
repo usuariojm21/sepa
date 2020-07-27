@@ -53,7 +53,7 @@ class Productores{
 	}*/
 
 	guardar(){
-		valueStatus = estatus.checked ? 1: 0;
+		//valueStatus = estatus.checked ? 1: 0;
 
 		let valid = main.valid(js("#fproductor"));
 		if (valid[0]===true) {
@@ -61,14 +61,13 @@ class Productores{
 			js("#btnReg").classList.add("loading");
 
 			let url = "../controller/consultas.php";
-			//let f = new FormData(js("#fproductor"));
 			let f = main.formData(js("#fproductor"));
 			
 			f.append("class",'productores');
 			f.append("method",2);
 			f.append("update",updateProductor);
 			f.append("rif_end",ssdata.entidad);
-			f.append("estatus",valueStatus);
+			//f.append("estatus",valueStatus);
 			let axios = main.axios('',url,f);
 			axios.then(function(r){
 				let resp = r.data;
@@ -116,8 +115,6 @@ class Productores{
 		updateProductor = 1;
 
 		main.blockElement(0,blockElement);
-
-
 	}
 
 	limpiar(){

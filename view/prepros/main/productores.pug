@@ -4,10 +4,6 @@
 
 |<?php
 |	include("../controller/mainscript.php");
-|	require_once("../controller/class.productores.php");
-|	require_once("../controller/class.intencion.php");
-| $nUNDproduccion = count($undproduccion["data"]);
-|
 |	if($_SESSION["nivel"]=='PRODUCTOR'){
 |		if($nUNDproduccion<1){
 |			header("location:./primerospasos");
@@ -43,7 +39,7 @@ html.h-100(lang="es")
 		title Sepa
 		link(rel="stylesheet" href=estilosCss)
 		script.
-			let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+			let jsonCiclos = JSON.parse(`<?php echo $totalCiclos; ?>`);
 			//var listEstados = JSON.parse(`<?php //echo $obtener_estados; ?>`);
 			var ssdata = JSON.parse(`<?php echo $session_data; ?>`);
 			//console.log(ssdata.filtro);
@@ -51,7 +47,6 @@ html.h-100(lang="es")
 	body.h-100
 		#fondoDark
 		.container-fluid.h-100
-			
 			include ../includes/header.pug
 			.main-content.row.h-100
 				.barra_lateral.col-12.col-md-auto
@@ -150,7 +145,7 @@ html.h-100(lang="es")
 													input#rlegal.large-control(type="text" name="rlegal" maxlength="50")
 												.col-12.p-1
 													.custom-control.custom-switch
-														input#switchProd.custom-control-input(type="checkbox", name="")
+														input#switchProd.custom-control-input(type="checkbox", name="estatus")
 														label.custom-control-label(for="switchProd") Activo/Inactivo
 												.w-100
 												.col-auto.p-0.mt-2.ml-auto
