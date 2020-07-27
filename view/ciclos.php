@@ -1,5 +1,4 @@
 <?php include("../controller/mainscript.php");
-	require_once("../controller/class.ciclos.php");
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="es">

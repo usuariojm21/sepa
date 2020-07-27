@@ -1,8 +1,5 @@
 <?php
 	include("../controller/mainscript.php");
-	require_once("../controller/class.paquetetec.php");
-	require_once("../controller/class.intencion.php");
-$nUNDproduccion = count($undproduccion["data"]);
 
 	if($_SESSION["nivel"]=='PRODUCTOR'){
 		if($nUNDproduccion<1){

@@ -1,15 +1,7 @@
 <?php
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 	include("../controller/mainscript.php");
-	require_once("../controller/methods.php");
-require_once("../model/class.querys.php");
-	require_once("../controller/class.productores.php");
-	require_once("../controller/class.undproduccion.php");
-require_once("../controller/class.direction.php");
-	require_once("../controller/class.intencion.php");
-$productores = new Productores();
-	$list_productores = json_encode($productores->buscar(),JSON_FORCE_OBJECT);
-$nUNDproduccion = count($undproduccion["data"]);
+	$lproductores = json_encode($dataProductores,JSON_FORCE_OBJECT);
 
 	if($_SESSION["nivel"]=='PRODUCTOR'){
 		if($nUNDproduccion<1){
@@ -446,7 +438,7 @@ $nUNDproduccion = count($undproduccion["data"]);
     var dashboard = new Dashboard();
     dashboard.getCicle(jsonCiclos);
     main.boxNew();
-    var productores = JSON.parse(`<?php echo $list_productores; ?>`);
+    var productores = JSON.parse(`<?php echo $lproductores; ?>`);
     
     let n = `<?php echo $_SESSION["nivel"]; ?>`;
     

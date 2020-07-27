@@ -1,13 +1,7 @@
 <?php
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 	include("../controller/mainscript.php");
-	require_once("../controller/methods.php");
-	require_once("../model/class.querys.php");
-	require_once("../controller/class.productores.php");
-	require_once("../controller/class.undproduccion.php");
-	require_once("../controller/class.direction.php");
-	require_once("../controller/class.intencion.php");
-	$undprod = $undproduccion["data"];
+	$undprod = $dataUNDproduccion["data"];
 	$JSONundprod = json_encode($undprod);
 	$intencion = new IntencionSiembra(array(
 			"ciclo"=>"%",

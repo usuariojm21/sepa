@@ -1,10 +1,6 @@
 <?php
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 	include("../controller/mainscript.php");
-	require_once("../controller/class.entidad.php");
-require_once("../controller/class.direction.php");
-	require_once("../controller/class.intencion.php");
-$nUNDproduccion = count($undproduccion["data"]);
 
 ?>
 <!DOCTYPE html>

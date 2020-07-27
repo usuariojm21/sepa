@@ -1,13 +1,16 @@
 <?php
 	error_reporting(E_ERROR | E_WARNING | E_PARSE);
 	session_start();
- 	require_once("../controller/obtener_ciclos.php");
+	require_once("../controller/obtener_ciclos.php");
+	require_once("../controller/class.ciclos.php");
 	require_once("../controller/class.datausers.php");
 	require_once("../controller/class.intencion.php");
 	require_once("../controller/class.productores.php");
 	require_once("../controller/class.undproduccion.php");
 	require_once("../controller/class.entidad.php");
+	require_once("../controller/class.tecnico.php");
 	require_once("../controller/class.direction.php");
+	require_once("../controller/class.paquetetec.php");
 		
 	$ciclos = new Ciclo;
 	if ($_GET) {

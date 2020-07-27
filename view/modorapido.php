@@ -1,13 +1,7 @@
 <?php
 	include("../controller/mainscript.php");
-	require_once("../controller/class.productores.php");
-	require_once("../controller/class.entidad.php");
-require_once("../controller/class.direction.php");
-	error_reporting(E_ERROR | E_WARNING | E_PARSE);
 	//obtener listado de productores
-$productores = new Productores();
-	$list_productores = $productores->buscar();
-	$JSONproductores = json_encode($list_productores,JSON_FORCE_OBJECT);
+	$JSONproductores = json_encode($dataProductores,JSON_FORCE_OBJECT);
 
 	//obtener listado de entidades
 	$JSONentidad = json_encode("");
