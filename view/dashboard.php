@@ -1,14 +1,8 @@
 <?php
 
-	error_reporting(E_ERROR | E_WARNING | E_PARSE);
 	include("../controller/mainscript.php");
-	require_once("../controller/class.intencion.php");
-	require_once("../controller/class.productores.php");
-	require_once("../controller/class.entidad.php");
-require_once("../controller/class.direction.php");
-	$nUNDproduccion = count($undproduccion["data"]);
 	if($_SESSION["nivel"]=='PRODUCTOR'){
-		if($nUNDproduccion<1) {
+		if(count($dataUNDproduccion['data'])<1) {
 			header("location:./primerospasos");
 		}else{
 			$intencion = new IntencionSiembra(array(
@@ -65,7 +59,7 @@ $productores = new Productores();
     <title>Sepa</title>
     <link rel="stylesheet" href="css/dashboard.css?v=100">
     <script>
-      let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+      let jsonCiclos = JSON.parse(`<?php echo $totalCiclos; ?>`);
       var ssdata = JSON.parse(`<?php echo $session_data; ?>`);
       
     </script>
@@ -138,24 +132,24 @@ $productores = new Productores();
                 	if($show>1){ ?>
                 <div class="card-resumen col-6 col-sm" id="card-entidad">
                   <div class="card"><i class="flaticon-pagar"></i>
-                    <h4><?php echo number_format(count($entidad["data"]),0,"","."); ?></h4><span class="text-collapsed">Entes Financieros</span>
+                    <h4><?php echo number_format(count($dataEntidad["data"]),0,"","."); ?></h4><span class="text-collapsed">Entes Financieros</span>
                   </div>
                 </div><?php } ?>
                 <div class="card-resumen col-6 col-sm" id="card-productores">
                   <div class="card"><i class="flaticon-agricultor"></i>
-                    <h4><?php echo number_format(count($list_productores["data"]),0,"","."); ?></h4><span class="text-collapsed">Productores</span>
+                    <h4><?php echo number_format(count($dataProductores["data"]),0,"","."); ?></h4><span class="text-collapsed">Productores</span>
                   </div>
                 </div><?php } ?>
                 <div class="card-resumen col-6 col-sm" id="card-undprod">
                   <div class="card"><i class="flaticon-siembra"></i>
-                    <h4><?php echo number_format(count($undproduccion["data"]),0,"","."); ?></h4><span class="text-collapsed">Unidades de Producción</span>
+                    <h4><?php echo number_format(count($dataUNDproduccion['data']),0,"","."); ?></h4><span class="text-collapsed">Unidades de Producción</span>
                   </div>
                 </div>
                 <div class="card-resumen col-6 col-sm" id="card-haproductivas">
                   <div class="card"><i class="flaticon-terreno"></i><?php
                     	$totalha = 0;
-                    	for($i=0; $i < count($undproduccion["data"]); $i++){ 
-                    		$totalha = $totalha + $undproduccion["data"][$i]["haproductivas"];
+                    	for($i=0; $i < count($dataUNDproduccion["data"]); $i++){ 
+                    		$totalha = $totalha + $dataUNDproduccion["data"][$i]["haproductivas"];
                     	}
                     ?>
                     <h4><?php echo number_format($totalha,2,",","."); ?></h4><span class="text-collapsed">Hect. Productivas</span>
