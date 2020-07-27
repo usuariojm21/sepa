@@ -37,7 +37,7 @@ $productores = new Productores();
     <title>Sepa</title>
     <link rel="stylesheet" href="css/style_modorapido.css?v=1">
     <script>
-      let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+      let jsonCiclos = JSON.parse(`<?php echo $totalCiclos; ?>`);
       //var listEstados = JSON.parse(`<?php //echo $obtener_estados; ?>`);
       var ssdata = JSON.parse(`<?php echo $session_data; ?>`);
       //console.log(ssdata.filtro);

@@ -49,7 +49,7 @@ $nUNDproduccion = count($undproduccion["data"]);
     <title>Sepa</title>
     <link rel="stylesheet" href="css/paquetetec.css">
     <script>
-      let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+      let jsonCiclos = JSON.parse(`<?php echo $totalCiclos; ?>`);
       //var listEstados = JSON.parse(`<?php //echo $obtener_estados; ?>`);
       var ssdata = JSON.parse(`<?php echo $session_data; ?>`);
       //console.log(ssdata.filtro);

@@ -20,7 +20,7 @@
     <title>Sepa</title>
     <link rel="stylesheet" href="css/ciclos.css">
     <script>
-      let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+      let jsonCiclos = JSON.parse(`<?php echo $totalCiclos; ?>`);
       
     </script>
   </head>

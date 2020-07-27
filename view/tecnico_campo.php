@@ -54,7 +54,7 @@ $nUNDproduccion = count($undproduccion["data"]);
     <title>Sepa</title>
     <link rel="stylesheet" href="css/tecnico_c.css">
     <script>
-      let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+      let jsonCiclos = JSON.parse(`<?php echo $totalCiclos; ?>`);
       var ssdata = JSON.parse(`<?php echo $session_data; ?>`);
       //console.log(ssdata);
       

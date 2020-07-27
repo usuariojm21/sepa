@@ -3,15 +3,10 @@
 
 |<?php
 |
-|	error_reporting(E_ERROR | E_WARNING | E_PARSE);
 |	include("../controller/mainscript.php");
-|	require_once("../controller/class.intencion.php");
-|	require_once("../controller/class.productores.php");
-|	require_once("../controller/class.entidad.php");
-| require_once("../controller/class.direction.php");
-|	$nUNDproduccion = count($undproduccion["data"]);
+
 |	if($_SESSION["nivel"]=='PRODUCTOR'){
-|		if($nUNDproduccion<1) {
+|		if(count($dataUNDproduccion['data'])<1) {
 |			header("location:./primerospasos");
 |		}else{
 |			$intencion = new IntencionSiembra(array(
@@ -57,7 +52,7 @@ html.h-100(lang="es")
 		title Sepa
 		link(rel="stylesheet" href=estilosCss)
 		script.
-			let jsonCiclos = JSON.parse(`<?php echo $total_ciclos; ?>`);
+			let jsonCiclos = JSON.parse(`<?php echo $totalCiclos; ?>`);
 			var ssdata = JSON.parse(`<?php echo $session_data; ?>`);
 
 	body.h-100.loading
@@ -83,27 +78,27 @@ html.h-100(lang="es")
 								#card-entidad.card-resumen.col-6.col-sm
 									.card
 										i.flaticon-pagar
-										h4 <?php echo number_format(count($entidad["data"]),0,"","."); ?>
+										h4 <?php echo number_format(count($dataEntidad["data"]),0,"","."); ?>
 										span.text-collapsed Entes Financieros
 								|<?php } ?>
 								#card-productores.card-resumen.col-6.col-sm
 									.card
 										i.flaticon-agricultor
-										h4 <?php echo number_format(count($list_productores["data"]),0,"","."); ?>
+										h4 <?php echo number_format(count($dataProductores["data"]),0,"","."); ?>
 										span.text-collapsed Productores
 								|<?php } ?>
 								#card-undprod.card-resumen.col-6.col-sm
 									.card
 										i.flaticon-siembra
-										h4 <?php echo number_format(count($undproduccion["data"]),0,"","."); ?>
+										h4 <?php echo number_format(count($dataUNDproduccion['data']),0,"","."); ?>
 										span.text-collapsed Unidades de Producción
 								#card-haproductivas.card-resumen.col-6.col-sm
 									.card
 										i.flaticon-terreno
 										|<?php
 										|	$totalha = 0;
-										|	for($i=0; $i < count($undproduccion["data"]); $i++){ 
-										|		$totalha = $totalha + $undproduccion["data"][$i]["haproductivas"];
+										|	for($i=0; $i < count($dataUNDproduccion["data"]); $i++){ 
+										|		$totalha = $totalha + $dataUNDproduccion["data"][$i]["haproductivas"];
 										|	}
 										|?>
 
